@@ -36,60 +36,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::resource('users', UserController::class);
 });
 
-
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('/customers/datatable', [CustomerController::class, 'datatable'])->name('customers.datatable');
     Route::resource('customers', CustomerController::class);
 });
-
-Route::middleware(['auth:sanctum', 'verified'])->group(function () {
-    Route::get('/loans/datatable', [LoanController::class, 'datatable'])->name('loans.datatable');
-    Route::resource('loans', LoanController::class);
-});
-Route::post('loan/payment/to-pay/{id}/{view}', [PaymentController::class, 'setToPay'])->name('payment.store');
-Route::get('loan/{id}', [LoanController::class, 'getLoan'])->name('loan.get');
-
-Route::middleware(['auth:sanctum', 'verified'])->group(function () {
-    Route::get('/investments/datatable', [InvestmentController::class, 'datatable'])->name('investments.datatable');
-    Route::resource('investments', InvestmentController::class);
-});
-
-Route::middleware(['auth:sanctum', 'verified'])->group(function () {
-    Route::get('/payments/datatable', [PaymentController::class, 'datatable'])->name('payments.datatable');
-    Route::resource('payments', PaymentController::class);
-});
-/*
-
-Route::middleware([
-    'auth:sanctum',
-    config('jetstream.auth_session'),
-    'verified',
-])->resource('/user', UserController::class)->parameters(['user' => 'person']);
-
-
-Route::middleware([
-    'auth:sanctum',
-    config('jetstream.auth_session'),
-    'verified',
-])->resource('/investment', InvestmentController::class);
-
-Route::middleware([
-    'auth:sanctum',
-    config('jetstream.auth_session'),
-    'verified',
-])->resource('/customer', CustomerController::class);
-
-Route::middleware([
-    'auth:sanctum',
-    config('jetstream.auth_session'),
-    'verified',
-])->resource('/payment', PaymentController::class);
-Route::post('loan/payment/to-pay/{id}/{view}', [PaymentController::class, 'setToPay'])->name('payment.store');
-
-Route::middleware([
-    'auth:sanctum',
-    config('jetstream.auth_session'),
-    'verified',
-])->resource('/loan', LoanController::class);
-Route::get('loan/{id}', [LoanController::class, 'getLoan'])->name('loan.get');
-*/

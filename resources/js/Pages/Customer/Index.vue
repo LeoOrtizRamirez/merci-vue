@@ -1,55 +1,47 @@
 <template>
     <div>
         <div class="p-grid">
-            <div class="p-col-12" v-permission="'customer.create'">
-                <div class="card">
-                    <Menubar :model="menuItems"/>
-                </div>
-            </div>
             <div class="p-col-12">
                 <div class="card">
-                    <DataTable
-                        ref="dt"
-                        :value="datatable.data"
-                        :lazy="true"
-                        data-key="id"
-                        :paginator="true"
-                        :rows="10"
-                        :loading="datatable.loading"
-                        :total-records="datatable.totalRecords"
+                    <div class="title">
+                        <Button v-permission="'customer.create'" icon="pi pi-fw pi-plus"
+                            class="p-button-primary p-button-sm mr-1 p-button-rounded p-button-outlined"
+                            @click="this.$inertia.get(this.route('customers.create'));" />
+                        <h4>Clientes</h4>
+                    </div>
+
+
+
+                    <DataTable ref="dt" :value="datatable.data" :lazy="true" data-key="id" :paginator="true" :rows="10"
+                        :loading="datatable.loading" :total-records="datatable.totalRecords"
                         v-model:filters="datatable.filters"
                         paginator-template="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
-                        :rows-per-page-options="[5,10,25]"
+                        :rows-per-page-options="[5, 10, 25]"
                         current-page-report-template="Mostrando del {first} al {last} de {totalRecords} resultados"
-                        @page="onPage($event)"
-                        @sort="onSort($event)"
-                        @filter="onSort($event)"
-                    >
-                        <template #header>
+                        @page="onPage($event)" @sort="onSort($event)" @filter="onSort($event)">
+                        <!-- <template #header>
                                 <h5 class="p-m-0">
                                     Clientes
                                 </h5>
-                        </template>
-                        <Column field="id" header="ID" :sortable="true">
+                        </template> -->
+                        <Column field="id" header="ID">
                             <template #body="slotProps">
                                 {{ slotProps.data.id }}
                             </template>
                         </Column>
-                        <Column field="name" header="Nombre" :sortable="true">
+                        <Column field="name" header="Nombre">
                             <template #body="slotProps">
                                 {{ slotProps.data.name }}
                             </template>
                         </Column>
                         <Column header="Acciones" style="width: 150px;">
                             <template #body="slotProps">
-                                <Button v-permission="'customer.edit'"
-                                    icon="pi pi-pencil"
-                                    class="p-button-success p-button-sm mr-1"
-                                    @click="edit(slotProps.data.id)"
-                                />
-                                <Button v-permission="'customer.destroy'" icon="pi pi-trash" class="p-button-sm p-button-danger"
-                                        @click="showDeleteDialog(slotProps.data)"
-                                />
+                                <Button v-permission="'customer.edit'" icon="pi pi-pencil"
+                                    class="p-button-success p-button-sm mr-1 p-button-rounded p-button-outlined"
+                                    @click="edit(slotProps.data.id)" />
+                                <Button v-permission="'customer.destroy'" icon="pi pi-trash"
+                                    class="p-button-sm p-button-danger p-button-rounded p-button-outlined"
+                                    @click="showDeleteDialog(slotProps.data)" />
                             </template>
                         </Column>
                         <template #empty>
@@ -60,19 +52,14 @@
             </div>
         </div>
 
-        <DeleteDialog
-            ref="deleteDialog"
-            v-model:visible="deleteDialog"
-            :loading="deletingModel"
-            @delete="onDelete"
-        />
+        <DeleteDialog ref="deleteDialog" v-model:visible="deleteDialog" :loading="deletingModel" @delete="onDelete" />
     </div>
 </template>
 
 <script>
 import AppLayout from "../../Layouts/AppLayout";
 import DataTable from "primevue/datatable";
-import {FilterMatchMode} from "primevue/api";
+import { FilterMatchMode } from "primevue/api";
 import DatatableService from "../../Services/DatatableService";
 import Menubar from "primevue/menubar";
 import Column from "primevue/column";
@@ -97,20 +84,11 @@ export default {
                 totalRecords: 0,
                 data: null,
                 filters: {
-                    'global': {value: null, matchMode: FilterMatchMode.CONTAINS},
-                    'status': {value: null, matchMode: FilterMatchMode.EQUALS},
+                    'global': { value: null, matchMode: FilterMatchMode.CONTAINS },
+                    'status': { value: null, matchMode: FilterMatchMode.EQUALS },
                 },
                 lazyParams: {}
             },
-            menuItems: [
-                {
-                    label: 'Crear',
-                    icon: 'pi pi-fw pi-plus',
-                    command: () => {
-                        this.$inertia.get(this.route('customers.create'));
-                    },
-                },
-            ],
             importDialog: false,
             importForm: this.$inertia.form({
                 file: null
@@ -175,5 +153,12 @@ export default {
 </script>
 
 <style scoped>
+.title {
+    display: flex;
+    align-items: center;
+}
 
+.title h4 {
+    margin: 0;
+}
 </style>
