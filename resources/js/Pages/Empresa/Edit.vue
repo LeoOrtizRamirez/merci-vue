@@ -46,10 +46,6 @@ export default {
         return {
             form: {
                 name: this.empresa.name,
-                email: this.empresa.email,
-                document: this.empresa.document,
-                address: this.empresa.address,
-                phone: this.empresa.phone,
             },
         }
     },

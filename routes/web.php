@@ -8,6 +8,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\EmpresaController;
+use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\Security;
 /*
 |--------------------------------------------------------------------------
@@ -42,4 +43,9 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('/empresas/datatable', [EmpresaController::class, 'datatable'])->name('empresas.datatable');
     Route::resource('empresas', EmpresaController::class);
+});
+
+Route::middleware(['auth:sanctum', 'verified'])->group(function () {
+    Route::get('/categorias/datatable', [CategoriaController::class, 'datatable'])->name('categorias.datatable');
+    Route::resource('categorias', CategoriaController::class);
 });
