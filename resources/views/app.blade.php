@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title inertia>{{ config('app.name', 'Laravel') }}</title>
+        <title inertia>{{ config('app.name', 'MERCI') }}</title>
 
         
 
@@ -14,6 +14,8 @@
 
         <!-- Styles -->
         <link rel="stylesheet" href="{{ mix('css/app.css') }}">
+        <link rel="stylesheet" href="/css/custom.css">
+        
 
         <link id="theme-link" rel="stylesheet" href="/themes/lara-light-indigo/theme.css">
 

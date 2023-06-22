@@ -156,6 +156,7 @@ export default {
 .title {
     display: flex;
     align-items: center;
+    padding-bottom: 10px;
 }
 
 .title h4 {
