@@ -36,9 +36,10 @@ abstract class Datatable
         if ($this->globalFilter) {
             $this->builder = $this->builder->where($this->globalFilter($request));
         }
-
+        /*
+        //PENDIENTE REVISAR PARA PERMITIR ORDENAR, NO FUNCIONA EN TABLA PERMISOS - ROLES
         $this->builder = $this->sortAndOrder($request);
-
+        */
         /** @var LengthAwarePaginator $paginator */
         $paginator = $this->builder->paginate($rows, ['*'], 'page', $pageNumber);
 

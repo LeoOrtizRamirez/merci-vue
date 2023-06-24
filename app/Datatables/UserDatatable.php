@@ -17,6 +17,7 @@ class UserDatatable extends Datatable
                 'id' => $user->id,
                 'name' => $user->name,
                 'email' => $user->email,
+                'estado' => $user->estado->name,
                 'admin' => $user->admin,
             ];
         };

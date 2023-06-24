@@ -24,19 +24,24 @@ class User extends Authenticatable
     use HasProfilePhoto;
     use Notifiable;
     use TwoFactorAuthenticatable;
-    //use HasPermissions;
+    use HasPermissions;
     use HasRoles;
 
+    public function estado(){
+        return $this->belongsTo('App\Models\Estado');
+    }
+    
     /**
      * The attributes that are mass assignable.
      *
      * @var string[]
      */
-    protected $fillable = [
+    /* protected $fillable = [
         'name',
         'email',
         'password',
-    ];
+        'estado',
+    ]; */
 
     /**
      * The attributes that should be hidden for serialization.

@@ -9,6 +9,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\EmpresaController;
 use App\Http\Controllers\CategoriaController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\Security;
 /*
 |--------------------------------------------------------------------------
@@ -48,4 +49,11 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('/categorias/datatable', [CategoriaController::class, 'datatable'])->name('categorias.datatable');
     Route::resource('categorias', CategoriaController::class);
+});
+
+Route::middleware(['auth:sanctum', 'verified'])->group(function () {
+    Route::get('/roles/datatable', [RoleController::class, 'datatable'])->name('roles.datatable');
+    Route::get('/roles/permissions/datatable', [RoleController::class, 'rolePermissionsDatatable'])->name('roles.permissions.datatable');
+    Route::post('/roles/permissions/toggle', [RoleController::class, 'rolePermissionsToggle'])->name('roles.permissions.toggle');
+    Route::resource('roles', RoleController::class);
 });

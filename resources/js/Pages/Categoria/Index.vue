@@ -16,7 +16,7 @@
                         :loading="datatable.loading" :total-records="datatable.totalRecords"
                         v-model:filters="datatable.filters"
                         paginator-template="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
-                        :rows-per-page-options="[5, 10, 25]"
+                        :rows-per-page-options="[10, 25, 50]"
                         current-page-report-template="Mostrando del {first} al {last} de {totalRecords} resultados"
                         @page="onPage($event)" @sort="onSort($event)" @filter="onSort($event)">
                         <!-- <template #header>
@@ -153,13 +153,4 @@ export default {
 </script>
 
 <style scoped>
-.title {
-    display: flex;
-    align-items: center;
-    padding-bottom: 10px;
-}
-
-.title h4 {
-    margin: 0;
-}
 </style>
