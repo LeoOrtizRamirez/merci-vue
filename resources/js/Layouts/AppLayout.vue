@@ -8,15 +8,15 @@
         <div class="layout-main-container">
             <AppConfig :layoutMode="layoutMode" @layout-change="onLayoutChange" />
             <div class="layout-main">
-                <slot/>
+                <slot />
             </div>
-            <AppFooter/>
+            <AppFooter />
         </div>
 
         <transition name="layout-mask">
             <div class="layout-mask p-component-overlay" v-if="mobileMenuActive"></div>
         </transition>
-        <Toast/>
+        <Toast />
     </div>
 </template>
 
@@ -39,22 +39,30 @@ export default {
                 {
                     label: 'Administrar',
                     items: [
-                        {label: 'Dashboard', icon: 'pi pi-fw pi-home', to: this.route('dashboard'), prefix: 'dashboard'},
-                        {label: 'Empresas', icon: 'pi pi-fw pi-briefcase', to: this.route('empresas.index'),},
-                        {label: 'Usuarios', icon: 'pi pi-fw pi-users', to: this.route('users.index'),},
-                        {label: 'Roles', icon: 'pi pi-fw pi-lock', to: this.route('roles.index'),},
-                        {label: 'Clientes', icon: 'pi pi-fw pi-users', to: this.route('customers.index'),},
-                    ]
-                },
-                {
-                    label: 'Ajustes',
-                    items: [
-                        {label: 'Categorias', icon: 'pi pi-fw pi-list', to: this.route('categorias.index'),},
+                        { label: 'Dashboard', icon: 'pi pi-fw pi-home', to: this.route('dashboard'), prefix: 'dashboard' },
+                        {
+                            label: 'Ajustes', icon: 'pi pi-fw pi-users',
+                            items: [
+                                { label: 'Usuarios', icon: 'pi pi-fw pi-users', to: this.route('users.index'), },
+                                { label: 'Roles', icon: 'pi pi-fw pi-lock', to: this.route('roles.index'), },
+                               
+                            ]
+                        },
+                        {
+                            label: 'Administrar', icon: 'pi pi-fw pi-users',
+                            items: [
+                                { label: 'Categorias', icon: 'pi pi-fw pi-list', to: this.route('categorias.index'), },
+                                { label: 'Empresas', icon: 'pi pi-fw pi-briefcase', to: this.route('empresas.index'), },
+                                { label: 'Clientes', icon: 'pi pi-fw pi-users', to: this.route('customers.index'), },
+                            ]
+                        },
                         {
                             label: 'Cerrar sesión', icon: 'pi pi-fw pi-sign-out', command: () => {
                                 this.$inertia.post(this.route('logout'))
                             },
-                        }]
+                        }
+
+                    ]
                 },
             ]
         }

@@ -157,13 +157,4 @@ export default {
 </script>
 
 <style scoped>
-.title {
-    display: flex;
-    align-items: center;
-    padding-bottom: 10px;
-}
-
-.title h4 {
-    margin: 0;
-}
 </style>

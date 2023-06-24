@@ -1,19 +1,19 @@
 <template>
     <card class="card" @submitted="updatePassword">
         <template #title>
-            Zmiana hasła
+            Cambio de contraseña
         </template>
 
         <template #content>
             <div class="mb-5">
-                Upewnij się, że Twoje konto używa długiego, losowego hasła, aby zachować bezpieczeństwo.
+                Asegúrate de que tu cuenta use una contraseña larga y aleatoria para mantenerse segura.
             </div>
             <div class="field">
-                <label for="current_password">Aktualne hasło</label>
+                <label for="current_password">Contraseña actual</label>
                 <InputText
                     id="current_password"
                     class="w-full"
-                    placeholder="Wprowadź hasło"
+                    placeholder="Ingresa tu contraseña"
                     :class="{'p-invalid': form.errors.current_password}"
                     type="password"
                     v-model="form.current_password"
@@ -23,11 +23,11 @@
                 </small>
             </div>
             <div class="field">
-                <label for="password">Nowe hasło</label>
+                <label for="password">Nueva contraseña</label>
                 <InputText
                     id="password"
                     class="w-full"
-                    placeholder="Wprowadź hasło"
+                    placeholder="Ingresa tu contraseña"
                     :class="{'p-invalid': form.errors.password}"
                     type="password"
                     v-model="form.password"
@@ -37,11 +37,11 @@
                 </small>
             </div>
             <div class="field">
-                <label for="password_confirmation">Powórz nowe hasło</label>
+                <label for="password_confirmation">Vuelve a introducir la nueva contraseña</label>
                 <InputText
                     id="password_confirmation"
                     class="w-full"
-                    placeholder="Wprowadź hasło"
+                    placeholder="Ingresa tu contraseña"
                     :class="{'p-invalid': form.errors.password_confirmation}"
                     type="password"
                     v-model="form.password_confirmation"
@@ -54,7 +54,7 @@
 
         <template #footer>
             <Button
-                label="Zapisz"
+                label="Actualizar"
                 :loading="form.processing"
                 @click="updatePassword"
             />
@@ -92,7 +92,7 @@ export default {
                 preserveScroll: true,
                 onSuccess: () => {
                     this.form.reset();
-                    this.flashSuccess('Zapisano hasło.');
+                    this.flashSuccess('Contraseña guardada.');
                 },
                 onError: () => {
                     if (this.form.errors.password) {
