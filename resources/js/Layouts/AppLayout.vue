@@ -37,11 +37,11 @@ export default {
             mobileMenuActive: false,
             menu: [
                 {
-                    label: 'Administrar',
+                    label: 'Menu',
                     items: [
                         { label: 'Dashboard', icon: 'pi pi-fw pi-home', to: this.route('dashboard'), prefix: 'dashboard' },
                         {
-                            label: 'Ajustes', icon: 'pi pi-fw pi-users',
+                            label: 'Administrar', icon: 'pi pi-fw pi-users',
                             items: [
                                 { label: 'Usuarios', icon: 'pi pi-fw pi-users', to: this.route('users.index'), },
                                 { label: 'Roles', icon: 'pi pi-fw pi-lock', to: this.route('roles.index'), },
@@ -49,7 +49,7 @@ export default {
                             ]
                         },
                         {
-                            label: 'Administrar', icon: 'pi pi-fw pi-users',
+                            label: 'Ajustes', icon: 'pi pi-fw pi-users',
                             items: [
                                 { label: 'Categorias', icon: 'pi pi-fw pi-list', to: this.route('categorias.index'), },
                                 { label: 'Empresas', icon: 'pi pi-fw pi-briefcase', to: this.route('empresas.index'), },

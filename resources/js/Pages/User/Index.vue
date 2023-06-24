@@ -41,8 +41,9 @@
                         </Column>
                         <Column field="estado" header="Estado">
                             <template #body="slotProps">
-                                {{ slotProps.data.estado }}
-                                <Tag severity="success" value="En proceso"></Tag>
+                                <Tag :style="{ background: slotProps.data.backgroundColor }">
+                                    <span>{{ slotProps.data.estado }}</span>
+                                </Tag>
                             </template>
                         </Column>
                         <Column header="Acciones" style="width: 150px;">
@@ -62,7 +63,6 @@
                 </div>
             </div>
         </div>
-
         <DeleteDialog ref="deleteDialog" v-model:visible="deleteDialog" :loading="deletingModel" @delete="onDelete" />
     </div>
 </template>
@@ -165,5 +165,4 @@ export default {
 }
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

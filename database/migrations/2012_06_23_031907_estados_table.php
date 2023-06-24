@@ -16,6 +16,8 @@ class EstadosTable extends Migration
         Schema::create('estados', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('color');
+            $table->string('backgroundColor');
             $table->timestamps();
         });
     }

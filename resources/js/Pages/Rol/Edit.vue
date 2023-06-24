@@ -57,6 +57,7 @@
             </div>
         </div>
         <DeleteDialog ref="deleteDialog" v-model:visible="deleteDialog" :loading="deletingModel" @delete="onDelete" />
+        <Toast />
     </div>
 </template>
 <script>
@@ -72,6 +73,7 @@ import Column from "primevue/column";
 import DeleteDialog from "../../Components/DeleteDialog";
 import InputSwitch from 'primevue/inputswitch';
 import axios from 'axios'
+import Toast from 'primevue/toast';
 
 export default {
     name: "Edit",
@@ -85,7 +87,8 @@ export default {
         Column,
         Button,
         DeleteDialog,
-        InputSwitch
+        InputSwitch,
+        Toast
     },
     props: {
         role: [],
@@ -176,22 +179,17 @@ export default {
             })
         },
         togglePermission(permission_id) {
-            console.log("permission_id", permission_id)
-            // Actualiza el role_has_permissions
-            /* if (this.role_has_permissions.includes(permission_id)) {
-                console.log("si")
-                this.role_has_permissions = this.role_has_permissions.filter(x => x !== permission_id)
-            } else {
-                this.role_has_permissions.push(permission_id )
-            } */
-
-            // Hace una petición a Laravel con el nuevo role_has_permissions
             axios.post(this.route('roles.permissions.toggle'), {
                 permission_id: permission_id,
                 role_id: this.role.id
             }).then(response => {
-                console.log("response.data", response.data)
                 this.role_has_permissions = response.data
+                this.$toast.add({
+                    severity: "success",
+                    summary: "Exitoso",
+                    detail: "Permiso Actualizado!",
+                    life: 3000,
+                });
             }).catch(error => {
                 // Maneja el error de Laravel
             })

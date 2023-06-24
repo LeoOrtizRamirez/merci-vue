@@ -65,6 +65,7 @@ import Menubar from "primevue/menubar";
 import Column from "primevue/column";
 import Button from "primevue/button";
 import DeleteDialog from "../../Components/DeleteDialog";
+import Toast from 'primevue/toast';
 
 export default {
     name: "Index",
@@ -75,7 +76,8 @@ export default {
         DataTable,
         Column,
         Button,
-        DeleteDialog
+        DeleteDialog,
+        Toast
     },
     data() {
         return {
@@ -145,6 +147,12 @@ export default {
                     this.deleteDialog = false;
                     this.loadLazyData();
                     this.$refs.deleteDialog.onClose();
+                    this.$toast.add({
+                        severity: "success",
+                        summary: "Exitoso",
+                        detail: "Categoria Eliminada!",
+                        life: 3000,
+                    });
                 }
             })
         },
@@ -152,5 +160,4 @@ export default {
 }
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

@@ -36,3 +36,7 @@
 .p-button{
     padding: 0.5rem 1rem !important;
 }
+
+span.p-tag.p-component {
+    min-width: 70px;
+}
