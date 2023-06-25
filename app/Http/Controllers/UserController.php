@@ -35,7 +35,7 @@ class UserController extends Controller
     public function create(): Response
     {
         $indicadores = Indicador::all();
-        $estados = Estado::all();
+        $estados = Estado::where('tipo', 2)->get();
         $empresas = Empresa::all();
         $roles = Role::all();
         return Inertia::render('User/Create', [
@@ -64,7 +64,8 @@ class UserController extends Controller
             'password' => Hash::make($request['password'])
         ]));
 
-        
+        //Agregar Rol
+
 
         return redirect()->route('users.index');
     }

@@ -9,11 +9,11 @@ class Tarea extends Model
 {
     use HasFactory;
 
-    public function categoria(){
-        return $this->belongsTo('App\Models\Categoria');
-    }
-
     public function actividad(){
         return $this->belongsTo('App\Models\Actividad');
+    }
+
+    public function estado(){
+        return $this->belongsTo('App\Models\Estado');
     }
 }

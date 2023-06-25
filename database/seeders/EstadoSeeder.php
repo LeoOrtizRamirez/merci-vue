@@ -15,9 +15,11 @@ class EstadoSeeder extends Seeder
     public function run()
     {
         $estados = [
-            ['name' => 'En proceso', 'color' => '#FFFFFF', 'backgroundColor' => '#6495ED'],
-            ['name' => 'Finalizada', 'color' => '#FFFFFF', 'backgroundColor' => '#DE3163'],
-            ['name' => 'Pausada', 'color' => '#FFFFFF', 'backgroundColor' => '#FFBF00'],
+            ['name' => 'En proceso', 'color' => '#FFFFFF', 'backgroundColor' => '#6495ED', 'tipo' => 1],
+            ['name' => 'Finalizada', 'color' => '#FFFFFF', 'backgroundColor' => '#DE3163', 'tipo' => 1],
+            ['name' => 'Pausada', 'color' => '#FFFFFF', 'backgroundColor' => '#FFBF00', 'tipo' => 1],
+            ['name' => 'Sin Iniciar', 'color' => '#FFFFFF', 'backgroundColor' => '#FFBF00', 'tipo' => 2],
+            ['name' => 'Terminada', 'color' => '#FFFFFF', 'backgroundColor' => '#DE3163', 'tipo' => 2],
         ];
         DB::table('estados')->insert($estados);
     }

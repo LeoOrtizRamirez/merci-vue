@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Datatables\ActaDatatable;
 use App\Http\Controllers\Controller;
 use App\Models\Acta;
+use App\Models\Actividad;
+use App\Models\Estado;
+use App\Models\Tarea;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Inertia\Response;
@@ -42,12 +45,14 @@ class ActaController extends Controller
         $acta->asistentes = $request->asistentes;
         $acta->temas = $request->temas;
         $acta->save();
-        return redirect()->route('actas.index');
+        return redirect()->route('actas.show', $acta->id);
     }
 
     public function show(Acta $acta)
     {
-        return Inertia::render('Acta/Show', compact('acta'));
+        $estados = Estado::where('tipo', 2)->get();
+        $actividades = Actividad::all();
+        return Inertia::render('Acta/Show', compact('acta', 'actividades', 'estados'));
     }
 
     public function edit(Acta $acta)
@@ -71,6 +76,11 @@ class ActaController extends Controller
 
     public function destroy(Acta $acta)
     {
+        //Buscar tareas de Acta y eliminar
+        $tareas = Tarea::where("acta_id", $acta->id)->get();
+        foreach ($tareas as $key => $tarea) {
+            $tarea->delete();
+        }
         $acta->delete();
         return redirect()->back();
     }

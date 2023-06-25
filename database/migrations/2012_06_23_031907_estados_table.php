@@ -18,6 +18,7 @@ class EstadosTable extends Migration
             $table->string('name');
             $table->string('color');
             $table->string('backgroundColor');
+            $table->integer('tipo')->comment('1: Estados de usuario, 2: Estados de tareas');;
             $table->timestamps();
         });
     }

@@ -24,7 +24,7 @@
                                     Clientes
                                 </h5>
                         </template> -->
-                        <Column field="numero_sesion" header="Número de la sesión">
+                        <Column field="numero_sesion" header="# sesión">
                             <template #body="slotProps">
                                 {{ slotProps.data.numero_sesion }}
                             </template>
@@ -44,23 +44,11 @@
                                 {{ slotProps.data.hora_finalizacion }}
                             </template>
                         </Column>
-                        <Column field="modalidad_encuentro" header="Modalidad de encuentro">
-                            <template #body="slotProps">
-                                {{ slotProps.data.modalidad_encuentro }}
-                            </template>
-                        </Column>
-                        <Column field="asistentes" header="Asistentes">
-                            <template #body="slotProps">
-                                {{ slotProps.data.asistentes }}
-                            </template>
-                        </Column>
-                        <Column field="temas" header="Temas tratados en la sesión">
-                            <template #body="slotProps">
-                                {{ slotProps.data.temas }}
-                            </template>
-                        </Column>
                         <Column header="Acciones" style="width: 150px;">
                             <template #body="slotProps">
+                                <Button v-permission="'acta.show'" icon="pi pi-search"
+                                    class="p-button-primary p-button-sm mr-1 p-button-rounded p-button-outlined"
+                                    @click="show(slotProps.data.id)" />
                                 <Button v-permission="'acta.edit'" icon="pi pi-pencil"
                                     class="p-button-success p-button-sm mr-1 p-button-rounded p-button-outlined"
                                     @click="edit(slotProps.data.id)" />
@@ -157,6 +145,9 @@ export default {
             this.datatable.lazyParams = event;
             this.loadLazyData();
         },
+        show(id) {
+            this.$inertia.get(this.route('actas.show', id));
+        },
         edit(id) {
             this.$inertia.get(this.route('actas.edit', id));
         },
@@ -175,7 +166,7 @@ export default {
                     this.$toast.add({
                         severity: "success",
                         summary: "Exitoso",
-                        detail: "Categoria Eliminada!",
+                        detail: "Acta Eliminada!",
                         life: 3000,
                     });
                 }

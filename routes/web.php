@@ -13,6 +13,8 @@ use App\Http\Controllers\EmpresaController;
 use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\Security;
+use App\Http\Controllers\TareaController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -56,6 +58,11 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('/actas/datatable', [ActaController::class, 'datatable'])->name('actas.datatable');
     Route::resource('actas', ActaController::class);
+});
+
+Route::middleware(['auth:sanctum', 'verified'])->group(function () {
+    Route::get('/tareas/datatable', [TareaController::class, 'datatable'])->name('tareas.datatable');
+    Route::resource('tareas', TareaController::class);
 });
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
