@@ -8,4 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class Tarea extends Model
 {
     use HasFactory;
+
+    public function categoria(){
+        return $this->belongsTo('App\Models\Categoria');
+    }
+
+    public function actividad(){
+        return $this->belongsTo('App\Models\Actividad');
+    }
 }

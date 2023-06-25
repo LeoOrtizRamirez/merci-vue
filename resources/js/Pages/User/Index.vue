@@ -39,6 +39,11 @@
                                 {{ slotProps.data.email }}
                             </template>
                         </Column>
+                        <Column field="email" header="Empresa">
+                            <template #body="slotProps">
+                                {{ slotProps.data.empresa }}
+                            </template>
+                        </Column>
                         <Column field="estado" header="Estado">
                             <template #body="slotProps">
                                 <Tag :style="{ background: slotProps.data.backgroundColor }">

@@ -6,8 +6,10 @@ use App\Actions\Users\CreateUser;
 use App\Actions\Users\UpdateUser;
 use App\Datatables\UserDatatable;
 use App\DTOs\UserDTO;
+use App\Models\Empresa;
 use App\Models\Estado;
 use App\Models\Indicador;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -34,9 +36,13 @@ class UserController extends Controller
     {
         $indicadores = Indicador::all();
         $estados = Estado::all();
+        $empresas = Empresa::all();
+        $roles = Role::all();
         return Inertia::render('User/Create', [
             'indicadores' => $indicadores,
             'estados' => $estados,
+            'empresas' => $empresas,
+            'roles' => $roles,
         ]);
     }
 
@@ -54,8 +60,11 @@ class UserController extends Controller
             'name' => $request['name'],
             'email' => $request['email'],
             'estado_id' => $request['estado']['id'],
+            'empresa_id' => $request['empresa']['id'],
             'password' => Hash::make($request['password'])
         ]));
+
+        
 
         return redirect()->route('users.index');
     }
@@ -105,10 +114,10 @@ class UserController extends Controller
         return redirect()->back();
     }
 
-    public function getPermissions(){
+/*     public function getPermissions(){
         foreach (Auth::user()->getAllPermissions() as $permission) {
             $permissions[] = $permission->name;
         }
         return $permissions;
-    }
+    } */
 }

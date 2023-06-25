@@ -14,7 +14,7 @@ use Spatie\Permission\Traits\HasPermissions;
 /* Add Permissions*/
 use Spatie\Permission\Models\Permission;
 use Illuminate\Support\Facades\Auth;
-
+use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
@@ -30,18 +30,22 @@ class User extends Authenticatable
     public function estado(){
         return $this->belongsTo('App\Models\Estado');
     }
+
+    public function empresa(){
+        return $this->belongsTo('App\Models\Empresa');
+    }
     
     /**
      * The attributes that are mass assignable.
      *
      * @var string[]
      */
-    /* protected $fillable = [
+    protected $fillable = [
         'name',
         'email',
         'password',
         'estado',
-    ]; */
+    ];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -74,7 +78,7 @@ class User extends Authenticatable
     ];
 
     public function setPasswordAttribute($value){
-        //$this->attributes["password"] = Hash::make($value);
-        $this->attributes["password"] = bcrypt($value);
+        $this->attributes["password"] = Hash::make($value);
+        /* $this->attributes["password"] = bcrypt($value); */
     }
 }

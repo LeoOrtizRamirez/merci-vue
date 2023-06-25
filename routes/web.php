@@ -1,4 +1,6 @@
 <?php
+
+use App\Http\Controllers\ActaController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -49,6 +51,11 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('/categorias/datatable', [CategoriaController::class, 'datatable'])->name('categorias.datatable');
     Route::resource('categorias', CategoriaController::class);
+});
+
+Route::middleware(['auth:sanctum', 'verified'])->group(function () {
+    Route::get('/actas/datatable', [ActaController::class, 'datatable'])->name('actas.datatable');
+    Route::resource('actas', ActaController::class);
 });
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {

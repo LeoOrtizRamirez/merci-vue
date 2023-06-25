@@ -22,7 +22,7 @@
                                         <InputText v-model="form.password" id="password" type="password" placeholder="Ingresa una contraseña" required />
                                     </div>
                                     <div class="field col-12 md:col-6">
-                                        <label for="rePassword">Confirma tu contraseña</label>
+                                        <label for="rePassword">Confirmar contraseña</label>
                                         <InputText v-model="form.rePassword" id="rePassword" type="password" placeholder="Ingresa la contraseña nuevamente" required />
                                     </div>
                                     <div class="field col-12 md:col-6">
@@ -36,8 +36,20 @@
                                             placeholder="Selecciona los Indicadores" :maxSelectedLabels="3" class="w-full" required/>
                                     </div>
                                     <div class="field col-12 md:col-6">
-                                        
+                                        <label for="empresa">Empresa</label>
+                                        <Dropdown v-model="form.empresa" :options="empresas" optionLabel="name"
+                                            placeholder="Selecciona una Empresa" class="w-full" required/>
                                     </div>
+                                    <div class="field col-12 md:col-6">
+                                        <label for="rol">Rol</label>
+                                        <Dropdown v-model="form.rol" :options="roles" optionLabel="name"
+                                            placeholder="Selecciona una Empresa" class="w-full" required/>
+                                    </div>
+
+                                    <!-- <div class="field col-12 md:col-6">
+                                        <label for="rol">Rol</label>
+                                        <input type="file" name="imagen" @change="cargarImagen">
+                                    </div> -->
                                 </div>
                                 <Button class="p-button p-component p-button-danger p-button-raised mx-2" label="Cancelar"
                                     @click="this.$inertia.get(this.route('users.index'));" />
@@ -73,6 +85,8 @@ export default {
     props: {
         indicadores: [],
         estados: [],
+        empresas: [],
+        roles: [],
         errors: Object
     },
     data() {
@@ -85,7 +99,9 @@ export default {
                 estado: "",
                 password: "",
                 rePassword: "",
-                email: ""
+                email: "",
+                empresa: "",
+                rol: "",
             },
         }
     },

@@ -2,7 +2,9 @@
     <div :class="containerClass" @click="onWrapperClick">
         <AppTopBar @menu-toggle="onMenuToggle" />
         <div class="layout-sidebar" @click="onSidebarClick">
-            <AppMenu :model="menu" @menuitem-click="onMenuItemClick" />
+            <AppMenu :model="menuAdmin" @menuitem-click="onMenuItemClick" v-role="'ADMIN'" />
+            <AppMenu :model="menuCliente" @menuitem-click="onMenuItemClick" v-role="'CLIENTE'" />
+            <AppMenu :model="menuConsultor" @menuitem-click="onMenuItemClick" v-permission="'CONSULTOR'" />
         </div>
 
         <div class="layout-main-container">
@@ -35,7 +37,7 @@ export default {
             staticMenuInactive: false,
             overlayMenuActive: false,
             mobileMenuActive: false,
-            menu: [
+            menuAdmin: [
                 {
                     label: 'Menu',
                     items: [
@@ -43,25 +45,45 @@ export default {
                         {
                             label: 'Administrar', icon: 'pi pi-fw pi-users',
                             items: [
-                                { label: 'Usuarios', icon: 'pi pi-fw pi-users', to: this.route('users.index'), },
-                                { label: 'Roles', icon: 'pi pi-fw pi-lock', to: this.route('roles.index'), },
-                               
-                            ]
-                        },
-                        {
-                            label: 'Ajustes', icon: 'pi pi-fw pi-users',
-                            items: [
-                                { label: 'Categorias', icon: 'pi pi-fw pi-list', to: this.route('categorias.index'), },
                                 { label: 'Empresas', icon: 'pi pi-fw pi-briefcase', to: this.route('empresas.index'), },
+                                { label: 'Usuarios', icon: 'pi pi-fw pi-users', to: this.route('users.index'), },
                                 { label: 'Clientes', icon: 'pi pi-fw pi-users', to: this.route('customers.index'), },
+                                { label: 'Roles', icon: 'pi pi-fw pi-lock', to: this.route('roles.index'), },
+                                { label: 'Categorias', icon: 'pi pi-fw pi-list', to: this.route('categorias.index'), },
                             ]
                         },
-                        {
-                            label: 'Cerrar sesión', icon: 'pi pi-fw pi-sign-out', command: () => {
+                        { label: 'Actas', icon: 'pi pi-fw pi-book', to: this.route('actas.index'), },
+                        { label: 'Cerrar sesión', icon: 'pi pi-fw pi-sign-out', command: () => {
                                 this.$inertia.post(this.route('logout'))
                             },
                         }
 
+                    ]
+                },
+            ],
+            menuConsultor: [
+                {
+                    label: 'Menu',
+                    items: [
+                        { label: 'Dashboard', icon: 'pi pi-fw pi-home', to: this.route('dashboard'), prefix: 'dashboard' },
+                        {
+                            label: 'Cerrar sesión', icon: 'pi pi-fw pi-sign-out', command: () => {
+                                this.$inertia.post(this.route('logout'))
+                            },
+                        },
+                    ]
+                },
+            ],
+            menuCliente: [
+                {
+                    label: 'Menu',
+                    items: [
+                        { label: 'Dashboard', icon: 'pi pi-fw pi-home', to: this.route('dashboard'), prefix: 'dashboard' },
+                        {
+                            label: 'Cerrar sesión', icon: 'pi pi-fw pi-sign-out', command: () => {
+                                this.$inertia.post(this.route('logout'))
+                            },
+                        },
                     ]
                 },
             ]

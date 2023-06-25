@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Acta extends Model
 {
     use HasFactory;
+
+    public function categorias(){
+        return $this->hasMany('App\Models\Categoria');
+    }
+
+    
 }
