@@ -44,8 +44,11 @@
                                 {{ slotProps.data.hora_finalizacion }}
                             </template>
                         </Column>
-                        <Column header="Acciones" style="width: 150px;">
+                        <Column header="Acciones" style="width: 150px;" class="acta-actions">
                             <template #body="slotProps">
+                                <Button v-permission="'acta.show'" icon="pi pi-calendar"
+                                    class="p-button-primary p-button-sm mr-1 p-button-rounded p-button-outlined"
+                                    @click="showCronograma(slotProps.data.id)" />
                                 <Button v-permission="'acta.show'" icon="pi pi-search"
                                     class="p-button-primary p-button-sm mr-1 p-button-rounded p-button-outlined"
                                     @click="show(slotProps.data.id)" />
@@ -148,6 +151,9 @@ export default {
         show(id) {
             this.$inertia.get(this.route('actas.show', id));
         },
+        showCronograma(id) {
+            this.$inertia.get(this.route('actas.cronograma', id));
+        },
         edit(id) {
             this.$inertia.get(this.route('actas.edit', id));
         },
@@ -176,4 +182,8 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+td.acta-actions {
+    width: 200px !important;
+}
+</style>

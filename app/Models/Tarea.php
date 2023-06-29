@@ -10,7 +10,7 @@ class Tarea extends Model
     use HasFactory;
 
     public function actividad(){
-        return $this->belongsTo('App\Models\Actividad');
+        return $this->belongsTo('App\Models\Actividade');
     }
 
     public function estado(){

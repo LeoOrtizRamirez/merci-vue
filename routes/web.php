@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ActaController;
+use App\Http\Controllers\ActividadeController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -56,7 +57,13 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 });
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
+    Route::get('/actividades/datatable', [ActividadeController::class, 'datatable'])->name('actividades.datatable');
+    Route::resource('actividades', ActividadeController::class);
+});
+
+Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('/actas/datatable', [ActaController::class, 'datatable'])->name('actas.datatable');
+    Route::get('/actas/cronograma/{id}', [ActaController::class, 'cronograma'])->name('actas.cronograma');
     Route::resource('actas', ActaController::class);
 });
 

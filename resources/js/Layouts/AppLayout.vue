@@ -4,7 +4,7 @@
         <div class="layout-sidebar" @click="onSidebarClick">
             <AppMenu :model="menuAdmin" @menuitem-click="onMenuItemClick" v-role="'ADMIN'" />
             <AppMenu :model="menuCliente" @menuitem-click="onMenuItemClick" v-role="'CLIENTE'" />
-            <AppMenu :model="menuConsultor" @menuitem-click="onMenuItemClick" v-permission="'CONSULTOR'" />
+            <AppMenu :model="menuAdmin" @menuitem-click="onMenuItemClick" v-role="'CONSULTOR'" />
         </div>
 
         <div class="layout-main-container">
@@ -50,10 +50,12 @@ export default {
                                 { label: 'Clientes', icon: 'pi pi-fw pi-users', to: this.route('customers.index'), },
                                 { label: 'Roles', icon: 'pi pi-fw pi-lock', to: this.route('roles.index'), },
                                 { label: 'Categorias', icon: 'pi pi-fw pi-list', to: this.route('categorias.index'), },
+                                { label: 'Actividades', icon: 'pi pi-fw pi-list', to: this.route('actividades.index'), },
                             ]
                         },
                         { label: 'Actas', icon: 'pi pi-fw pi-book', to: this.route('actas.index'), },
-                        { label: 'Cerrar sesión', icon: 'pi pi-fw pi-sign-out', command: () => {
+                        {
+                            label: 'Cerrar sesión', icon: 'pi pi-fw pi-sign-out', command: () => {
                                 this.$inertia.post(this.route('logout'))
                             },
                         }
@@ -66,6 +68,7 @@ export default {
                     label: 'Menu',
                     items: [
                         { label: 'Dashboard', icon: 'pi pi-fw pi-home', to: this.route('dashboard'), prefix: 'dashboard' },
+                        { label: 'Actas', icon: 'pi pi-fw pi-book', to: this.route('actas.index'), },
                         {
                             label: 'Cerrar sesión', icon: 'pi pi-fw pi-sign-out', command: () => {
                                 this.$inertia.post(this.route('logout'))
@@ -79,6 +82,7 @@ export default {
                     label: 'Menu',
                     items: [
                         { label: 'Dashboard', icon: 'pi pi-fw pi-home', to: this.route('dashboard'), prefix: 'dashboard' },
+                        { label: 'Actas', icon: 'pi pi-fw pi-book', to: this.route('actas.index'), },
                         {
                             label: 'Cerrar sesión', icon: 'pi pi-fw pi-sign-out', command: () => {
                                 this.$inertia.post(this.route('logout'))

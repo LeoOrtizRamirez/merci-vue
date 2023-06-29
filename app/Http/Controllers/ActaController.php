@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Datatables\ActaDatatable;
 use App\Http\Controllers\Controller;
 use App\Models\Acta;
-use App\Models\Actividad;
+use App\Models\Actividade;
 use App\Models\Estado;
 use App\Models\Tarea;
 use Illuminate\Http\Request;
@@ -51,7 +51,7 @@ class ActaController extends Controller
     public function show(Acta $acta)
     {
         $estados = Estado::where('tipo', 2)->get();
-        $actividades = Actividad::all();
+        $actividades = Actividade::all();
         return Inertia::render('Acta/Show', compact('acta', 'actividades', 'estados'));
     }
 
@@ -83,5 +83,30 @@ class ActaController extends Controller
         }
         $acta->delete();
         return redirect()->back();
+    }
+
+    public function cronograma($id)
+    {
+        $acta = Acta::with('tareas')->find($id);
+        $tareas = $acta->tareas;
+
+        $categorias_ids = [];
+        $actividades_ids = [];
+
+        $categorias = [];
+        $actividades = [];
+
+        foreach ($tareas as $key => $tarea) {
+            if (!in_array($tarea->actividad_id, $actividades_ids)) {
+                $actividades[] = $tarea->actividad;
+                $actividades_ids[] = $tarea->actividad_id;
+            }
+            if (!in_array($tarea->actividad->categoria_id, $categorias_ids)) {
+                $categorias[] = $tarea->actividad->categoria;
+                $categorias_ids[] = $tarea->actividad->categoria_id;
+            }
+        }
+        
+        return Inertia::render('Acta/Cronograma', compact('acta', 'tareas', 'actividades', 'categorias'));
     }
 }

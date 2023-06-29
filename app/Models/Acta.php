@@ -9,9 +9,7 @@ class Acta extends Model
 {
     use HasFactory;
 
-    public function categorias(){
-        return $this->hasMany('App\Models\Categoria');
+    public function tareas(){
+        return $this->hasMany('App\Models\Tarea');
     }
-
-    
 }
