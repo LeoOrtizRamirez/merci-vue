@@ -27,7 +27,8 @@
                                     </div>
                                     <div class="field col-12 md:col-6">
                                         <label for="modalidad_encuentro">Modalidad de encuentro</label>
-                                        <InputText v-model="form.modalidad_encuentro" id="modalidad_encuentro" type="text" />
+                                        <Dropdown v-model="form.modalidad_encuentro" :options="modalidades"
+                                            placeholder="Selecciona una modalidad" class="w-full" required />
                                     </div>
                                     <div class="field col-12 md:col-12">
                                         <label for="asistentes">Asistentes</label>
@@ -54,6 +55,7 @@ import AppLayout from "../../Layouts/AppLayout";
 import Button from "primevue/button";
 import InputText from "primevue/inputtext";
 import TextArea from 'primevue/textarea';
+import Dropdown from 'primevue/dropdown';
 
 export default {
     name: "Edit",
@@ -62,7 +64,8 @@ export default {
         AppLayout,
         Button,
         InputText,
-        TextArea
+        TextArea,
+        Dropdown
     },
     props: {
         acta: [],
@@ -79,6 +82,7 @@ export default {
                 asistentes: this.acta.asistentes,
                 temas: this.acta.temas,
             },
+            modalidades: [ 'Presencial', 'Virtual', 'Mixta']
         }
     },
     mounted() {
