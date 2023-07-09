@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class Indicador extends Model
 {
     use HasFactory;
+
+    protected $table = "indicadores";
 }

@@ -1,16 +1,16 @@
 <template>
     <Card class="card" @submitted="updateProfileInformation">
         <template #title>
-            Twój profil
+            Tu Perfil
         </template>
 
         <template #content>
             <div class="mb-5">
-                Zaktualizuj informacje profilowe i adres email swojego konta.
+                Actualiza la información de tu perfil y la dirección de correo electrónico de tu cuenta.
             </div>
             <!-- Name -->
             <div class="field">
-                <label for="name">Nazwa</label>
+                <label for="name">Nombre</label>
                 <InputText
                     id="name"
                     class="w-full"
@@ -23,7 +23,7 @@
                 </small>
             </div>
             <div class="field">
-                <label for="email">Adres e-mail</label>
+                <label for="email">Correo electrónico</label>
                 <InputText
                     id="email"
                     class="w-full"
@@ -39,7 +39,7 @@
 
         <template #footer>
             <Button
-                label="Zapisz"
+                label="Actualizar"
                 :loading="form.processing"
                 @click="updateProfileInformation"
             />
@@ -85,7 +85,7 @@ export default {
                 errorBag: 'updateProfileInformation',
                 preserveScroll: true,
                 onSuccess: () => {
-                    this.flashSuccess('Zapisano dane konta.');
+                    this.flashSuccess('Detalles de la cuenta guardados.');
                 }
             });
         },

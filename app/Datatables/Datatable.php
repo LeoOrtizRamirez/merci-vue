@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Datatables;
 
 use Illuminate\Database\Eloquent\Builder;
@@ -14,7 +15,7 @@ abstract class Datatable
 
     protected bool $includeTrashed = false;
 
-    protected bool $globalFilter = false;
+    protected bool $globalFilter = true;
 
     protected Builder $builder;
 
@@ -36,9 +37,10 @@ abstract class Datatable
         if ($this->globalFilter) {
             $this->builder = $this->builder->where($this->globalFilter($request));
         }
-
+        /*
+        //PENDIENTE REVISAR PARA PERMITIR ORDENAR, NO FUNCIONA EN TABLA PERMISOS - ROLES
         $this->builder = $this->sortAndOrder($request);
-
+        */
         /** @var LengthAwarePaginator $paginator */
         $paginator = $this->builder->paginate($rows, ['*'], 'page', $pageNumber);
 
@@ -78,8 +80,15 @@ abstract class Datatable
 
         $filterValue = $filters['global']['value'];
 
-        return function (Builder $query) use ($filterValue) {
-            $query->where('name', 'LIKE', '%' . $filterValue . '%');
-        };
+        if (isset($filters['acta_id'])) {
+            $filterValue = $filters['acta_id']['value'];
+            return function (Builder $query) use ($filterValue) {
+                $query->where('acta_id', '=', $filterValue);
+            };
+        }else{
+            return function (Builder $query) use ($filterValue) {
+                //$query->where('name', 'LIKE', '%' . $filterValue . '%');
+            };
+        }
     }
 }

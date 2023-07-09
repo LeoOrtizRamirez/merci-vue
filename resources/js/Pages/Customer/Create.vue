@@ -11,27 +11,29 @@
                                 <div class="p-fluid formgrid grid">
                                     <div class="field col-12 md:col-6">
                                         <label for="name">Nombre</label>
-                                        <InputText v-model="form.name" id="name" type="text" required/>
+                                        <InputText v-model="form.name" id="name" type="text" required />
                                     </div>
                                     <div class="field col-12 md:col-6">
                                         <label for="document">Número de documento</label>
-                                        <InputText v-model="form.document" id="document" type="text"/>
+                                        <InputText v-model="form.document" id="document" type="text" />
                                     </div>
                                     <div class="field col-12 md:col-6">
                                         <label for="phone">Teléfono</label>
-                                        <InputText v-model="form.phone" id="phone" type="text"/>
+                                        <InputText v-model="form.phone" id="phone" type="text" />
                                     </div>
                                     <div class="field col-12 md:col-6">
                                         <label for="email">E-mail</label>
-                                        <InputText v-model="form.email" id="email" type="email"/>
+                                        <InputText v-model="form.email" id="email" type="email" />
                                     </div>
                                     <div class="field col-12 md:col-6">
                                         <label for="address">Dirección</label>
-                                        <InputText v-model="form.address" id="address" type="text"/>
+                                        <InputText v-model="form.address" id="address" type="text" />
                                     </div>
-                                    <Button label="Submit" type="submit"></Button>
                                 </div>
-                            </form>    
+                                <Button class="p-button p-component p-button-danger p-button-raised mx-2" label="Cancelar"
+                                    @click="this.$inertia.get(this.route('customers.index'));" />
+                                <Button label="Guardar" type="submit"></Button>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -55,25 +57,23 @@ export default {
     },
     data() {
         return {
-            form:{
-                name:"",
-                document:"",
-                phone:"",
-                email:"",
-                address:""
+            form: {
+                name: "",
+                document: "",
+                phone: "",
+                email: "",
+                address: ""
             },
         }
     },
     mounted() {
     },
     methods: {
-        submit(){
-            this.$inertia.post(route('customers.store'),this.form);
+        submit() {
+            this.$inertia.post(route('customers.store'), this.form);
         },
     }
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
