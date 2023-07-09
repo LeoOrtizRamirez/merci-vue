@@ -46,15 +46,13 @@ class TareaController extends Controller
             $color = $item->estado->backgroundColor;
             $estado = $item->estado->name;
             $actividad = $item->actividad->name;
-
+            $categoria = $item->actividad->categoria->name;
             $item->estado_name = $estado;
             $item->estado_backgroundColor = $color;
             $item->actividad_name = $actividad;
+            $item->categoria_name = $categoria;
         }
-
-        //dd($tareas);
         return json_encode($tareas);
-        //return redirect()->route('tareas.index');
     }
 
     public function show(Tarea $tarea)
@@ -69,10 +67,31 @@ class TareaController extends Controller
 
     public function update(Request $request, Tarea $tarea)
     {
+        //dd($request);
         $tarea = Tarea::find($tarea->id);
-        $tarea->name = $request->name;
+        //$tarea = new Tarea;
+        $tarea->acta_id = $request->acta_id;
+        $tarea->descripcion = $request->descripcion;
+        $tarea->responsable = $request->responsable;
+        $tarea->fecha_inicio = $request->fecha_inicio;
+        $tarea->fecha_fin = $request->fecha_fin;
+        $tarea->fecha_finalizacion = $request->fecha_finalizacion;
+        $tarea->estado_id = $request["estado"]["id"];
+        $tarea->actividad_id = $request["actividad"]["id"];
         $tarea->save();
-        return redirect()->route('tareas.index');
+
+        $tareas = Tarea::where('acta_id', $request->acta_id)->with("estado", "actividad")->get();
+        foreach ($tareas as $key => $item) {
+            $color = $item->estado->backgroundColor;
+            $estado = $item->estado->name;
+            $actividad = $item->actividad->name;
+            $categoria = $item->actividad->categoria->name;
+            $item->estado_name = $estado;
+            $item->estado_backgroundColor = $color;
+            $item->actividad_name = $actividad;
+            $item->categoria_name = $categoria;
+        }
+        return json_encode($tareas);
     }
 
     public function destroy(Tarea $tarea)

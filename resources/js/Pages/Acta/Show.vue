@@ -64,7 +64,7 @@
                             </Column>
                             <Column field="descripcion" header="Tarea">
                                 <template #body="slotProps">
-                                    {{ slotProps.data.descripcion }}
+                                    <span class="large-text">{{ slotProps.data.descripcion }}</span>
                                 </template>
                             </Column>
                             <Column field="categoria" header="Categoria">
@@ -79,35 +79,39 @@
                             </Column>
                             <Column field="responsable" header="Responsable">
                                 <template #body="slotProps">
-                                    {{ slotProps.data.responsable }}
+                                    <span class="large-text">{{ slotProps.data.responsable }}</span>
                                 </template>
                             </Column>
-                            <Column field="fecha_inicio" header="Fecha Inicio">
+                            <Column field="fecha_inicio" header="Fecha Inicio" class="date">
                                 <template #body="slotProps">
-                                    {{ slotProps.data.fecha_inicio }}
+                                    <span class="date">{{ slotProps.data.fecha_inicio }}</span>
                                 </template>
                             </Column>
-                            <Column field="fecha_fin" header="Fecha Finalización">
+                            <Column field="fecha_fin" header="Fecha Fin" class="date">
                                 <template #body="slotProps">
-                                    {{ slotProps.data.fecha_fin }}
+                                    <span class="date">{{ slotProps.data.fecha_fin }}</span>
                                 </template>
                             </Column>
                             <Column field="estado" header="Estado">
                                 <template #body="slotProps">
                                     <Tag :style="{ background: slotProps.data.estado_backgroundColor }">
-                                        <span>{{ slotProps.data.estado_name }}</span>
+                                        <span style="font-size: 11px;">{{ slotProps.data.estado_name }}</span>
                                     </Tag>
                                 </template>
                             </Column>
-                            <Column field="fecha_finalizacion" header="Fecha real de Finalización">
+                            <Column field="fecha_finalizacion" header="Fecha Finalización" class="date">
                                 <template #body="slotProps">
-                                    {{ slotProps.data.fecha_finalizacion }}
+                                    <span class="date">{{ slotProps.data.fecha_finalizacion }}</span>
                                 </template>
                             </Column>
-                            <Column header="Acciones" style="width: 150px;">
+                            <Column header="Acciones" style="min-width: 150px;">
                                 <template #body="slotProps">
-                                    <Button icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2"
+                                    <Button v-permission="'tarea.edit'" icon="pi pi-pencil"
+                                        class="p-button-success p-button-sm mr-1 p-button-rounded p-button-outlined"
                                         @click="editModel(slotProps.data)" />
+                                    <Button v-permission="'tarea.destroy'" icon="pi pi-trash"
+                                        class="p-button-sm p-button-danger p-button-rounded p-button-outlined"
+                                        @click="showDeleteDialog(slotProps.data)" />
                                 </template>
                             </Column>
                             <template #empty>
@@ -129,6 +133,72 @@
                 <InputText id="descripcion" v-model.trim="model.descripcion" required="true" autofocus
                     :class="{ 'p-invalid': submitted && !model.descripcion }" />
                 <small class="p-invalid" v-if="submitted && !model.descripcion">Descripción es requerida.</small>
+            </div>
+            <div class="field col-12 md:col-12">
+                <label for="actividad">Actividad</label>
+                <Dropdown v-model="model.actividad" :options="actividades" optionLabel="name"
+                    placeholder="Selecciona una Actividad" :class="{ 'p-invalid': submitted && !model.actividad }"
+                    required />
+                <small class="p-invalid" v-if="submitted && !model.actividad">Responsable es requerido.</small>
+            </div>
+            <div class="field col-12 md:col-12">
+                <label for="responsable">Responsable</label>
+                <InputText id="responsable" v-model.trim="model.responsable" required="true" autofocus
+                    :class="{ 'p-invalid': submitted && !model.responsable }" />
+                <small class="p-invalid" v-if="submitted && !model.responsable">Responsable es requerido.</small>
+            </div>
+            <div class="field col-12 md:col-6">
+                <label for="fecha_inicio">Fecha Inicio</label>
+                <InputText id="fecha_inicio" v-model.trim="model.fecha_inicio" required="true" autofocus
+                    :class="{ 'p-invalid': submitted && !model.fecha_inicio }" type="date" />
+                <small class="p-invalid" v-if="submitted && !model.fecha_inicio">Responsable es requerido.</small>
+            </div>
+            <div class="field col-12 md:col-6">
+                <label for="fecha_fin">Fecha Fin</label>
+                <InputText id="fecha_fin" v-model.trim="model.fecha_fin" required="true" autofocus
+                    :class="{ 'p-invalid': submitted && !model.fecha_fin }" type="date" />
+                <small class="p-invalid" v-if="submitted && !model.fecha_fin">Responsable es requerido.</small>
+            </div>
+            <!-- <div class="field col-12 md:col-4">
+                <label for="fecha_finalizacion">Fecha finalización</label>
+                <InputText id="fecha_finalizacion" v-model.trim="model.fecha_finalizacion" required="true" autofocus
+                    :class="{ 'p-invalid': submitted && !model.fecha_finalizacion }" type="date" />
+                <small class="p-invalid" v-if="submitted && !model.fecha_finalizacion">Responsable es requerido.</small>
+            </div> -->
+            <!-- <div class="field col-12 md:col-6">
+                <label for="estado">Estado</label>
+                <Dropdown v-model="model.estado" :options="estados" optionLabel="name" placeholder="Selecciona un Estado"
+                    :class="{ 'p-invalid': submitted && !model.estado }" required />
+                <small class="p-invalid" v-if="submitted && !model.estado">Responsable es requerido.</small>
+            </div> -->
+        </div>
+        <template #footer>
+            <Button label="Cancelar" icon="pi pi-times" class="p-button-text" @click="hideDialog" />
+            <Button label="Guardar" icon="pi pi-check" class="p-button-text" @click="saveModel" />
+        </template>
+    </Dialog>
+
+    <Dialog v-model:visible="modelEditDialog" :style="{ width: '750px' }" header="Editar Tarea" :modal="true"
+        class="p-fluid">
+        <div class="p-fluid formgrid grid">
+            <div class="field col-12 md:col-12">
+                <label for="name">Tarea</label>
+                <InputText id="descripcion" v-model.trim="model.descripcion" required="true" autofocus
+                    :class="{ 'p-invalid': submitted && !model.descripcion }" />
+                <small class="p-invalid" v-if="submitted && !model.descripcion">Descripción es requerida.</small>
+            </div>
+            <div class="field col-12 md:col-6">
+                <label for="actividad">Actividad</label>
+                <Dropdown v-model="model.actividad" :options="actividades" optionLabel="name"
+                    placeholder="Selecciona una Actividad" :class="{ 'p-invalid': submitted && !model.actividad }"
+                    required />
+                <small class="p-invalid" v-if="submitted && !model.actividad">Responsable es requerido.</small>
+            </div>
+            <div class="field col-12 md:col-6">
+                <label for="estado">Estado</label>
+                <Dropdown v-model="model.estado" :options="estados" optionLabel="name" placeholder="Selecciona un Estado"
+                    :class="{ 'p-invalid': submitted && !model.estado }" required />
+                <small class="p-invalid" v-if="submitted && !model.estado">Responsable es requerido.</small>
             </div>
             <div class="field col-12 md:col-12">
                 <label for="responsable">Responsable</label>
@@ -154,23 +224,10 @@
                     :class="{ 'p-invalid': submitted && !model.fecha_finalizacion }" type="date" />
                 <small class="p-invalid" v-if="submitted && !model.fecha_finalizacion">Responsable es requerido.</small>
             </div>
-            <div class="field col-12 md:col-6">
-                <label for="estado">Estado</label>
-                <Dropdown v-model="model.estado" :options="estados" optionLabel="name" placeholder="Selecciona un Estado"
-                    :class="{ 'p-invalid': submitted && !model.estado }" required />
-                <small class="p-invalid" v-if="submitted && !model.estado">Responsable es requerido.</small>
-            </div>
-            <div class="field col-12 md:col-6">
-                <label for="actividad">Actividad</label>
-                <Dropdown v-model="model.actividad" :options="actividades" optionLabel="name"
-                    placeholder="Selecciona una Actividad" :class="{ 'p-invalid': submitted && !model.actividad }"
-                    required />
-                <small class="p-invalid" v-if="submitted && !model.actividad">Responsable es requerido.</small>
-            </div>
         </div>
         <template #footer>
-            <Button label="Cancelar" icon="pi pi-times" class="p-button-text" @click="hideDialog" />
-            <Button label="Guardar" icon="pi pi-check" class="p-button-text" @click="saveModel" />
+            <Button label="Cancelar" icon="pi pi-times" class="p-button-text" @click="hideEditDialog" />
+            <Button label="Guardar" icon="pi pi-check" class="p-button-text" @click="updateModel" />
         </template>
     </Dialog>
 </template>
@@ -233,6 +290,7 @@ export default {
             deleteDialog: false,
             deletingModel: false,
             modelDialog: false,
+            modelEditDialog: false,
             model: {
                 descripcion: "des",
                 responsable: "des",
@@ -248,7 +306,6 @@ export default {
 
             },
             submitted: false,
-            modelDialog: false,
         }
     },
     datatableService: null,
@@ -295,7 +352,7 @@ export default {
         },
         onDelete() {
             this.deletingModel = true;
-            this.$inertia.delete(this.route('actas.destroy', this.selectedModel.id), {
+            this.$inertia.delete(this.route('tareas.destroy', this.selectedModel.id), {
                 onSuccess: () => {
                     this.deletingModel = false;
                     this.deleteDialog = false;
@@ -304,7 +361,7 @@ export default {
                     this.$toast.add({
                         severity: "success",
                         summary: "Exitoso",
-                        detail: "Categoria Eliminada!",
+                        detail: "Tarea Eliminada!",
                         life: 3000,
                     });
                 }
@@ -319,44 +376,26 @@ export default {
             this.submitted = false;
             this.modelDialog = true;
         },
+        editModel(model) {
+            var actividad = this.actividades.filter(actividad => actividad.name == model.actividad_name)[0]
+            var estado = this.estados.filter(estado => estado.name == model.estado_name)[0]
+
+            this.model = model
+            this.model.actividad = actividad
+            this.model.estado = estado
+
+            console.log(this.model)
+            this.submitted = false;
+            this.modelEditDialog = true;
+        },
+        hideEditDialog() {
+            this.modelEditDialog = false;
+            this.submitted = false;
+        },
         saveModel() {
             this.submitted = true;
             if (this.model) {
-
-                /* var token = document.querySelector('meta[name="csrf-token"]')
-                fetch(this.route('tareas.store'), {
-                    method: 'POST',
-                    body: this.model,
-                    headers: {
-                        'X-CSRF-TOKEN': token.content // Replace with your CSRF token
-                    }
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        this.model = data.data.data;
-                        this.models.unshift(this.model);
-                        this.$toast.add({
-                            severity: "success",
-                            summary: "Successful",
-                            detail: "Permission Created",
-                            life: 3000,
-                        });
-                        this.datatable.data = response.data
-                        console.log("datatable.data", this.datatable.data)
-                    })
-                    .catch(error => {
-                        console.error('Error uploading image', error);
-                        this.$toast.add({
-                            severity: "error",
-                            summary: "Error",
-                            detail: "Permission not created",
-                            life: 3000,
-                        });
-                    }); */
-
-
-                axios
-                    .post(this.route('tareas.store'), this.model)
+                axios.post(this.route('tareas.store'), this.model)
                     .then((response) => {
                         this.model = response.data.data;
                         /* this.models.unshift(this.model); */
@@ -379,6 +418,36 @@ export default {
                     });
             }
             this.modelDialog = false;
+            this.model = {};
+        },
+        updateModel() {
+            this.submitted = true;
+            if (this.model) {
+                console.log("model", this.model)
+                console.log(typeof miVariable)
+                axios.put(this.route('tareas.update',  this.model), this.model)
+                    .then((response) => {
+                        this.model = response.data.data;
+                        /* this.models.unshift(this.model); */
+                        this.$toast.add({
+                            severity: "success",
+                            summary: "Exitoso!",
+                            detail: "Tarea actualizada",
+                            life: 3000,
+                        });
+                        this.datatable.data = response.data
+                        console.log("datatable.data", this.datatable.data)
+                    })
+                    .catch((error) => {
+                        this.$toast.add({
+                            severity: "error",
+                            summary: "Error",
+                            detail: error,
+                            life: 3000,
+                        });
+                    });
+            }
+            this.modelEditDialog = false;
             this.model = {};
         },
     }

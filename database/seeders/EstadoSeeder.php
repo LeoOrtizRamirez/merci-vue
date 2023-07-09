@@ -19,7 +19,9 @@ class EstadoSeeder extends Seeder
             ['name' => 'Finalizada', 'color' => '#FFFFFF', 'backgroundColor' => '#DE3163', 'tipo' => 1],
             ['name' => 'Pausada', 'color' => '#FFFFFF', 'backgroundColor' => '#FFBF00', 'tipo' => 1],
             ['name' => 'Sin Iniciar', 'color' => '#FFFFFF', 'backgroundColor' => '#FFBF00', 'tipo' => 2],
-            ['name' => 'Terminada', 'color' => '#FFFFFF', 'backgroundColor' => '#DE3163', 'tipo' => 2],
+            ['name' => 'Progreso', 'color' => '#FFFFFF', 'backgroundColor' => '#326fd1', 'tipo' => 2],
+            ['name' => 'Terminada', 'color' => '#FFFFFF', 'backgroundColor' => '#1da750', 'tipo' => 2],
+            ['name' => 'Vencida', 'color' => '#FFFFFF', 'backgroundColor' => '#DE3163', 'tipo' => 2],
         ];
         DB::table('estados')->insert($estados);
     }

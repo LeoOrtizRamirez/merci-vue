@@ -47,6 +47,10 @@ class PermissionSeeder extends Seeder
             ['name' => 'actividad.show', 'guard_name' => 'web', 'created_at' => now(), 'updated_at' => now()],
             ['name' => 'actividad.edit', 'guard_name' => 'web', 'created_at' => now(), 'updated_at' => now()],
             ['name' => 'actividad.destroy', 'guard_name' => 'web', 'created_at' => now(), 'updated_at' => now()],
+            ['name' => 'tarea.create', 'guard_name' => 'web', 'created_at' => now(), 'updated_at' => now()],
+            ['name' => 'tarea.show', 'guard_name' => 'web', 'created_at' => now(), 'updated_at' => now()],
+            ['name' => 'tarea.edit', 'guard_name' => 'web', 'created_at' => now(), 'updated_at' => now()],
+            ['name' => 'tarea.destroy', 'guard_name' => 'web', 'created_at' => now(), 'updated_at' => now()],
         ];
         DB::table('permissions')->insert($permissions);
     }

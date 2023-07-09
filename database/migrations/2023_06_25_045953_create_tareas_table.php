@@ -19,7 +19,7 @@ class CreateTareasTable extends Migration
             $table->string('responsable');
             $table->date('fecha_inicio');
             $table->date('fecha_fin');
-            $table->date('fecha_finalizacion');
+            $table->date('fecha_finalizacion')->nullable();
 
             $table->unsignedBigInteger('acta_id')->nullable()->unsigned();
             $table->foreign('acta_id')
