@@ -71,7 +71,7 @@ class ActaController extends Controller
         $acta->asistentes = $request->asistentes;
         $acta->temas = $request->temas;
         $acta->save();
-        return redirect()->route('actas.index');
+        return redirect()->route('actas.show', $acta->id);
     }
 
     public function destroy(Acta $acta)

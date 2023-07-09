@@ -3,7 +3,12 @@
         <div class="p-grid">
             <div class="p-col-12">
                 <div class="card">
-                    <h4>Acta</h4>
+                    <div class="flex mb-2">
+                        <Button v-permission="'acta.edit'" icon="pi pi-pencil"
+                            class="p-button-success p-button-sm mr-1 p-button-rounded p-button-outlined"
+                            @click="edit(acta.id)" />
+                        <h4 class="m-0">Acta</h4>
+                    </div>
                     <div class="flex justify-between items-center px-2 py-2">
                         <p class="m-0 font-bold">Número de la sesión:</p>
                         <p class="ml-2">{{ acta.numero_sesion }}</p>
@@ -252,6 +257,9 @@ export default {
         this.loadLazyData();
     },
     methods: {
+        edit(id) {
+            this.$inertia.get(this.route('actas.edit', id));
+        },
         loadLazyData() {
 
             this.datatable.loading = true;

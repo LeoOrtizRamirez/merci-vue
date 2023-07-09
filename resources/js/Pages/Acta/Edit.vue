@@ -40,7 +40,7 @@
                                     </div>
                                 </div>
                                 <Button class="p-button p-component p-button-danger p-button-raised mx-2" label="Cancelar"
-                                    @click="this.$inertia.get(this.route('actas.index'));" />
+                                    @click="this.$inertia.get(this.route('actas.show', acta.id));" />
                                 <Button label="Actualizar" type="submit"></Button>
                             </form>
                         </div>
