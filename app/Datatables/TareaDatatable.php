@@ -23,6 +23,7 @@ class TareaDatatable extends Datatable
                 'estado_name' => $tarea->estado->name,
                 'estado_backgroundColor' => $tarea->estado->backgroundColor,
                 'actividad_name' => $tarea->actividad->name,
+                'categoria_name' => $tarea->actividad->categoria->name,
                 'acta_id' => $tarea->acta_id,
             ];
         };

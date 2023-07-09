@@ -67,6 +67,16 @@
                                     {{ slotProps.data.descripcion }}
                                 </template>
                             </Column>
+                            <Column field="categoria" header="Categoria">
+                                <template #body="slotProps">
+                                    {{ slotProps.data.categoria_name }}
+                                </template>
+                            </Column>
+                            <Column field="actividad" header="Actividad">
+                                <template #body="slotProps">
+                                    {{ slotProps.data.actividad_name }}
+                                </template>
+                            </Column>
                             <Column field="responsable" header="Responsable">
                                 <template #body="slotProps">
                                     {{ slotProps.data.responsable }}
@@ -246,6 +256,7 @@ export default {
         this.datatableService = new DatatableService();
     },
     mounted() {
+        console.log(this.actividades[0])
         this.datatable.loading = true;
         this.datatable.lazyParams = {
             first: 0,
