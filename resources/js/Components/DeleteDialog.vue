@@ -16,13 +16,13 @@
             <Button
                 label="Cancelar"
                 icon="pi pi-times"
-                class="p-button-text"
+                class="p-button-danger p-button-raised mx-2"
                 @click="onClose"
             />
             <Button
                 label="Aceptar"
                 icon="pi pi-check"
-                class="p-button-text"
+                class=""
                 :loading="loading"
                 @click="onSubmit"
             />

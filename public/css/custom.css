@@ -61,3 +61,7 @@ td.date {
     display: inline-block;
     max-width: 90px;
 }
+
+.confirmation-content{
+    display: flex;
+}

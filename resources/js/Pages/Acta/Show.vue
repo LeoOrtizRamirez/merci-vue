@@ -173,8 +173,8 @@
             </div> -->
         </div>
         <template #footer>
-            <Button label="Cancelar" icon="pi pi-times" class="p-button-text" @click="hideDialog" />
-            <Button label="Guardar" icon="pi pi-check" class="p-button-text" @click="saveModel" />
+            <Button label="Cancelar" icon="pi pi-times" class="p-button-danger p-button-raised mx-2" @click="hideDialog" />
+            <Button label="Guardar" icon="pi pi-check" class="" @click="saveModel" />
         </template>
     </Dialog>
 
@@ -226,8 +226,8 @@
             </div>
         </div>
         <template #footer>
-            <Button label="Cancelar" icon="pi pi-times" class="p-button-text" @click="hideEditDialog" />
-            <Button label="Guardar" icon="pi pi-check" class="p-button-text" @click="updateModel" />
+            <Button label="Cancelar" icon="pi pi-times" class="p-button-danger p-button-raised mx-2" @click="hideEditDialog" />
+            <Button label="Guardar" icon="pi pi-check" class="" @click="updateModel" />
         </template>
     </Dialog>
 </template>
