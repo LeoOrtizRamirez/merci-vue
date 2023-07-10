@@ -47,7 +47,6 @@ export default {
                             items: [
                                 { label: 'Empresas', icon: 'pi pi-fw pi-briefcase', to: this.route('empresas.index'), },
                                 { label: 'Usuarios', icon: 'pi pi-fw pi-users', to: this.route('users.index'), },
-                                { label: 'Clientes', icon: 'pi pi-fw pi-users', to: this.route('customers.index'), },
                                 { label: 'Roles', icon: 'pi pi-fw pi-lock', to: this.route('roles.index'), },
                                 { label: 'Categorias', icon: 'pi pi-fw pi-list', to: this.route('categorias.index'), },
                                 { label: 'Actividades', icon: 'pi pi-fw pi-list', to: this.route('actividades.index'), },

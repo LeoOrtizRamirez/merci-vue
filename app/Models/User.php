@@ -27,12 +27,12 @@ class User extends Authenticatable
     use HasPermissions;
     use HasRoles;
 
-    public function estado(){
-        return $this->belongsTo('App\Models\Estado');
-    }
-
     public function empresa(){
         return $this->belongsTo('App\Models\Empresa');
+    }
+
+    public function indicadores(){
+        return $this->hasMany('App\Models\UserIndicadore');
     }
     
     /**

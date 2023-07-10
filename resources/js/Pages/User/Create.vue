@@ -22,27 +22,18 @@
                                         <InputText v-model="form.password" id="password" type="password" placeholder="Ingresa una contraseña" required />
                                     </div>
                                     <div class="field col-12 md:col-6">
-                                        <label for="rePassword">Confirmar contraseña</label>
-                                        <InputText v-model="form.rePassword" id="rePassword" type="password" placeholder="Ingresa la contraseña nuevamente" required />
-                                    </div>
-                                    <div class="field col-12 md:col-6">
-                                        <label for="estado">Estado</label>
-                                        <Dropdown v-model="form.estado" :options="estados" optionLabel="name"
-                                            placeholder="Selecciona un Estado" class="w-full" required/>
-                                    </div>
-                                    <div class="field col-12 md:col-6">
                                         <label for="indicadores">Indicadores</label>
                                         <MultiSelect v-model="form.indicadores" :options="indicadores" optionLabel="name"
                                             placeholder="Selecciona los Indicadores" :maxSelectedLabels="3" class="w-full" required/>
                                     </div>
                                     <div class="field col-12 md:col-6">
-                                        <label for="empresa">Empresa</label>
-                                        <Dropdown v-model="form.empresa" :options="empresas" optionLabel="name"
+                                        <label for="rol">Rol</label>
+                                        <Dropdown v-model="form.rol" :options="roles" optionLabel="name"
                                             placeholder="Selecciona una Empresa" class="w-full" required/>
                                     </div>
                                     <div class="field col-12 md:col-6">
-                                        <label for="rol">Rol</label>
-                                        <Dropdown v-model="form.rol" :options="roles" optionLabel="name"
+                                        <label for="empresa">Empresa</label>
+                                        <Dropdown v-model="form.empresa" :options="empresas" optionLabel="name"
                                             placeholder="Selecciona una Empresa" class="w-full" required/>
                                     </div>
 
@@ -84,7 +75,6 @@ export default {
     },
     props: {
         indicadores: [],
-        estados: [],
         empresas: [],
         roles: [],
         errors: Object
@@ -96,7 +86,6 @@ export default {
             form: {
                 name: "",
                 indicadores: "",
-                estado: "",
                 password: "",
                 rePassword: "",
                 email: "",

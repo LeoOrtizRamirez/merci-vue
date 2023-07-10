@@ -17,9 +17,7 @@ class UserDatatable extends Datatable
                 'id' => $user->id,
                 'name' => $user->name,
                 'email' => $user->email,
-                'estado' => $user?->estado?->name,
                 'empresa' => $user?->empresa?->name,
-                'backgroundColor' => $user?->estado?->backgroundColor,
                 'admin' => $user->admin,
             ];
         };

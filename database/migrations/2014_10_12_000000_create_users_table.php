@@ -27,11 +27,6 @@ class CreateUsersTable extends Migration
             $table->foreign('empresa_id')
                 ->references('id')
                 ->on('empresas');
-
-            $table->unsignedBigInteger('estado_id')->nullable()->unsigned();
-            $table->foreign('estado_id')
-                ->references('id')
-                ->on('estados');
             $table->timestamps();
         });
     }

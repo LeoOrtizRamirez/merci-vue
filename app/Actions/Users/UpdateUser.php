@@ -11,12 +11,11 @@ class UpdateUser
     {
         $user->name = $data->name;
         $user->email = $data->email;
+        $user->empresa_id = $data->empresa_id;
         if ($data->password) {
             $user->password = $data->password;
         }
-
         $user->save();
-
         return $user;
     }
 }

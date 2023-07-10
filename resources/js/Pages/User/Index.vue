@@ -44,13 +44,6 @@
                                 {{ slotProps.data.empresa }}
                             </template>
                         </Column>
-                        <Column field="estado" header="Estado">
-                            <template #body="slotProps">
-                                <Tag :style="{ background: slotProps.data.backgroundColor }">
-                                    <span>{{ slotProps.data.estado }}</span>
-                                </Tag>
-                            </template>
-                        </Column>
                         <Column header="Acciones" style="width: 150px;">
                             <template #body="slotProps">
                                 <Button v-permission="'user.edit'" icon="pi pi-pencil"

@@ -59,13 +59,7 @@ export default {
         }
     },
     mounted() {
-        console.log("this.actividade", this.actividade)
-        console.log("categorias", this.categorias[0])
-
-        // Buscar la categoría con el id correspondiente a actividade.categoria_id
         const categoriaSeleccionada = this.categorias.find(categoria => categoria.id === this.actividade.categoria_id);
-
-        // Establecer la categoría seleccionada en el Dropdown
         if (categoriaSeleccionada) {
             this.form.categoria = categoriaSeleccionada;
         }

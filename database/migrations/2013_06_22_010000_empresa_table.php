@@ -16,6 +16,13 @@ class EmpresaTable extends Migration
         Schema::create('empresas', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('nit');
+
+            $table->unsignedBigInteger('estado_id')->nullable()->unsigned();
+            $table->foreign('estado_id')
+                ->references('id')
+                ->on('estados');
+
             $table->timestamps();
         });
     }

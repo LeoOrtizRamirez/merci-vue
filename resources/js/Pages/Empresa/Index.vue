@@ -34,6 +34,18 @@
                                 {{ slotProps.data.name }}
                             </template>
                         </Column>
+                        <Column field="nit" header="NIT">
+                            <template #body="slotProps">
+                                {{ slotProps.data.nit }}
+                            </template>
+                        </Column>
+                        <Column field="estado" header="Estado">
+                            <template #body="slotProps">
+                                <Tag :style="{ background: slotProps.data.backgroundColor }">
+                                    <span>{{ slotProps.data.estado }}</span>
+                                </Tag>
+                            </template>
+                        </Column>
                         <Column header="Acciones" style="width: 150px;">
                             <template #body="slotProps">
                                 <Button v-permission="'empresa.edit'" icon="pi pi-pencil"
@@ -65,6 +77,7 @@ import Menubar from "primevue/menubar";
 import Column from "primevue/column";
 import Button from "primevue/button";
 import DeleteDialog from "../../Components/DeleteDialog";
+import Tag from 'primevue/tag';
 
 export default {
     name: "Index",
@@ -75,7 +88,8 @@ export default {
         DataTable,
         Column,
         Button,
-        DeleteDialog
+        DeleteDialog,
+        Tag
     },
     data() {
         return {

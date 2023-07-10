@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class UserIndicador extends Model
+class UserIndicadore extends Model
 {
     use HasFactory;
 
@@ -16,6 +16,6 @@ class UserIndicador extends Model
 
     public function indicador()
     {
-        return $this->belongsToMany('App\Indicador');
+        return $this->belongsToMany('App\Indicadore');
     }
 }

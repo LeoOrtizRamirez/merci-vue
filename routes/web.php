@@ -42,11 +42,6 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 });
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
-    Route::get('/customers/datatable', [CustomerController::class, 'datatable'])->name('customers.datatable');
-    Route::resource('customers', CustomerController::class);
-});
-
-Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('/empresas/datatable', [EmpresaController::class, 'datatable'])->name('empresas.datatable');
     Route::resource('empresas', EmpresaController::class);
 });
