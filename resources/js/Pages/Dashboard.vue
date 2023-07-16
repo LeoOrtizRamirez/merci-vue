@@ -4,10 +4,12 @@
             <div class="card mb-0">
                 <div class="flex justify-content-between">
                     <div>
-                        <div class="text-900 font-medium text-xl"><span class="text-green-500 font-medium">{{ new Intl.NumberFormat('en-US').format(investment) }}</span></div>
+                        <div class="text-900 font-medium text-xl"><span class="text-green-500 font-medium">{{ new
+                            Intl.NumberFormat('en-US').format(investment) }}</span></div>
                         <span class="block text-500 font-medium mb-3">Encuentros</span>
                     </div>
-                    <div class="flex align-items-center justify-content-center bg-blue-100 border-round" style="width:2.5rem;height:2.5rem">
+                    <div class="flex align-items-center justify-content-center bg-blue-100 border-round"
+                        style="width:2.5rem;height:2.5rem">
                         <i class="pi pi-dollar text-blue-500 text-xl"></i>
                     </div>
                 </div>
@@ -20,7 +22,8 @@
                         <span class="block text-500 font-medium">Acceso <br> Cronograma</span>
                         <!-- <div class="text-900 font-medium text-xl"><span class="text-green-500 font-medium">{{ new Intl.NumberFormat('en-US').format(loans) }}</span></div> -->
                     </div>
-                    <div class="flex align-items-center justify-content-center bg-orange-100 border-round" style="width:2.5rem;height:2.5rem">
+                    <div class="flex align-items-center justify-content-center bg-orange-100 border-round"
+                        style="width:2.5rem;height:2.5rem">
                         <i class="pi pi-shopping-cart text-orange-500 text-xl"></i>
                     </div>
                 </div>
@@ -33,7 +36,8 @@
                         <span class="block text-500 font-medium">Acceso <br> Entregables</span>
                         <!-- <div class="text-900 font-medium text-xl"><span class="text-green-500 font-medium">{{ new Intl.NumberFormat('en-US').format(gain) }}</span></div> -->
                     </div>
-                    <div class="flex align-items-center justify-content-center bg-cyan-100 border-round" style="width:2.5rem;height:2.5rem">
+                    <div class="flex align-items-center justify-content-center bg-cyan-100 border-round"
+                        style="width:2.5rem;height:2.5rem">
                         <i class="pi pi-money-bill text-cyan-500 text-xl"></i>
                     </div>
                 </div>
@@ -53,19 +57,121 @@
                 </div>
             </div>
         </div>
-	</div>
+        <div class="col-12 lg:col-6 xl :col-6">
+            <div class="card">
+                <h6 class="text-center">VENTAS vs PRESUPUESTO en mill.</h6>
+                <Chart type="bar" :data="chartVentasPresupuesto" :options="chartOptions" />
+            </div>
+        </div>
+        <div class="col-12 lg:col-6 xl :col-6">
+            <div class="card">
+                <h6 class="text-center">COTIZACIONES</h6>
+                <Chart type="bar" :data="chartTtlCotizaciones" :options="chartOptions" />
+            </div>
+        </div>
+
+        <div class="col-12 lg:col-6 xl :col-6">
+            <div class="card">
+                <h6 class="text-center">EFECTIVIDAD COMERCIAL</h6>
+                <Chart type="line" :data="chartEfectividadComercial" />
+            </div>
+        </div>
+
+        <div class="col-12 lg:col-6 xl :col-6">
+            <div class="card">
+                <h6 class="text-center">CLIENTES NUEVOS</h6>
+                <Chart type="bar" :data="chartClientesNuevos" :options="basicOptions" />
+            </div>
+        </div>
+
+    </div>
 </template>
 
 <script>
-import AppLayout from '@/Layouts/AppLayout.vue'
+import AppLayout from '@/Layouts/AppLayout.vue';
+import Chart from 'primevue/chart';
+
 
 export default {
     layout: AppLayout,
-    props:{
-        investment:0,
-        loans:0,
-        gain:0,
-        current_balance:0
+    components: {
+        AppLayout,
+        Chart,
     },
+    props: {
+        investment: 0,
+        loans: 0,
+        gain: 0,
+        current_balance: 0
+    },
+    data() {
+        return {
+            chartOptions: {
+                responsive: true,
+                legend: {
+                    display: false
+                }
+            },
+            chartVentasPresupuesto: {
+                labels: ['ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO'],
+                datasets: [{
+                    type: 'line',
+                    label: 'PRESUPUESTO',
+                    borderColor: '#42A5F5',
+                    borderWidth: 2,
+                    fill: false,
+                    data: [50,25,12,48,100]
+                }, {
+                    type: 'bar',
+                    label: 'VENTAS',
+                    backgroundColor: '#581dfc',
+                    data: [21,84,24,75,37],
+                    borderColor: 'white',
+                    borderWidth: 2
+                }]
+            },
+            chartTtlCotizaciones: {
+                labels: ['ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO'],
+                datasets: [{
+                    type: 'line',
+                    label: 'N COTIZACIONES',
+                    borderColor: '#42A5F5',
+                    borderWidth: 2,
+                    fill: false,
+                    data: [50,25,12,48,56]
+                }, {
+                    type: 'bar',
+                    label: 'TTL COTIZACIONES',
+                    backgroundColor: '#581dfc',
+                    data: [21,84,24,75,37],
+                    borderColor: 'white',
+                    borderWidth: 2
+                }]
+            },
+            chartEfectividadComercial: {
+                labels: ['ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO'],
+                datasets: [
+                    {
+                        label: 'VENTAS',
+                        data: [12, 51, 62, 33, 21],
+                        fill: true,
+                        borderColor: '#581dfc',
+                        tension: .4,
+                        backgroundColor: '#581dfca6'
+                    }
+                ]
+            },
+            chartClientesNuevos: {
+                labels: ['ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO'],
+                datasets: [
+                    {
+                        label: 'CLIENTES',
+                        backgroundColor: '#581dfc',
+                        data: [5, 10, 20, 20, 5]
+                    }
+                ]
+            },
+        }
+    }
 };
 </script>

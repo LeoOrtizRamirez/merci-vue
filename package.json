@@ -33,6 +33,7 @@
         "vue-loader": "^16.1.2"
     },
     "dependencies": {
+        "chart.js": "^4.3.0",
         "vue-gates": "^2.1.2"
     }
 }
