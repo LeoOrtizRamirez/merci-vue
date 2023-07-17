@@ -4,13 +4,12 @@
             <div class="card mb-0">
                 <div class="flex justify-content-between">
                     <div>
-                        <div class="text-900 font-medium text-xl"><span class="text-green-500 font-medium">{{ new
-                            Intl.NumberFormat('en-US').format(investment) }}</span></div>
+                        <div class="text-900 font-medium text-xl"><span class="text-green-500 font-medium">1</span></div>
                         <span class="block text-500 font-medium mb-3">Encuentros</span>
                     </div>
                     <div class="flex align-items-center justify-content-center bg-blue-100 border-round"
                         style="width:2.5rem;height:2.5rem">
-                        <i class="pi pi-dollar text-blue-500 text-xl"></i>
+                        <i class="pi pi-book text-blue-500 text-xl"></i>
                     </div>
                 </div>
             </div>
@@ -24,7 +23,7 @@
                     </div>
                     <div class="flex align-items-center justify-content-center bg-orange-100 border-round"
                         style="width:2.5rem;height:2.5rem">
-                        <i class="pi pi-shopping-cart text-orange-500 text-xl"></i>
+                        <i class="pi pi-external-link text-orange-500 text-xl"></i>
                     </div>
                 </div>
             </div>
@@ -38,7 +37,7 @@
                     </div>
                     <div class="flex align-items-center justify-content-center bg-cyan-100 border-round"
                         style="width:2.5rem;height:2.5rem">
-                        <i class="pi pi-money-bill text-cyan-500 text-xl"></i>
+                        <i class="pi pi-external-link text-cyan-500 text-xl"></i>
                     </div>
                 </div>
             </div>
@@ -57,6 +56,98 @@
                 </div>
             </div>
         </div>
+
+
+        <div class="col-12 lg:col-12 xl:col-12">
+            <div class="card">
+                <div class="table-responsive">
+                    <table class="table align-items-center w-full" id="categorias">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <h5 class="mb-2 text-left"><strong>CATEGORÍAS</strong></h5>
+                                </th>
+                                <th>
+                                    <h6 class="mb-2 text-left">% de avance</h6>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <img src="/images/icons/icono-azul.png" class="absolute" style="width: 30px" alt="" />
+                                    <h6 class="categoria">COMPONENTE ESTRÁTEGICO</h6>
+                                </td>
+                                <td>
+                                    <div class="d-flex">
+                                        <ProgressBar :value="80"></ProgressBar>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <img src="/images/icons/icono-azul.png" class="absolute" style="width: 30px" alt="" />
+                                    <h6 class="categoria">CANALES DE VENTA</h6>
+                                </td>
+                                <td>
+                                    <div class="d-flex">
+                                        <ProgressBar :value="20"></ProgressBar>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <img src="/images/icons/icono-azul.png" class="absolute" style="width: 30px" alt="" />
+                                    <h6 class="categoria">MECÁNICA COMERCIAL</h6>
+                                </td>
+                                <td>
+                                    <div class="d-flex">
+                                        <ProgressBar :value="10"></ProgressBar>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <img src="/images/icons/icono-azul.png" class="absolute" style="width: 30px" alt="" />
+                                    <h6 class="categoria">TRANSFERENCIA DE CONOCIMIENTO
+                                    </h6>
+                                </td>
+                                <td>
+                                    <div class="d-flex">
+                                        <ProgressBar :value="25"></ProgressBar>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <img src="/images/icons/icono-azul.png" class="absolute" style="width: 30px" alt="" />
+                                    <h6 class="categoria">MERCADEO</h6>
+                                </td>
+                                <td>
+                                    <div class="d-flex">
+                                        <ProgressBar :value="10"></ProgressBar>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <img src="/images/icons/icono-azul.png" class="absolute" style="width: 30px" alt="" />
+                                    <h6 class="categoria">INFRAESTRUCTURA</h6>
+                                </td>
+                                <td>
+                                    <div class="d-flex">
+                                        <ProgressBar :value="50"></ProgressBar>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+
+
         <div class="col-12 lg:col-6 xl :col-6">
             <div class="card">
                 <h6 class="text-center">VENTAS vs PRESUPUESTO en mill.</h6>
@@ -90,6 +181,7 @@
 <script>
 import AppLayout from '@/Layouts/AppLayout.vue';
 import Chart from 'primevue/chart';
+import ProgressBar from 'primevue/progressbar';
 
 
 export default {
@@ -97,6 +189,7 @@ export default {
     components: {
         AppLayout,
         Chart,
+        ProgressBar
     },
     props: {
         chartVentasPresupuesto: [],
