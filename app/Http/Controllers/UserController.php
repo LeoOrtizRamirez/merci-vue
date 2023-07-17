@@ -86,19 +86,25 @@ class UserController extends Controller
         $user = User::where('id', $user->id)->with('empresa')->first();
         $user->role_name = $user->getRoleNames()[0];
 
+        $user_indicadores = $user->indicadores;
+        $user_indicadores_ids = [];
+        foreach ($user_indicadores as $key => $item) {
+            $user_indicadores_ids[] = $item->indicador->id;
+        }
+
         $users = User::all();
-        $indicadores = Indicadore::all();
+        $indicadores = Indicadore::whereIn('id', $user_indicadores_ids)->get();
 
         $arbol = [];
-        foreach ($user->indicadores as $index => $indicador) {
+        foreach ($user->indicadores as $index => $item) {
             $arbol[$index] = [
                 "key" => "" . $index . "",
                 "data" => [
-                    "name" => $indicador->indicador->name,
+                    "name" => $item->indicador->name,
                 ],
             ];
-            foreach ($indicador->datos as $key => $dato) {
-                switch ($indicador->id) {
+            foreach ($item->datos as $key => $dato) {
+                switch ($item->indicador->id) {
                     case 1:
                         $arbol[$index]["children"][$key] = [
                             "key" => $index . "-" . $key,
@@ -162,22 +168,56 @@ class UserController extends Controller
         }
 
         $arbol = [];
-        foreach ($user->indicadores as $index => $indicador) {
+        foreach ($user->indicadores as $index => $item) {
             $arbol[$index] = [
                 "key" => "" . $index . "",
                 "data" => [
-                    "name" => $indicador->indicador->name,
+                    "name" => $item->indicador->name,
                 ],
             ];
-            foreach ($indicador->datos as $key => $dato) {
-                $arbol[$index]["children"][$key] = [
-                    "key" => $index . "-" . $key,
-                    "data" => [
-                        "name" => "Mes: " . $dato->mes,
-                        "size" => "Ventas: " . $dato->data_1,
-                        "type" => "Presupuesto: " . $dato->data_2
-                    ]
-                ];
+            foreach ($item->datos as $key => $dato) {
+                switch ($item->indicador->id) {
+                    case 1:
+                        $arbol[$index]["children"][$key] = [
+                            "key" => $index . "-" . $key,
+                            "data" => [
+                                "name" => "MES: " . $dato->mes,
+                                "size" => "VENTAS: " . $dato->data_1,
+                                "type" => "PRESUPUESTO: " . $dato->data_2
+                            ]
+                        ];
+                        break;
+                    case 2:
+                        $arbol[$index]["children"][$key] = [
+                            "key" => $index . "-" . $key,
+                            "data" => [
+                                "name" => "MES: " . $dato->mes,
+                                "size" => "TTL COTIZACIONES: " . $dato->data_1,
+                                "type" => "N COTIZACIONES: " . $dato->data_2
+                            ]
+                        ];
+                        break;
+                    case 3:
+                        $arbol[$index]["children"][$key] = [
+                            "key" => $index . "-" . $key,
+                            "data" => [
+                                "name" => "MES: " . $dato->mes,
+                                "size" => "PORCENTAJE: " . $dato->data_1,
+                                "type" => ""
+                            ]
+                        ];
+                        break;
+                    case 4:
+                        $arbol[$index]["children"][$key] = [
+                            "key" => $index . "-" . $key,
+                            "data" => [
+                                "name" => "MES: " . $dato->mes,
+                                "size" => "CLIENTES: " . $dato->data_1,
+                                "type" => ""
+                            ]
+                        ];
+                        break;
+                }
             }
         }
         return json_encode($arbol);

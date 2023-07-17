@@ -124,18 +124,18 @@
 
     <Dialog v-model:visible="modelDialog" :style="{ width: '750px' }" header="Crear Indicador" :modal="true" class="p-fluid">
         <div class="p-fluid formgrid grid">
-            <div class="field col-12 md:col-12">
+            <div class="field col-12 md:col-6">
                 <label for="mes">MES</label>
                 <InputText type="month" id="mes" v-model.trim="model.mes" required="true" autofocus
                     :class="{ 'p-invalid': submitted && !model.mes }" />
                 <small class="p-invalid" v-if="submitted && !model.mes">MES es requerido.</small>
             </div>
-            <div class="field col-12 md:col-6">
+            <!-- <div class="field col-12 md:col-6">
                 <label for="actividad">USUARIO</label>
                 <Dropdown v-model="model.user" :options="users" optionLabel="name" placeholder="Selecciona un Usuario"
                     :class="{ 'p-invalid': submitted && !model.user }" required />
                 <small class="p-invalid" v-if="submitted && !model.actividad">Usuario es requerido.</small>
-            </div>
+            </div> -->
             <div class="field col-12 md:col-6">
                 <label for="actividad">INDICADOR</label>
                 <Dropdown v-model="model.indicador" :options="indicadores" optionLabel="name"
@@ -304,13 +304,13 @@ export default {
                 data_1: "",
                 data_2: "",
                 indicador: "",
-                user: ""
+                user: this.user
             },
             submitted: false,
         }
     },
     mounted() {
-        console.log("this.users" + this.users)
+        console.log("this.users" + this.user)
     },
     methods: {
         edit(id) {
@@ -342,7 +342,7 @@ export default {
             this.submitted = false;
         },
         openNew() {
-            this.model = { ...this.model, user: this.user.id };
+            this.model = { ...this.model, user: this.user };
             this.submitted = false;
             this.modelDialog = true;
         },

@@ -13,13 +13,14 @@
             <i class="pi pi-ellipsis-v"></i>
         </button>
         <ul class="layout-topbar-menu hidden lg:flex origin-top">
+            <!--
             <li>
                 <button class="p-link layout-topbar-button">
                     <i class="pi pi-calendar"></i>
                     <span>Events</span>
                 </button>
             </li>
-            <li>
+             <li>
                 <Button
                     class="p-button-link  p-link layout-topbar-button"
                     @click="goToSettings"
@@ -27,10 +28,11 @@
                     <i class="pi pi-cog"></i>
                     <span>Settings</span>
                 </Button>
-            </li>
+            </li> -->
             <li>
                 <Button
                     class="p-button-link p-link layout-topbar-button"
+                    @click="goToSettings"
                 >
                     <i class="pi pi-user"></i>
                     <span>Profile</span>

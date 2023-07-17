@@ -148,27 +148,27 @@
 
 
 
-        <div class="col-12 lg:col-6 xl :col-6">
+        <div class="col-12 lg:col-6 xl :col-6" v-if="indicadores_ids.includes(1)">
             <div class="card">
                 <h6 class="text-center">VENTAS vs PRESUPUESTO en mill.</h6>
                 <Chart type="bar" :data="chartVentasPresupuesto" :options="chartOptions" />
             </div>
         </div>
-        <div class="col-12 lg:col-6 xl :col-6">
+        <div class="col-12 lg:col-6 xl :col-6" v-if="indicadores_ids.includes(2)">
             <div class="card">
                 <h6 class="text-center">COTIZACIONES</h6>
                 <Chart type="bar" :data="chartTtlCotizaciones" :options="chartOptions" />
             </div>
         </div>
 
-        <div class="col-12 lg:col-6 xl :col-6">
+        <div class="col-12 lg:col-6 xl :col-6" v-if="indicadores_ids.includes(3)">
             <div class="card">
                 <h6 class="text-center">EFECTIVIDAD COMERCIAL</h6>
                 <Chart type="line" :data="chartEfectividadComercial" />
             </div>
         </div>
 
-        <div class="col-12 lg:col-6 xl :col-6">
+        <div class="col-12 lg:col-6 xl :col-6" v-if="indicadores_ids.includes(4)">
             <div class="card">
                 <h6 class="text-center">CLIENTES NUEVOS</h6>
                 <Chart type="bar" :data="chartClientesNuevos" :options="basicOptions" />
@@ -195,7 +195,8 @@ export default {
         chartVentasPresupuesto: [],
         chartTtlCotizaciones: [],
         chartEfectividadComercial: [],
-        chartClientesNuevos: []
+        chartClientesNuevos: [],
+        indicadores_ids: []
     },
     data() {
         return {
