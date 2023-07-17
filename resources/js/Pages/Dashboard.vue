@@ -99,10 +99,10 @@ export default {
         Chart,
     },
     props: {
-        investment: 0,
-        loans: 0,
-        gain: 0,
-        current_balance: 0
+        chartVentasPresupuesto: [],
+        chartTtlCotizaciones: [],
+        chartEfectividadComercial: [],
+        chartClientesNuevos: []
     },
     data() {
         return {
@@ -111,65 +111,6 @@ export default {
                 legend: {
                     display: false
                 }
-            },
-            chartVentasPresupuesto: {
-                labels: ['ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO'],
-                datasets: [{
-                    type: 'line',
-                    label: 'PRESUPUESTO',
-                    borderColor: '#42A5F5',
-                    borderWidth: 2,
-                    fill: false,
-                    data: [50,25,12,48,100]
-                }, {
-                    type: 'bar',
-                    label: 'VENTAS',
-                    backgroundColor: '#581dfc',
-                    data: [21,84,24,75,37],
-                    borderColor: 'white',
-                    borderWidth: 2
-                }]
-            },
-            chartTtlCotizaciones: {
-                labels: ['ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO'],
-                datasets: [{
-                    type: 'line',
-                    label: 'N COTIZACIONES',
-                    borderColor: '#42A5F5',
-                    borderWidth: 2,
-                    fill: false,
-                    data: [50,25,12,48,56]
-                }, {
-                    type: 'bar',
-                    label: 'TTL COTIZACIONES',
-                    backgroundColor: '#581dfc',
-                    data: [21,84,24,75,37],
-                    borderColor: 'white',
-                    borderWidth: 2
-                }]
-            },
-            chartEfectividadComercial: {
-                labels: ['ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO'],
-                datasets: [
-                    {
-                        label: 'VENTAS',
-                        data: [12, 51, 62, 33, 21],
-                        fill: true,
-                        borderColor: '#581dfc',
-                        tension: .4,
-                        backgroundColor: '#581dfca6'
-                    }
-                ]
-            },
-            chartClientesNuevos: {
-                labels: ['ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO'],
-                datasets: [
-                    {
-                        label: 'CLIENTES',
-                        backgroundColor: '#581dfc',
-                        data: [5, 10, 20, 20, 5]
-                    }
-                ]
             },
         }
     }

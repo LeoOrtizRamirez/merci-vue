@@ -38,6 +38,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group( function () {
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('/users/datatable', [UserController::class, 'datatable'])->name('users.datatable');
+    Route::post('/users/indicadores', [UserController::class, 'saveIndicador'])->name('users.saveIndicador');
     Route::resource('users', UserController::class);
 });
 

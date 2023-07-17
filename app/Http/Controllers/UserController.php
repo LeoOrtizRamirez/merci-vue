@@ -12,6 +12,7 @@ use App\Models\Indicadore;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\UserIndicadore;
+use App\Models\UsersIndicadoresDato;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -80,6 +81,108 @@ class UserController extends Controller
         return redirect()->route('users.index');
     }
 
+    public function show(User $user)
+    {
+        $user = User::where('id', $user->id)->with('empresa')->first();
+        $user->role_name = $user->getRoleNames()[0];
+
+        $users = User::all();
+        $indicadores = Indicadore::all();
+
+        $arbol = [];
+        foreach ($user->indicadores as $index => $indicador) {
+            $arbol[$index] = [
+                "key" => "" . $index . "",
+                "data" => [
+                    "name" => $indicador->indicador->name,
+                ],
+            ];
+            foreach ($indicador->datos as $key => $dato) {
+                switch ($indicador->id) {
+                    case 1:
+                        $arbol[$index]["children"][$key] = [
+                            "key" => $index . "-" . $key,
+                            "data" => [
+                                "name" => "MES: " . $dato->mes,
+                                "size" => "VENTAS: " . $dato->data_1,
+                                "type" => "PRESUPUESTO: " . $dato->data_2
+                            ]
+                        ];
+                        break;
+                    case 2:
+                        $arbol[$index]["children"][$key] = [
+                            "key" => $index . "-" . $key,
+                            "data" => [
+                                "name" => "MES: " . $dato->mes,
+                                "size" => "TTL COTIZACIONES: " . $dato->data_1,
+                                "type" => "N COTIZACIONES: " . $dato->data_2
+                            ]
+                        ];
+                        break;
+                    case 3:
+                        $arbol[$index]["children"][$key] = [
+                            "key" => $index . "-" . $key,
+                            "data" => [
+                                "name" => "MES: " . $dato->mes,
+                                "size" => "PORCENTAJE: " . $dato->data_1,
+                                "type" => ""
+                            ]
+                        ];
+                        break;
+                    case 4:
+                        $arbol[$index]["children"][$key] = [
+                            "key" => $index . "-" . $key,
+                            "data" => [
+                                "name" => "MES: " . $dato->mes,
+                                "size" => "CLIENTES: " . $dato->data_1,
+                                "type" => ""
+                            ]
+                        ];
+                        break;
+                }
+            }
+        }
+
+        return Inertia::render('User/Show', compact('user', 'users', 'indicadores', 'arbol'));
+    }
+
+    public function saveIndicador(Request $request)
+    {
+        $user = User::find($request->user["id"]);
+        $user_indicadores = UserIndicadore::where('user_id', $request->user["id"])
+            ->where('indicador_id', $request->indicador["id"])->first();
+
+        if ($user_indicadores) {
+            $users_indicadores_dato = new UsersIndicadoresDato;
+            $users_indicadores_dato->mes = $request->mes;
+            $users_indicadores_dato->data_1 = $request->data_1;
+            $users_indicadores_dato->data_2 = $request->data_2;
+            $users_indicadores_dato->user_indicadore_id = $user_indicadores->id;
+            $users_indicadores_dato->save();
+        }
+
+        $arbol = [];
+        foreach ($user->indicadores as $index => $indicador) {
+            $arbol[$index] = [
+                "key" => "" . $index . "",
+                "data" => [
+                    "name" => $indicador->indicador->name,
+                ],
+            ];
+            foreach ($indicador->datos as $key => $dato) {
+                $arbol[$index]["children"][$key] = [
+                    "key" => $index . "-" . $key,
+                    "data" => [
+                        "name" => "Mes: " . $dato->mes,
+                        "size" => "Ventas: " . $dato->data_1,
+                        "type" => "Presupuesto: " . $dato->data_2
+                    ]
+                ];
+            }
+        }
+        return json_encode($arbol);
+    }
+
     public function edit(User $user): Response
     {
         /* abort_if(!auth()->user()->admin, 403); */
@@ -97,7 +200,8 @@ class UserController extends Controller
         return Inertia::render('User/Edit', compact('indicadores', 'empresas', 'roles', 'rol', 'current_user', 'user_indicadores_ids'));
     }
 
-    public function update(Request $request, User $user, UpdateUser $updateUser): RedirectResponse {
+    public function update(Request $request, User $user, UpdateUser $updateUser): RedirectResponse
+    {
         /* abort_if(!auth()->user()->admin, 403); */
 
         $user = User::find($request->id);

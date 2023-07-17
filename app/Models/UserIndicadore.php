@@ -11,11 +11,16 @@ class UserIndicadore extends Model
 
     public function user()
     {
-        return $this->belongsToMany('App\User');
+        return $this->belongsTo(User::class);
     }
 
     public function indicador()
     {
-        return $this->belongsToMany('App\Indicadore');
+        return $this->belongsTo(Indicadore::class);
+    }
+
+    public function datos()
+    {
+        return $this->hasMany(UsersIndicadoresDato::class);
     }
 }
