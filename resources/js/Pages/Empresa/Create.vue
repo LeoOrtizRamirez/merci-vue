@@ -22,6 +22,11 @@
                                         <Dropdown v-model="form.estado" :options="estados" optionLabel="name"
                                             placeholder="Selecciona un Estado" class="w-full" required />
                                     </div>
+                                    <div class="field col-12 md:col-6">
+                                        <label for="estado">Logo</label>
+                                        <input type="file" name="image" @change="handleFileUpload">
+                                    </div>
+
                                 </div>
                                 <Button class="p-button p-component p-button-danger p-button-raised mx-2" label="Cancelar"
                                     @click="this.$inertia.get(this.route('empresas.index'));" />
@@ -40,6 +45,7 @@ import AppLayout from "../../Layouts/AppLayout";
 import Button from "primevue/button";
 import InputText from "primevue/inputtext";
 import Dropdown from 'primevue/dropdown';
+import axios from 'axios';
 
 export default {
     name: "Create",
@@ -50,7 +56,7 @@ export default {
         InputText,
         Dropdown
     },
-    props:{
+    props: {
         estados: []
     },
     data() {
@@ -66,7 +72,23 @@ export default {
     },
     methods: {
         submit() {
-            this.$inertia.post(route('empresas.store'), this.form);
+            this.formData.append("name", this.form.name);
+            this.formData.append("nit", this.form.nit);
+            this.formData.append("estado", this.form.estado.id);
+            axios.post('/api/upload-image', this.formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            }).then(response => {
+                this.$inertia.get(route('empresas.index'));
+            }).catch(error => {
+                console.log(error.response.data);
+            });
+        },
+
+        handleFileUpload(event) {
+            this.formData = new FormData();
+            this.formData.append('image', event.target.files[0]);
         },
     }
 }

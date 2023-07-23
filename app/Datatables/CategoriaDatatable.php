@@ -16,6 +16,7 @@ class CategoriaDatatable extends Datatable
             return [
                 'id' => $categoria->id,
                 'name' => $categoria->name,
+                'visible' => $categoria->hasRegistros($categoria->id),
             ];
         };
     }

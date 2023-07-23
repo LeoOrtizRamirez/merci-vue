@@ -9,7 +9,18 @@ class Categoria extends Model
 {
     use HasFactory;
 
-        public function actividades(){
-            return $this->hasMany('App\Models\Actividade');
+    public function actividades()
+    {
+        return $this->hasMany('App\Models\Actividade');
+    }
+
+    public function hasRegistros($id)
+    {
+        $actividades = Actividade::where('categoria_id', $id)->get();
+        if (sizeof($actividades) > 0) {
+            return true;
+        } else {
+            return false;
         }
+    }
 }

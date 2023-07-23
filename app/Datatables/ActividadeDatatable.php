@@ -17,6 +17,7 @@ class ActividadDatatable extends Datatable
                 'id' => $actividade->id,
                 'categoria_name' => $actividade->categoria->name,
                 'name' => $actividade->name,
+                'visible' => $actividade->hasRegistros($actividade->id),
             ];
         };
     }

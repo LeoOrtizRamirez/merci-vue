@@ -15,7 +15,7 @@ class EmpresaSeeder extends Seeder
     public function run()
     {
         $empresas = [
-            ['name' => 'MERCI', 'nit' => '901.137.860-5', 'estado_id' => 1] // En proceso,
+            ['name' => 'MERCI', 'nit' => '901.137.860-5', 'estado_id' => 1, 'logo' => 'logo-merci.png'] // En proceso,
         ];
         DB::table('empresas')->insert($empresas);
     }

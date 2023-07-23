@@ -21,13 +21,12 @@ class EmpresaController extends Controller
     public function datatable(
         Request       $request,
         EmpresaDatatable $datatable
-    ): JsonResponse
-    {
+    ): JsonResponse {
         $data = $datatable->make($request);
 
         return response()->json($data);
     }
-    
+
     public function create(): Response
     {
         $estados = Estado::where('tipo', 1)->get();
@@ -74,5 +73,30 @@ class EmpresaController extends Controller
     {
         $empresa->delete();
         return redirect()->back();
+    }
+
+    public function uploadImage(Request $request)
+    {
+        // validate the image
+        $request->validate([
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+
+        //dd($request->image->extension());
+        // store the image
+        $imageName = time() . '.' . $request->image->extension();
+        $request->image->move(public_path('images'), $imageName);
+
+        // return the image path
+        //return response()->json(['path' => '/images/' . $imageName]);
+
+        $empresa = new Empresa;
+        $empresa->name = $request->name;
+        $empresa->nit = $request->nit;
+        $empresa->estado_id = $request['estado'];
+
+        $empresa->logo = $imageName;
+        $empresa->save();
+        return redirect()->route('empresas.index');
     }
 }

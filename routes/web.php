@@ -44,6 +44,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('/empresas/datatable', [EmpresaController::class, 'datatable'])->name('empresas.datatable');
+    Route::post('/api/upload-image', [EmpresaController::class, 'uploadImage'])->name('empresas.image');
     Route::resource('empresas', EmpresaController::class);
 });
 

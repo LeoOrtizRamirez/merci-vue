@@ -39,7 +39,7 @@
                                 <Button v-permission="'categoria.edit'" icon="pi pi-pencil"
                                     class="p-button-success p-button-sm mr-1 p-button-rounded p-button-outlined"
                                     @click="edit(slotProps.data.id)" />
-                                <Button v-permission="'categoria.destroy'" icon="pi pi-trash"
+                                <Button v-permission="'categoria.destroy'" v-if="slotProps.data.visible == false" icon="pi pi-trash"
                                     class="p-button-sm p-button-danger p-button-rounded p-button-outlined"
                                     @click="showDeleteDialog(slotProps.data)" />
                             </template>

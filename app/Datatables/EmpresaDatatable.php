@@ -16,6 +16,7 @@ class EmpresaDatatable extends Datatable
             return [
                 'id' => $empresa->id,
                 'name' => $empresa->name,
+                'logo' => $empresa->logo,
                 'nit' => $empresa->nit,
                 'estado' => $empresa?->estado?->name,
                 'backgroundColor' => $empresa?->estado?->backgroundColor,

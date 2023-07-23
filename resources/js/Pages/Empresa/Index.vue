@@ -39,6 +39,11 @@
                                 {{ slotProps.data.nit }}
                             </template>
                         </Column>
+                        <Column field="logo" header="LOGO">
+                            <template #body="slotProps">
+                                <img :src="`/images/${slotProps.data.logo}`" alt="" width="100">
+                            </template>
+                        </Column>
                         <Column field="estado" header="Estado">
                             <template #body="slotProps">
                                 <Tag :style="{ background: slotProps.data.backgroundColor }">
