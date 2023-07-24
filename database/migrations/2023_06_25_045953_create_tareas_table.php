@@ -15,10 +15,10 @@ class CreateTareasTable extends Migration
     {
         Schema::create('tareas', function (Blueprint $table) {
             $table->id();
-            $table->string('descripcion');
-            $table->string('responsable');
-            $table->date('fecha_inicio');
-            $table->date('fecha_fin');
+            $table->string('descripcion')->nullable();
+            $table->string('responsable')->nullable();
+            $table->date('fecha_inicio')->nullable();
+            $table->date('fecha_fin')->nullable();
             $table->date('fecha_finalizacion')->nullable();
 
             $table->unsignedBigInteger('acta_id')->nullable()->unsigned();

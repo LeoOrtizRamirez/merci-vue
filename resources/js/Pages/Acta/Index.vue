@@ -7,12 +7,31 @@
                         <Button v-permission="'acta.create'" icon="pi pi-fw pi-plus"
                             class="p-button-primary p-button-sm mr-1 p-button-rounded p-button-outlined"
                             @click="this.$inertia.get(this.route('actas.create'));" />
+                        <!-- <Button v-permission="'acta.create'" icon="pi pi-fw pi-file-import"
+                            class="p-button-primary p-button-sm mr-1 p-button-rounded p-button-outlined"
+                            @click="this.$inertia.get(this.route('actas.create'));" /> -->
                         <h4>Actas</h4>
+                    </div>
+                    <div class="title">
+                        <form @submit.prevent="importarArchivo">
+                            <!-- <input id="file-upload" type="file" class="p-fileupload" ref="archivo" name="archivo">
+                            <button type="submit" class="p-button p-component">Importar archivo</button> -->
+
+                            <label for="file-upload" class="custom-file-upload">
+                                <span class="pi pi-upload"></span>
+                                <span>{{ fileName }}</span>
+                                <input id="file-upload" name="file-upload" ref="archivo" type="file" class="input-file"
+                                    @change="handleFileUpload">
+                            </label>
+                            <button v-if="fileName != 'Importar'" class="p-button p-component" type="submit">
+                                <span class="p-button-label">Guardar</span>
+                            </button>
+                        </form>
                     </div>
 
 
 
-                    <DataTable ref="dt" :value="datatable.data" :lazy="true" data-key="id" :paginator="true" :rows="10"
+                    <DataTable ref="dt" :value="datatable.data" :lazy="true" data-key="id" :paginator="true" :rows="50"
                         :loading="datatable.loading" :total-records="datatable.totalRecords"
                         v-model:filters="datatable.filters"
                         paginator-template="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
@@ -44,7 +63,7 @@
                                 {{ slotProps.data.hora_finalizacion }}
                             </template>
                         </Column>
-                        <Column header="Acciones" style="width: 150px;" class="acta-actions">
+                        <Column header="Acciones" class="acta-actions">
                             <template #body="slotProps">
                                 <Button v-permission="'acta.show'" icon="pi pi-calendar"
                                     class="p-button-primary p-button-sm mr-1 p-button-rounded p-button-outlined"
@@ -82,6 +101,7 @@ import Column from "primevue/column";
 import Button from "primevue/button";
 import DeleteDialog from "../../Components/DeleteDialog";
 import Toast from 'primevue/toast';
+import axios from 'axios';
 
 export default {
     name: "Index",
@@ -114,6 +134,7 @@ export default {
             selectedModel: null,
             deleteDialog: false,
             deletingModel: false,
+            fileName: 'Importar'
         }
     },
     datatableService: null,
@@ -178,12 +199,68 @@ export default {
                 }
             })
         },
+        async importarArchivo() {
+            this.datatable.loading = true;
+            let formData = new FormData();
+            formData.append('file', this.$refs.archivo.files[0]);
+
+            let response = await axios.post('/importar-archivo', formData);
+
+            console.log(response.data.data);
+            this.$toast.add({
+                severity: "success",
+                summary: "Exitoso",
+                detail: response.data.message,
+                life: 3000,
+            });
+
+            this.datatable.data = response.data.data
+            console.log(response.data.data.length)
+            this.datatable.totalRecords = response.data.data.length;
+            this.datatable.loading = false;
+        },
+        handleFileUpload(event) {
+            const input = event.target;
+            const fileName = input.files[0].name;
+            this.fileName = fileName;
+            // Handle file upload logic here
+        }
     }
 }
 </script>
 
 <style scoped>
 td.acta-actions {
-    width: 200px !important;
+    white-space: nowrap;
+}
+
+.input-file {
+    opacity: 0;
+    position: absolute;
+    z-index: -1;
+}
+
+.custom-file-upload {
+    display: inline-block;
+    background-color: #6366F1;
+    color: #fff;
+    font-size: 1rem;
+    padding: 6px 10px;
+    cursor: pointer;
+    border-radius: 4px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    margin-right: 5px;
+}
+
+.custom-file-upload span {
+    display: inline-block;
+    max-width: 160px;
+    margin-right: 8px;
+    font-size: 0.9rem;
+    vertical-align: middle;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 </style>

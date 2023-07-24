@@ -25,7 +25,7 @@
                         <div class="card">
                             <h5>Permisos</h5>
                             <DataTable ref="dt" :value="datatable.data" :lazy="true" data-key="id" :paginator="true"
-                                :rows="10" :loading="datatable.loading" :total-records="datatable.totalRecords"
+                                :rows="50" :loading="datatable.loading" :total-records="datatable.totalRecords"
                                 v-model:filters="datatable.filters"
                                 paginator-template="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
                                 :rows-per-page-options="[10, 25, 50]"

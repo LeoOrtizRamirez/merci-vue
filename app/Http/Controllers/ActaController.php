@@ -6,12 +6,15 @@ use App\Datatables\ActaDatatable;
 use App\Http\Controllers\Controller;
 use App\Models\Acta;
 use App\Models\Actividade;
+use App\Models\Categoria;
 use App\Models\Estado;
 use App\Models\Tarea;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Inertia\Response;
 use Inertia\Inertia;
+use Maatwebsite\Excel\Concerns\ToModel;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ActaController extends Controller
 {
@@ -106,7 +109,87 @@ class ActaController extends Controller
                 $categorias_ids[] = $tarea->actividad->categoria_id;
             }
         }
-        
+
         return Inertia::render('Acta/Cronograma', compact('acta', 'tareas', 'actividades', 'categorias'));
+    }
+
+    public function import(Request $request)
+    {
+        // Obtenemos el archivo enviado
+        $file = $request->file('file');
+
+        // Leemos el archivo Excel
+        $data = Excel::toArray([], $file);
+
+        //Crear Acta
+        $acta = new Acta;
+        $acta->numero_sesion = $data[0][1][0];
+        $acta->fecha = $data[0][1][1];
+        $acta->hora_inicio = $data[0][1][2];
+        $acta->hora_finalizacion = $data[0][1][3];
+        $acta->modalidad_encuentro = $data[0][1][4];
+        $acta->asistentes = $data[0][1][5];
+        $acta->temas = $data[0][1][6];
+        $acta->save();
+
+        // Procesamos los datos del archivo
+        foreach ($data[0] as $index => $row) {
+            if ($index > 3) {
+                //dd($row);
+                //Buscar Categoria
+                $categoria = Categoria::where('name', $row[0])->first();
+                if (is_null($categoria)) {
+                    $categoria = new Categoria;
+                    $categoria->name = $row[0];
+                    $categoria->save();
+                }
+                //dd($categoria);
+                //Buscar Actividad
+                $actividad = Actividade::where('name', $row[1])->first();
+                if (is_null($actividad)) {
+                    $actividad = new Actividade;
+                    $actividad->name = $row[0];
+                    $actividad->categoria_id = $categoria->id;
+                    $actividad->save();
+                }
+                //dd($actividad);
+                //Crear Tarea
+                $tarea = new Tarea;
+                $tarea->descripcion = $row[2];
+                $tarea->responsable = $row[3];
+                $tarea->fecha_inicio = $row[4];
+                $tarea->fecha_fin = $row[5];
+
+                switch ($row[6]) {
+                    case 'Sin iniciar':
+                        $tarea->estado_id = 4;
+                        break;
+                    case 'Progreso':
+                        $tarea->estado_id = 5;
+                        break;
+                    case 'Terminada':
+                        $tarea->estado_id = 6;
+                        break;
+                    case 'Vencida':
+                        $tarea->estado_id = 7;
+                        break;
+                    default:
+                        $tarea->estado_id = 4;
+                        break;
+                }
+
+                $tarea->fecha_finalizacion = $row[7];
+                $tarea->actividad_id = $actividad->id;
+                $tarea->acta_id = $acta->id;
+                $tarea->save();
+            }
+        }
+
+        $actas = Acta::all();
+        // Retornamos una respuesta
+        return response()->json([
+            'message' => 'Archivo importado con éxito',
+            'data' => $actas,
+        ]);
     }
 }
