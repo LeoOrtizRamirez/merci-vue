@@ -91,6 +91,9 @@ export default {
         DeleteDialog,
         Tag
     },
+    props: {
+        user: [],
+    },
     data() {
         return {
             datatable: {
@@ -123,7 +126,8 @@ export default {
             rows: this.$refs.dt.rows,
             sortField: 'id',
             sortOrder: -1,
-            filters: this.datatable.filters
+            filters: this.datatable.filters,
+            role_name: this.user.role_name
         };
         this.loadLazyData();
     },

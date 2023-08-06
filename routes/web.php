@@ -15,6 +15,8 @@ use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\Security;
 use App\Http\Controllers\TareaController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,12 +30,20 @@ use App\Http\Controllers\TareaController;
 */
 
 Route::get('/', function () {
-    return redirect()->route('dashboard');
+    return redirect('/dashboard');
 });
 
-Route::middleware(['auth:sanctum', 'verified'])->group( function () {
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    //return Inertia::render('Dashboard');
+Route::middleware(['auth:sanctum', 'verified'])->group(function () {
+    Route::get('/dashboard', function (Request $request) {
+        $empresa = $request->input('empresa_id');
+        $user = Auth::user();
+        $user->role_name = $user->getRoleNames()[0];
+        if ($user->role_name == "ADMIN" || isset($empresa)) {
+            return app()->call('App\Http\Controllers\DashboardController@index');
+        } else {
+            return app()->call('App\Http\Controllers\EmpresaController@index');
+        }
+    })->name('dashboard');
 });
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {

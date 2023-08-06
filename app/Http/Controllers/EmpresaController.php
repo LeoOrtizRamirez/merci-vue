@@ -8,6 +8,7 @@ use App\Models\Empresa;
 use App\Models\Estado;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Response;
 use Inertia\Inertia;
 
@@ -15,7 +16,18 @@ class EmpresaController extends Controller
 {
     public function index(): Response
     {
-        return Inertia::render('Empresa/Index');
+        $user = Auth::user();
+        $user->role_name = $user->getRoleNames()[0];
+        if ($user->role_name == "ADMIN") {
+            $empresas = Empresa::with('estado')->get();
+        } else {
+            $empresas_ids = [];
+            foreach ($user->empresas as $key => $value) {
+                $empresas_ids[] = $value->empresa_id;
+            }
+            $empresas = Empresa::whereIn('id', $empresas_ids)->with('estado')->get();
+        }
+        return Inertia::render('Empresa/Index', compact('empresas', 'user'));
     }
 
     public function datatable(

@@ -4,7 +4,7 @@
         <div class="layout-sidebar" @click="onSidebarClick">
             <AppMenu :model="menuAdmin" @menuitem-click="onMenuItemClick" v-role="'ADMIN'" />
             <AppMenu :model="menuCliente" @menuitem-click="onMenuItemClick" v-role="'CLIENTE'" />
-            <AppMenu :model="menuAdmin" @menuitem-click="onMenuItemClick" v-role="'CONSULTOR'" />
+            <AppMenu :model="menuConsultor" @menuitem-click="onMenuItemClick" v-role="'CONSULTOR'" />
         </div>
 
         <div class="layout-main-container">
@@ -66,7 +66,7 @@ export default {
                 {
                     label: 'Menu',
                     items: [
-                        { label: 'Dashboard', icon: 'pi pi-fw pi-home', to: this.route('dashboard'), prefix: 'dashboard' },
+                        { label: 'Clientes', icon: 'pi pi-fw pi-users', to: this.route('empresas.index'), },
                         { label: 'Actas', icon: 'pi pi-fw pi-book', to: this.route('actas.index'), },
                         {
                             label: 'Cerrar sesión', icon: 'pi pi-fw pi-sign-out', command: () => {

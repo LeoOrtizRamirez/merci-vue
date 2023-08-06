@@ -7,12 +7,13 @@
                         <Button v-permission="'empresa.create'" icon="pi pi-fw pi-plus"
                             class="p-button-primary p-button-sm mr-1 p-button-rounded p-button-outlined"
                             @click="this.$inertia.get(this.route('empresas.create'));" />
-                        <h4>Empresas</h4>
+                        <h4 v-if="user.role_name == 'ADMIN'">Empresas</h4>
+                        <h4 v-else>Clientes</h4>
                     </div>
 
 
 
-                    <DataTable ref="dt" :value="datatable.data" :lazy="true" data-key="id" :paginator="true" :rows="50"
+                    <DataTable ref="dt" :value="empresas" :lazy="true" data-key="id" :paginator="true" :rows="50"
                         :loading="datatable.loading" :total-records="datatable.totalRecords"
                         v-model:filters="datatable.filters"
                         paginator-template="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
@@ -46,13 +47,16 @@
                         </Column>
                         <Column field="estado" header="Estado">
                             <template #body="slotProps">
-                                <Tag :style="{ background: slotProps.data.backgroundColor }">
-                                    <span>{{ slotProps.data.estado }}</span>
+                                <Tag :style="{ background: slotProps.data?.estado?.backgroundColor }">
+                                    <span>{{ slotProps.data?.estado?.name }}</span>
                                 </Tag>
                             </template>
                         </Column>
                         <Column header="Acciones" style="width: 150px;">
                             <template #body="slotProps">
+                                <Button v-permission="'empresa.show'" icon="pi pi-search"
+                                    class="p-button-primary p-button-sm mr-1 p-button-rounded p-button-outlined"
+                                    @click="show(slotProps.data.id)" />
                                 <Button v-permission="'empresa.edit'" icon="pi pi-pencil"
                                     class="p-button-success p-button-sm mr-1 p-button-rounded p-button-outlined"
                                     @click="edit(slotProps.data.id)" />
@@ -95,6 +99,10 @@ export default {
         Button,
         DeleteDialog,
         Tag
+    },
+    props: {
+        user: [],
+        empresas: []
     },
     data() {
         return {
@@ -167,9 +175,11 @@ export default {
                 }
             })
         },
+        show(id) {
+            this.$inertia.get('/dashboard?empresa_id=' + id);
+        },
     }
 }
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>
