@@ -13,7 +13,6 @@ class CreateUser
         $user->name = $data->name;
         $user->email = $data->email;
         $user->password = $data->password;
-        $user->empresa_id = $data->empresa_id;
         $user->save();
 
         return $user;

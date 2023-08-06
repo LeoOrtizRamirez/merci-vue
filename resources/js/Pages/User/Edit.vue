@@ -11,36 +11,41 @@
                                 <div class="p-fluid formgrid grid">
                                     <div class="field col-12 md:col-6">
                                         <label for="name">Nombre</label>
-                                        <InputText v-model="form.name" id="name" type="text" placeholder="Ingresa el nombre" required />
+                                        <InputText v-model="form.name" id="name" type="text" placeholder="Ingresa el nombre"
+                                            required />
                                     </div>
                                     <div class="field col-12 md:col-6">
                                         <label for="email">Correo electrónico</label>
-                                        <InputText v-model="form.email" id="email" type="email" placeholder="Ingresa el correo electrónico" required />
+                                        <InputText v-model="form.email" id="email" type="email"
+                                            placeholder="Ingresa el correo electrónico" required />
                                     </div>
                                     <div class="field col-12 md:col-6">
                                         <label for="password">Contraseña</label>
-                                        <InputText v-model="form.password" id="password" type="password" placeholder="Ingresa una contraseña" />
+                                        <InputText v-model="form.password" id="password" type="password"
+                                            placeholder="Ingresa una contraseña" />
                                     </div>
                                     <div class="field col-12 md:col-6">
                                         <label for="indicadores">Indicadores</label>
                                         <MultiSelect v-model="form.indicadores" :options="indicadores" optionLabel="name"
-                                            placeholder="Selecciona los Indicadores" :maxSelectedLabels="3" class="w-full" required/>
+                                            placeholder="Selecciona los Indicadores" :maxSelectedLabels="3" class="w-full"
+                                            required />
                                     </div>
                                     <div class="field col-12 md:col-6">
                                         <label for="rol">Rol</label>
-                                        <Dropdown v-model="form.rol" :options="roles" optionLabel="name"
-                                            placeholder="Selecciona un Rol" class="w-full" required/>
+                                        <Dropdown v-model="form.rol" :options="roles" optionLabel="name" @change="formatEstado()"
+                                            placeholder="Selecciona un Rol" class="w-full" required />
                                     </div>
-                                    <div class="field col-12 md:col-6">
+                                    <div class="field col-12 md:col-6" v-if="form.rol.name == 'CLIENTE'">
                                         <label for="empresa">Empresa</label>
                                         <Dropdown v-model="form.empresa" :options="empresas" optionLabel="name"
-                                            placeholder="Selecciona una Empresa" class="w-full" required/>
+                                            placeholder="Selecciona una Empresa" class="w-full" required />
                                     </div>
-
-                                    <!-- <div class="field col-12 md:col-6">
-                                        <label for="rol">Rol</label>
-                                        <input type="file" name="imagen" @change="cargarImagen">
-                                    </div> -->
+                                    <div class="field col-12 md:col-6" v-if="form.rol.name != 'CLIENTE'">
+                                        <label for="empresas">Empresas</label>
+                                        <MultiSelect v-model="form.empresa" :options="empresas" optionLabel="name"
+                                            placeholder="Selecciona las empresas" :maxSelectedLabels="3" class="w-full"
+                                            required />
+                                    </div>
                                 </div>
                                 <Button class="p-button p-component p-button-danger p-button-raised mx-2" label="Cancelar"
                                     @click="this.$inertia.get(this.route('users.index'));" />
@@ -78,6 +83,7 @@ export default {
         current_user: [],
         rol: [],
         user_indicadores_ids: [],
+        user_empresas_ids: [],
         errors: Object
     },
     data() {
@@ -94,10 +100,10 @@ export default {
         }
     },
     mounted() {
-        const empresaSeleccionada = this.empresas.find(empresa => empresa.id === this.current_user.empresa_id);
+        /* const empresaSeleccionada = this.empresas.find(empresa => empresa.id === this.current_user.empresa_id);
         if (empresaSeleccionada) {
             this.form.empresa = empresaSeleccionada;
-        }
+        } */
         const rolSeleccionado = this.roles.find(rol => rol.name === this.rol);
         if (rolSeleccionado) {
             this.form.rol = rolSeleccionado;
@@ -106,11 +112,26 @@ export default {
         if (indicadoresSeleccionados) {
             this.form.indicadores = indicadoresSeleccionados;
         }
+
+        if (this.form.rol.name != 'CLIENTE') {
+            const empresasSeleccionadas = this.empresas.filter(empresa => this.user_empresas_ids.includes(empresa.id));
+            if (empresasSeleccionadas) {
+                this.form.empresa = empresasSeleccionadas;
+            }
+        } else {
+            const empresaSeleccionada = this.empresas.find(empresa => empresa.id === this.user_empresas_ids[0]);
+            if (empresaSeleccionada) {
+                this.form.empresa = empresaSeleccionada;
+            }
+        }
     },
     methods: {
         submit() {
             this.$inertia.put(route('users.update', { 'user': this.user }), this.form);
         },
+        formatEstado(){
+            this.form.empresa = ""
+        }
     }
 }
 </script>

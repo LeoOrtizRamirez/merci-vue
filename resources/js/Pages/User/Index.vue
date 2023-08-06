@@ -41,7 +41,7 @@
                         </Column>
                         <Column field="email" header="Empresa">
                             <template #body="slotProps">
-                                {{ slotProps.data.empresa }}
+                                <p class="m-0" v-for="empresa in slotProps.data.empresa" :key="empresa">{{ empresa }}</p>
                             </template>
                         </Column>
                         <Column header="Acciones" style="width: 150px;">

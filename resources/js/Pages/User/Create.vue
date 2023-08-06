@@ -28,19 +28,19 @@
                                     </div>
                                     <div class="field col-12 md:col-6">
                                         <label for="rol">Rol</label>
-                                        <Dropdown v-model="form.rol" :options="roles" optionLabel="name"
+                                        <Dropdown v-model="form.rol" :options="roles" optionLabel="name" @change="formatEstado()"
                                             placeholder="Selecciona una Empresa" class="w-full" required/>
                                     </div>
-                                    <div class="field col-12 md:col-6">
+                                    <div class="field col-12 md:col-6" v-if="form.rol.name == 'CLIENTE'">
                                         <label for="empresa">Empresa</label>
                                         <Dropdown v-model="form.empresa" :options="empresas" optionLabel="name"
                                             placeholder="Selecciona una Empresa" class="w-full" required/>
                                     </div>
-
-                                    <!-- <div class="field col-12 md:col-6">
-                                        <label for="rol">Rol</label>
-                                        <input type="file" name="imagen" @change="cargarImagen">
-                                    </div> -->
+                                    <div class="field col-12 md:col-6" v-if="form.rol.name != 'CLIENTE'">
+                                        <label for="empresas">Empresas</label>
+                                        <MultiSelect v-model="form.empresa" :options="empresas" optionLabel="name"
+                                            placeholder="Selecciona las empresas" :maxSelectedLabels="3" class="w-full" required/>
+                                    </div>
                                 </div>
                                 <Button class="p-button p-component p-button-danger p-button-raised mx-2" label="Cancelar"
                                     @click="this.$inertia.get(this.route('users.index'));" />
@@ -98,8 +98,12 @@ export default {
     },
     methods: {
         submit() {
+            console.log(typeof this.form.empresa)
             this.$inertia.post(route('users.store'), this.form);
         },
+        formatEstado(){
+            this.form.empresa = ""
+        }
     }
 }
 </script>

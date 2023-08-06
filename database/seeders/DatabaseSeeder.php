@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
         $this->call(CategoriaSeeder::class);
         $this->call(ActividadSeeder::class);
         $this->call(UserSeeder::class);
+        $this->call(UserEmpresaSeeder::class);
         $this->call(PermissionSeeder::class);
         $this->call(RolSeeder::class);
         $this->call(ModelHasRoleSeeder::class);

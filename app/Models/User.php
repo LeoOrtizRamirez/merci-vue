@@ -27,14 +27,29 @@ class User extends Authenticatable
     use HasPermissions;
     use HasRoles;
 
-    public function empresa(){
-        return $this->belongsTo('App\Models\Empresa');
+    public function empresas()
+    {
+        return $this->hasMany('App\Models\UserEmpresa');
     }
 
-    public function indicadores(){
+    public function getNameEmpresas()
+    {
+        $name_empresas = null;
+        $data = $this->hasMany('App\Models\UserEmpresa')->get();
+        if(sizeof($data)>0){
+            foreach ($data as $key => $value) {
+                $empresa = Empresa::find($value->empresa_id);
+                $name_empresas[] = $empresa->name;
+            }
+        }
+       return $name_empresas;
+    }
+
+    public function indicadores()
+    {
         return $this->hasMany('App\Models\UserIndicadore');
     }
-    
+
     /**
      * The attributes that are mass assignable.
      *
@@ -76,9 +91,4 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
-
-    public function setPasswordAttribute($value){
-        $this->attributes["password"] = Hash::make($value);
-        /* $this->attributes["password"] = bcrypt($value); */
-    }
 }

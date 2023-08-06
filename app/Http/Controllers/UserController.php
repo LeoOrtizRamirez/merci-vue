@@ -11,6 +11,7 @@ use App\Models\Estado;
 use App\Models\Indicadore;
 use App\Models\Role;
 use App\Models\User;
+use App\Models\UserEmpresa;
 use App\Models\UserIndicadore;
 use App\Models\UsersIndicadoresDato;
 use Illuminate\Http\JsonResponse;
@@ -20,6 +21,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Inertia\Inertia;
 use Inertia\Response;
+use Mockery\Undefined;
 
 class UserController extends Controller
 {
@@ -62,9 +64,21 @@ class UserController extends Controller
         $user = $createUser->execute(new UserDTO([
             'name' => $request['name'],
             'email' => $request['email'],
-            'empresa_id' => $request['empresa']['id'],
             'password' => Hash::make($request['password'])
         ]));
+
+        //Guardar empresas
+        $empresas = $request['empresa'];
+        if (!isset($empresas[0])) {
+            $empresas = [$empresas];
+        }
+
+        foreach ($empresas as $key => $empresa) {
+            $user_empresa = new UserEmpresa;
+            $user_empresa->user_id = $user->id;
+            $user_empresa->empresa_id = $empresa["id"];
+            $user_empresa->save();
+        }
 
         //Agregar Rol
         $user->assignRole($request->rol["name"]);
@@ -83,7 +97,9 @@ class UserController extends Controller
 
     public function show(User $user)
     {
-        $user = User::where('id', $user->id)->with('empresa')->first();
+        $user = User::where('id', $user->id)->first();
+        $empresas = $user->getNameEmpresas();
+        $user->empresas = $empresas;
         $user->role_name = $user->getRoleNames()[0];
 
         $user_indicadores = $user->indicadores;
@@ -237,7 +253,12 @@ class UserController extends Controller
         foreach ($user_indicadores as $key => $user_indicador) {
             $user_indicadores_ids[] = $user_indicador->indicador_id;
         }
-        return Inertia::render('User/Edit', compact('indicadores', 'empresas', 'roles', 'rol', 'current_user', 'user_indicadores_ids'));
+        $user_empresas = $user->empresas;
+        $user_empresas_ids = [];
+        foreach ($user_empresas as $key => $user_empresa) {
+            $user_empresas_ids[] = $user_empresa->empresa_id;
+        }
+        return Inertia::render('User/Edit', compact('indicadores', 'empresas', 'roles', 'rol', 'current_user', 'user_indicadores_ids', 'user_empresas_ids'));
     }
 
     public function update(Request $request, User $user, UpdateUser $updateUser): RedirectResponse
@@ -254,7 +275,6 @@ class UserController extends Controller
         $updateUser->execute($user, new UserDTO([
             'name' => $request['name'],
             'email' => $request['email'],
-            'empresa_id' => $request['empresa']['id'],
             'password' => $request['password'] ?
                 Hash::make($request['password']) : null,
         ]));
@@ -264,6 +284,24 @@ class UserController extends Controller
         $user->removeRole($current_role);
         //Agregar Rol
         $user->assignRole($request->rol["name"]);
+
+        //Eliminar Empresas
+        foreach ($user->empresas as $key => $empresa) {
+            $empresa->delete();
+        }
+
+        //Guardar empresas
+        $empresas = $request['empresa'];
+        if (!isset($empresas[0])) {
+            $empresas = [$empresas];
+        }
+
+        foreach ($empresas as $key => $empresa) {
+            $user_empresa = new UserEmpresa;
+            $user_empresa->user_id = $user->id;
+            $user_empresa->empresa_id = $empresa["id"];
+            $user_empresa->save();
+        }
 
         //Eliminar Indicadores
         foreach ($user->indicadores as $key => $indicador) {
@@ -288,6 +326,11 @@ class UserController extends Controller
         //Eliminar Indicadores
         foreach ($user->indicadores as $key => $indicador) {
             $indicador->delete();
+        }
+
+        //Eliminar Empresas
+        foreach ($user->empresas as $key => $empresa) {
+            $empresa->delete();
         }
 
         $user->delete();

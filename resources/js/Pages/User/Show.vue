@@ -21,9 +21,13 @@
                         <p class="m-0 font-bold">Rol:</p>
                         <p class="ml-2">{{ user.role_name }}</p>
                     </div>
-                    <div class="flex justify-between items-center px-2 py-2">
+                    <div class="flex justify-between items-center px-2 py-2" v-if="user.empresas.length <= 1">
                         <p class="m-0 font-bold">Empresa:</p>
-                        <p class="ml-2">{{ user.empresa.name }}</p>
+                        <p class="m-0 ml-2" v-for="empresa in user.empresas" :key="empresa">{{ empresa }}</p><br>
+                    </div>
+                    <div class="px-2 py-2" v-if="user.empresas.length > 1">
+                        <p class="m-0 font-bold">Empresa:</p>
+                        <p class="m-0 ml-2" v-for="empresa in user.empresas" :key="empresa">{{ empresa }}</p><br>
                     </div>
                 </div>
                 <div class="col-12">
@@ -122,7 +126,8 @@
 
     <DeleteDialog ref="deleteDialog" v-model:visible="deleteDialog" :loading="deletingModel" @delete="onDelete" />
 
-    <Dialog v-model:visible="modelDialog" :style="{ width: '750px' }" header="Crear Indicador" :modal="true" class="p-fluid">
+    <Dialog v-model:visible="modelDialog" :style="{ width: '750px' }" header="Crear Indicador" :modal="true"
+        class="p-fluid">
         <div class="p-fluid formgrid grid">
             <div class="field col-12 md:col-6">
                 <label for="mes">MES</label>
@@ -139,7 +144,8 @@
             <div class="field col-12 md:col-6">
                 <label for="actividad">INDICADOR</label>
                 <Dropdown v-model="model.indicador" :options="indicadores" optionLabel="name"
-                    placeholder="Selecciona un Indicador" :class="{ 'p-invalid': submitted && !model.user }" required v-on:change="clearData"/>
+                    placeholder="Selecciona un Indicador" :class="{ 'p-invalid': submitted && !model.user }" required
+                    v-on:change="clearData" />
                 <small class="p-invalid" v-if="submitted && !model.indicador">Indicador es requerido.</small>
             </div>
 
@@ -171,7 +177,7 @@
 
             <div class="field col-12 md:col-12" v-if="model.indicador.id == 3">
                 <label for="data_1">PORCENTAJE</label>
-                <InputNumber type="number" id="data_1" v-model.trim="model.data_1" required="true" autofocus 
+                <InputNumber type="number" id="data_1" v-model.trim="model.data_1" required="true" autofocus
                     :class="{ 'p-invalid': submitted && !model.data_1 }" />
                 <small class="p-invalid" v-if="submitted && !model.data_1">PORCENTAJE es requerido.</small>
             </div>
@@ -375,7 +381,7 @@ export default {
                             detail: "Indicador creada",
                             life: 3000,
                         });
-                        console.log("arbol",  response.data)
+                        console.log("arbol", response.data)
                         this.$arbol = response.data
                     })
                     .catch((error) => {
@@ -420,7 +426,7 @@ export default {
             this.modelEditDialog = false;
             this.model = {};
         },
-        clearData (){
+        clearData() {
             this.model.data_1 = ""
             this.model.data_2 = ""
         }
