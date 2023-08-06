@@ -93,24 +93,17 @@ class ActaController extends Controller
         $acta = Acta::with('tareas')->find($id);
         $tareas = $acta->tareas;
 
-        $categorias_ids = [];
-        $actividades_ids = [];
-
-        $categorias = [];
-        $actividades = [];
-
         foreach ($tareas as $key => $tarea) {
-            if (!in_array($tarea->actividad_id, $actividades_ids)) {
-                $actividades[] = $tarea->actividad;
-                $actividades_ids[] = $tarea->actividad_id;
-            }
-            if (!in_array($tarea->actividad->categoria_id, $categorias_ids)) {
-                $categorias[] = $tarea->actividad->categoria;
-                $categorias_ids[] = $tarea->actividad->categoria_id;
-            }
-        }
+            $tarea->estado_name = $tarea->estado->name;
+            $tarea->estado_backgroundColor = $tarea->estado->backgroundColor;
+            $tarea->actividad_name = $tarea->actividad->name;
+            $tarea->categoria_name = $tarea->actividad->categoria->name;
 
-        return Inertia::render('Acta/Cronograma', compact('acta', 'tareas', 'actividades', 'categorias'));
+            $segundos = strtotime($tarea->fecha_finalizacion) - strtotime($tarea->fecha_fin);
+            $dias = $segundos / 86400;
+            $tarea->desviacion = $dias;
+        }
+        return Inertia::render('Acta/Cronograma', compact('acta', 'tareas'));
     }
 
     public function import(Request $request)

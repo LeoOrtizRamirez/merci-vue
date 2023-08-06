@@ -10,6 +10,12 @@
                         <h4 class="m-0">Acta</h4>
                     </div>
                     <div class="flex justify-between items-center px-2 py-2">
+                        <p class="m-0 font-bold">Ver cronograma:</p>
+                        <Button v-permission="'acta.show'" icon="pi pi-calendar"
+                                    class="mx-2 p-button-primary p-button-sm mr-1 p-button-rounded p-button-outlined"
+                                    @click="showCronograma(acta.id)" />
+                    </div>
+                    <div class="flex justify-between items-center px-2 py-2">
                         <p class="m-0 font-bold">Número de la sesión:</p>
                         <p class="ml-2">{{ acta.numero_sesion }}</p>
                     </div>
@@ -325,6 +331,9 @@ export default {
         this.loadLazyData();
     },
     methods: {
+        showCronograma(id) {
+            this.$inertia.get(this.route('actas.cronograma', id));
+        },
         edit(id) {
             this.$inertia.get(this.route('actas.edit', id));
         },

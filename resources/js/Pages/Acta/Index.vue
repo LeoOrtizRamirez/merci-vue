@@ -10,7 +10,9 @@
                         <!-- <Button v-permission="'acta.create'" icon="pi pi-fw pi-file-import"
                             class="p-button-primary p-button-sm mr-1 p-button-rounded p-button-outlined"
                             @click="this.$inertia.get(this.route('actas.create'));" /> -->
-                        <h4>Actas</h4>
+                        <h4  @click="descargarArchivo">Actas</h4>
+                        <Button icon="pi pi-fw pi-download" title="Descargar archivo con ejemplo de importación" class="mx-2 p-button-primary p-button-sm mr-1 p-button-rounded p-button-outlined" @click="descargarArchivo">
+                        </Button>
                     </div>
                     <div class="title">
                         <form @submit.prevent="importarArchivo">
@@ -224,6 +226,16 @@ export default {
             const fileName = input.files[0].name;
             this.fileName = fileName;
             // Handle file upload logic here
+        },
+        descargarArchivo() {
+            const url = "http://127.0.0.1:8000/assets/cronograma.xlsx";
+            const nombreArchivo = "importacion-cronograma.xlsx";
+            const link = document.createElement("a");
+            link.href = url;
+            link.setAttribute("download", nombreArchivo);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         }
     }
 }

@@ -3,212 +3,68 @@
         <div class="p-grid">
             <div class="p-col-12">
                 <div class="card">
-                    <h4>Acta</h4>
-                    <!-- <div class="flex justify-between items-center px-2 py-2">
-                        <p class="m-0 font-bold">Número de la sesión:</p>
-                        <p class="ml-2">{{ acta.numero_sesion }}</p>
-                    </div>
-                    <div class="flex justify-between items-center px-2 py-2">
-                        <p class="m-0 font-bold">Fecha: </p>
-                        <p class="ml-2"> {{ acta.fecha }} </p>
-                    </div>
-                    <div class="flex justify-between items-center px-2 py-2">
-                        <p class="m-0 font-bold">Hora de inicio:</p>
-                        <p class="ml-2">{{ acta.hora_inicio }}</p>
-                    </div>
-                    <div class="flex justify-between items-center px-2 py-2">
-                        <p class="m-0 font-bold">Hora de finalización:</p>
-                        <p class="ml-2">{{ acta.hora_finalizacion }}</p>
-                    </div>
-                    <div class="flex justify-between items-center px-2 py-2">
-                        <p class="m-0 font-bold">Modalidad de encuentro:</p>
-                        <p class="ml-2">{{ acta.modalidad_encuentro }}</p>
-                    </div>
-                    <div class="flex justify-between items-center px-2 py-2">
-                        <p class="m-0 font-bold">Asistentes:</p>
-                        <p class="ml-2">{{ acta.asistentes }}</p>
-                    </div>
-                    <div class="flex justify-between items-center px-2 py-2">
-                        <p class="m-0 font-bold">Temas tratados en la sesión:</p>
-                        <p class="ml-2">{{ acta.temas }}</p>
-                    </div> -->
-
-                    <table class="border-1" summary="Análisis de ventas anuales">
-                        <thead>
-                            <tr>
-                                <th class="border-1" rowspan="2" scope="col">AÑO</th>
-                                <th class="border-1" colspan="4" scope="col">Expansión de ventas</th>
-                            </tr>
-                            <tr>
-                                <th class="border-1" scope="col">Producto A</th>
-                                <th class="border-1" scope="col">Producto B</th>
-                                <th class="border-1" scope="col">Producto C</th>
-                                <th class="border-1" scope="col">Producto D</th>
-                            </tr>
-                        </thead>
-
-                        <tfoot>
-                            <tr>
-                                <th class="border-1" rowspan="2" scope="col">AÑO</th>
-                                <th class="border-1" scope="col">Producto A</th>
-                                <th class="border-1" scope="col">Producto B</th>
-                                <th class="border-1" scope="col">Producto C</th>
-                                <th class="border-1" scope="col">Producto D</th>
-                            </tr>
-                            <tr>
-                                <th class="border-1" colspan="4" scope="col">Expansión de ventas</th>
-                            </tr>
-                        </tfoot>
-
-                        <tbody>
-                            <tr>
-                                <th class="border-1" scope="row">N-3</th>
-                                <td class="border-1">-</td>
-                                <td class="border-1">-</td>
-                                <td class="border-1">-</td>
-                                <td class="border-1">-</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">N-2</th>
-                                <td class="border-1">3</td>
-                                <td class="border-1">5</td>
-                                <td class="border-1">8</td>
-                                <td class="border-1">4</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">N-1</th>
-                                <td class="border-1">4</td>
-                                <td class="border-1">4</td>
-                                <td class="border-1">7</td>
-                                <td class="border-1">3</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">N</th>
-                                <td class="border-1">5</td>
-                                <td class="border-1">7</td>
-                                <td class="border-1">6</td>
-                                <td class="border-1">2</td>
-                            </tr>
-                        </tbody>
-                    </table>
-
-
-                    <div class="Table">
-                        <div class="Heading">
-                            <div class="Cell">
-                                <p>Categoría</p>
-                            </div>
-                            <div class="Cell">
-                                <p>Actividades</p>
-                            </div>
-                            <div class="Cell">
-                                <p>Tareas</p>
-                            </div>
-                        </div>
-                        <div class="Row" v-for="(categoria, categoriaIndex) in categorias" :key="categoriaIndex">
-                            <div class="Cell categorias">{{ categoria.name }}</div>
-                            <div class="Cell actividades">
-                                <div class="Row actividades"
-                                    v-for="actividad in actividades.filter(a => a.categoria_id === categoria.id)"
-                                    :key="actividad.id">
-                                    <div class="Cell">{{ actividad.name }}</div>
-                                </div>
-                            </div>
-                            <div class="Cell tareas">
-                                <div v-for="actividad in actividades.filter(a => a.categoria_id === categoria.id)">
-                                    <div class="Row tareas" v-for="tarea in tareas" :key="tarea.id">
-                                        <div v-if="tarea.actividad_id == actividad.id">
-                                            <div class="Cell">{{ tarea.descripcion }}</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
-
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Categoría</th>
-                                <th>Actividades</th>
-                                <th>Tareas</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr v-for="(categoria, categoriaIndex) in categorias" :key="categoriaIndex">
-                                <div class="Cell">{{ categoria.name }}</div>
-                                <div class="Cell">
-                                    <table>
-                                        <tbody>
-                                            <tr v-for="actividad in actividades.filter(a => a.categoria_id === categoria.id)"
-                                                :key="actividad.id">
-                                                <div class="Cell">{{ actividad.name }}</div>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div class="Cell">
-                                    <table>
-                                        <tbody>
-                                            <div
-                                                v-for="actividad in actividades.filter(a => a.categoria_id === categoria.id)">
-                                                <tr v-for="tarea in tareas" :key="tarea.id">
-                                                    <div v-if="tarea.actividad_id == actividad.id">
-                                                        <div class="Cell">{{ tarea.descripcion }}</div>
-                                                    </div>
-                                                </tr>
-                                            </div>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </tr>
-                        </tbody>
-                    </table>
-
-                    <table class="border-collapse border-slate-400">
-                        <thead>
-                            <tr>
-                                <th>CATEGORÍA</th>
-                                <th>ACTIVIDAD - TÁCTICA</th>
-                                <th>TAREAS</th>
-                                <th>RESPONSABLE</th>
-                                <th>FECHA INICIO</th>
-                                <th>FECHA FIN</th>
-                                <th>ESTADO</th>
-                                <th>FECHA REAL DE FINALIZACIÓN</th>
-                                <th>DESVIACIÓN</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr v-for="categoria in categorias">
-                                <div class="Cell">
-                                    {{ categoria.name }}
-                                </div>
-                                <div class="Cell">
-                                    <div v-for="categoria in categorias">
-                                        <div v-for="actividad in actividades">
-                                            <div v-if="categoria.id == actividad.categoria_id">
-                                                {{ actividad.name }}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="Cell">
-                                    <div v-for="tarea in tareas">
-                                        {{ tarea.descripcion }}
-                                    </div>
-                                </div>
-                                <div class="Cell"></div>
-                                <div class="Cell"></div>
-                                <div class="Cell"></div>
-                                <div class="Cell"></div>
-                                <div class="Cell"></div>
-                                <div class="Cell"></div>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <h4>Cronograma</h4>
+                    <DataTable :value="tareas" :paginator="false" v-model:filters="filters" filterDisplay="row">
+                        <Column field="categoria_name" header="CATEGORIA">
+                            <template #filter="{ filterModel, filterCallback }">
+                                <InputText type="text" v-model="filterModel.value" @input="filterCallback()"
+                                    class="p-column-filter" />
+                            </template>
+                        </Column>
+                        <Column field="actividad_name" header="ACTIVIDAD">
+                            <template #filter="{ filterModel, filterCallback }">
+                                <InputText type="text" v-model="filterModel.value" @input="filterCallback()"
+                                    class="p-column-filter" />
+                            </template>
+                        </Column>
+                        <Column field="descripcion" header="TAREAS">
+                            <template #filter="{ filterModel, filterCallback }">
+                                <InputText type="text" v-model="filterModel.value" @input="filterCallback()"
+                                    class="p-column-filter" />
+                            </template>
+                        </Column>
+                        <Column field="responsable" header="RESPONSABLE">
+                            <template #filter="{ filterModel, filterCallback }">
+                                <InputText type="text" v-model="filterModel.value" @input="filterCallback()"
+                                    class="p-column-filter" />
+                            </template>
+                        </Column>
+                        <Column field="fecha_inicio" header="FECHA INICIO">
+                            <template #filter="{ filterModel, filterCallback }">
+                                <InputText type="text" v-model="filterModel.value" @input="filterCallback()"
+                                    class="p-column-filter" />
+                            </template>
+                        </Column>
+                        <Column field="fecha_fin" header="FECHA FIN">
+                            <template #filter="{ filterModel, filterCallback }">
+                                <InputText type="text" v-model="filterModel.value" @input="filterCallback()"
+                                    class="p-column-filter" />
+                            </template>
+                        </Column>
+                        <Column field="estado_name" header="ESTADO">
+                            <template #filter="{ filterModel, filterCallback }">
+                                <InputText type="text" v-model="filterModel.value" @input="filterCallback()"
+                                    class="p-column-filter" />
+                            </template>
+                            <template #body="slotProps">
+                                <Tag :style="{ background: slotProps.data.estado_backgroundColor }">
+                                    <span style="font-size: 11px;">{{ slotProps.data.estado_name }}</span>
+                                </Tag>
+                            </template>
+                        </Column>
+                        <Column field="fecha_finalizacion" header="FECHA REAL DE FINALIZACION">
+                            <template #filter="{ filterModel, filterCallback }">
+                                <InputText type="text" v-model="filterModel.value" @input="filterCallback()"
+                                    class="p-column-filter" />
+                            </template>
+                        </Column>
+                        <Column field="desviacion" header="DESVIACIÓN" class="text-center">
+                            <template #filter="{ filterModel, filterCallback }">
+                                <InputText type="text" v-model="filterModel.value" @input="filterCallback()"
+                                    class="p-column-filter" />
+                            </template>
+                        </Column>
+                    </DataTable>
                 </div>
             </div>
         </div>
@@ -255,13 +111,21 @@ export default {
     },
     data() {
         return {
-            rowSpanCategorias: 0
+            filters: {
+                global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+                categoria_name: { value: null, matchMode: FilterMatchMode.CONTAINS },
+                actividad_name: { value: null, matchMode: FilterMatchMode.CONTAINS },
+                descripcion: { value: null, matchMode: FilterMatchMode.CONTAINS },
+                responsable: { value: null, matchMode: FilterMatchMode.CONTAINS },
+                fecha_inicio: { value: null, matchMode: FilterMatchMode.CONTAINS },
+                fecha_fin: { value: null, matchMode: FilterMatchMode.CONTAINS },
+                estado_name: { value: null, matchMode: FilterMatchMode.CONTAINS },
+                fecha_finalizacion: { value: null, matchMode: FilterMatchMode.CONTAINS },
+                desviacion: { value: null, matchMode: FilterMatchMode.CONTAINS },
+            },
         }
     },
     created() {
-        console.log("categorias", this.categorias[0])
-        console.log("actividades", this.actividades[0])
-        console.log("tareas", this.tareas[0])
     },
     mounted() {
     },
@@ -308,4 +172,5 @@ export default {
 .Row.tareas div {
     border: none !important;
     padding: 0px !important;
-}</style>
+}
+</style>
