@@ -12,6 +12,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\EmpresaController;
 use App\Http\Controllers\CategoriaController;
+use App\Http\Controllers\EntregableController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\Security;
 use App\Http\Controllers\TareaController;
@@ -56,6 +57,12 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('/empresas/datatable', [EmpresaController::class, 'datatable'])->name('empresas.datatable');
     Route::post('/api/upload-image', [EmpresaController::class, 'uploadImage'])->name('empresas.image');
     Route::resource('empresas', EmpresaController::class);
+});
+
+Route::middleware(['auth:sanctum', 'verified'])->group(function () {
+    Route::get('/entregables/datatable', [EntregableController::class, 'datatable'])->name('entregables.datatable');
+    Route::post('/api/upload-entregable', [EntregableController::class, 'uploadImage'])->name('entregables.image');
+    Route::resource('entregables', EntregableController::class);
 });
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {

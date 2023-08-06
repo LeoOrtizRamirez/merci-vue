@@ -15,7 +15,7 @@
             </div>
         </div>
         <div class="col-12 lg:col-6 xl:col-3">
-            <div class="card mb-0">
+            <div class="card mb-0 cursor-pointer" @click="showCronograma(acta_id)">
                 <div class="flex justify-content-between mb-3">
                     <div>
                         <span class="block text-500 font-medium">Acceso <br> Cronograma</span>
@@ -29,7 +29,7 @@
             </div>
         </div>
         <div class="col-12 lg:col-6 xl:col-3">
-            <div class="card mb-0">
+            <div class="card mb-0 cursor-pointer" @click="showEntregables()">
                 <div class="flex justify-content-between mb-3">
                     <div>
                         <span class="block text-500 font-medium">Acceso <br> Entregables</span>
@@ -73,70 +73,14 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
+                            <tr v-for="item in result">
                                 <td>
                                     <img src="/images/icons/icono-azul.png" class="absolute" style="width: 30px" alt="" />
-                                    <h6 class="categoria">COMPONENTE ESTRÁTEGICO</h6>
+                                    <h6 class="categoria">{{ item.categoria_name }}</h6>
                                 </td>
                                 <td>
                                     <div class="d-flex">
-                                        <ProgressBar :value="80"></ProgressBar>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <img src="/images/icons/icono-azul.png" class="absolute" style="width: 30px" alt="" />
-                                    <h6 class="categoria">CANALES DE VENTA</h6>
-                                </td>
-                                <td>
-                                    <div class="d-flex">
-                                        <ProgressBar :value="20"></ProgressBar>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <img src="/images/icons/icono-azul.png" class="absolute" style="width: 30px" alt="" />
-                                    <h6 class="categoria">MECÁNICA COMERCIAL</h6>
-                                </td>
-                                <td>
-                                    <div class="d-flex">
-                                        <ProgressBar :value="10"></ProgressBar>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <img src="/images/icons/icono-azul.png" class="absolute" style="width: 30px" alt="" />
-                                    <h6 class="categoria">TRANSFERENCIA DE CONOCIMIENTO
-                                    </h6>
-                                </td>
-                                <td>
-                                    <div class="d-flex">
-                                        <ProgressBar :value="25"></ProgressBar>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <img src="/images/icons/icono-azul.png" class="absolute" style="width: 30px" alt="" />
-                                    <h6 class="categoria">MERCADEO</h6>
-                                </td>
-                                <td>
-                                    <div class="d-flex">
-                                        <ProgressBar :value="10"></ProgressBar>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <img src="/images/icons/icono-azul.png" class="absolute" style="width: 30px" alt="" />
-                                    <h6 class="categoria">INFRAESTRUCTURA</h6>
-                                </td>
-                                <td>
-                                    <div class="d-flex">
-                                        <ProgressBar :value="50"></ProgressBar>
+                                        <ProgressBar :value="item.tareas_terminadas * 100 / item.tareas_totales"></ProgressBar>
                                     </div>
                                 </td>
                             </tr>
@@ -196,7 +140,9 @@ export default {
         chartTtlCotizaciones: [],
         chartEfectividadComercial: [],
         chartClientesNuevos: [],
-        indicadores_ids: []
+        indicadores_ids: [],
+        result:[],
+        acta_id:""
     },
     data() {
         return {
@@ -206,6 +152,14 @@ export default {
                     display: false
                 }
             },
+        }
+    },
+    methods:{
+        showCronograma(id) {
+            this.$inertia.get(this.route('actas.cronograma', id));
+        },
+        showEntregables(){
+            this.$inertia.get(this.route('entregables.index'));
         }
     }
 };

@@ -15,6 +15,7 @@ class RoleHasPermissionSeeder extends Seeder
     public function run()
     {
         $role_has_permissions = [
+            //ADMIN
             ['permission_id' => 1, 'role_id' => 1],
             ['permission_id' => 2, 'role_id' => 1],
             ['permission_id' => 3, 'role_id' => 1],
@@ -29,7 +30,6 @@ class RoleHasPermissionSeeder extends Seeder
             ['permission_id' => 12, 'role_id' => 1],
             ['permission_id' => 13, 'role_id' => 1],
             ['permission_id' => 14, 'role_id' => 1],
-            ['permission_id' => 14, 'role_id' => 3],
             ['permission_id' => 15, 'role_id' => 1],
             ['permission_id' => 16, 'role_id' => 1],
             ['permission_id' => 17, 'role_id' => 1],
@@ -52,7 +52,13 @@ class RoleHasPermissionSeeder extends Seeder
             ['permission_id' => 34, 'role_id' => 1],
             ['permission_id' => 35, 'role_id' => 1],
             ['permission_id' => 36, 'role_id' => 1],
+            ['permission_id' => 37, 'role_id' => 1],
+            ['permission_id' => 38, 'role_id' => 1],
+            ['permission_id' => 39, 'role_id' => 1],
+            ['permission_id' => 40, 'role_id' => 1],
 
+            //CONSULTOR
+            ['permission_id' => 14, 'role_id' => 3],
         ];
         DB::table('role_has_permissions')->insert($role_has_permissions);
     }

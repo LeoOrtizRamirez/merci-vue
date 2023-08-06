@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Acta;
+use App\Models\Tarea;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Inertia\Response;
+use stdClass;
 
 class DashboardController extends Controller
 {
@@ -13,6 +17,15 @@ class DashboardController extends Controller
     {
         $user = Auth::user();
         $indicadores = $user->indicadores;
+
+        $acta_id = 1;
+        $result = DB::table('tareas as t')
+        ->join('actividades as a', 'a.id', '=', 't.actividad_id')
+        ->join('categorias as c', 'c.id', '=', 'a.categoria_id')
+        ->select(DB::raw('SUM(IF(t.estado_id = 6, 1, 0)) AS tareas_terminadas'), DB::raw('count(t.id) as tareas_totales'), 'c.name as categoria_name')
+        ->where('acta_id', '=', $acta_id)
+        ->groupBy('c.name')
+        ->get();
 
         $dataVentasPresupuesto = [];
         $dataTtlCotizaciones = [];
@@ -25,8 +38,6 @@ class DashboardController extends Controller
         $chartClientesNuevos = [];
 
         $indicadores_ids = [];
-
-        
         foreach ($indicadores as $key => $item) {
             $indicadores_ids[] = $item->indicador->id;
             switch ($item->indicador->id) {
@@ -112,6 +123,6 @@ class DashboardController extends Controller
                     break;
             }
         }
-        return Inertia::render('Dashboard', compact('chartVentasPresupuesto', 'chartTtlCotizaciones', 'chartEfectividadComercial', 'chartClientesNuevos', 'indicadores_ids'));
+        return Inertia::render('Dashboard', compact('chartVentasPresupuesto', 'chartTtlCotizaciones', 'chartEfectividadComercial', 'chartClientesNuevos', 'indicadores_ids', 'result', 'acta_id'));
     }
 }
