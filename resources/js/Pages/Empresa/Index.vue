@@ -20,19 +20,9 @@
                         :rows-per-page-options="[10, 25, 50]"
                         current-page-report-template="Mostrando del {first} al {last} de {totalRecords} resultados"
                         @page="onPage($event)" @sort="onSort($event)" @filter="onSort($event)">
-                        <!-- <template #header>
-                                <h5 class="p-m-0">
-                                    Clientes
-                                </h5>
-                        </template> -->
-                        <Column field="id" header="ID">
-                            <template #body="slotProps">
-                                {{ slotProps.data.id }}
-                            </template>
-                        </Column>
                         <Column field="name" header="Nombre">
                             <template #body="slotProps">
-                                {{ slotProps.data.name }}
+                                <a  rel="noopener noreferrer" class="cursor-pointer" @click="showDashboard(slotProps.data.id)">{{ slotProps.data.name }}</a>
                             </template>
                         </Column>
                         <Column field="nit" header="NIT">
@@ -175,8 +165,11 @@ export default {
                 }
             })
         },
-        show(id) {
+        showDashboard(id) {
             this.$inertia.get('/dashboard?empresa_id=' + id);
+        },
+        show(id) {
+            this.$inertia.get(this.route('empresas.show', id));
         },
     }
 }

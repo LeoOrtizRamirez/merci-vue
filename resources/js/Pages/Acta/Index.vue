@@ -7,18 +7,10 @@
                         <Button v-permission="'acta.create'" icon="pi pi-fw pi-plus"
                             class="p-button-primary p-button-sm mr-1 p-button-rounded p-button-outlined"
                             @click="this.$inertia.get(this.route('actas.create'));" />
-                        <!-- <Button v-permission="'acta.create'" icon="pi pi-fw pi-file-import"
-                            class="p-button-primary p-button-sm mr-1 p-button-rounded p-button-outlined"
-                            @click="this.$inertia.get(this.route('actas.create'));" /> -->
-                        <h4  @click="descargarArchivo">Actas</h4>
-                        <Button icon="pi pi-fw pi-download" title="Descargar archivo con ejemplo de importación" class="mx-2 p-button-primary p-button-sm mr-1 p-button-rounded p-button-outlined" @click="descargarArchivo">
-                        </Button>
+                            <h4 >Actas</h4>
                     </div>
-                    <div class="title">
+                    <!-- <div class="title">
                         <form @submit.prevent="importarArchivo">
-                            <!-- <input id="file-upload" type="file" class="p-fileupload" ref="archivo" name="archivo">
-                            <button type="submit" class="p-button p-component">Importar archivo</button> -->
-
                             <label for="file-upload" class="custom-file-upload">
                                 <span class="pi pi-upload"></span>
                                 <span>{{ fileName }}</span>
@@ -29,7 +21,7 @@
                                 <span class="p-button-label">Guardar</span>
                             </button>
                         </form>
-                    </div>
+                    </div> -->
 
 
 
@@ -40,11 +32,16 @@
                         :rows-per-page-options="[10, 25, 50]"
                         current-page-report-template="Mostrando del {first} al {last} de {totalRecords} resultados"
                         @page="onPage($event)" @sort="onSort($event)" @filter="onSort($event)">
-                        <!-- <template #header>
-                                <h5 class="p-m-0">
-                                    Clientes
-                                </h5>
-                        </template> -->
+                        <Column field="empresa" header="Empresa">
+                            <template #body="slotProps">
+                                {{ slotProps.data.empresa.name }}
+                            </template>
+                        </Column>
+                        <Column field="user" header="Usuario">
+                            <template #body="slotProps">
+                                {{ slotProps.data.user.name }}
+                            </template>
+                        </Column>
                         <Column field="numero_sesion" header="# sesión">
                             <template #body="slotProps">
                                 {{ slotProps.data.numero_sesion }}
@@ -228,7 +225,7 @@ export default {
             // Handle file upload logic here
         },
         descargarArchivo() {
-            const url = "http://127.0.0.1:8000/assets/cronograma.xlsx";
+            const url = "/assets/cronograma.xlsx";
             const nombreArchivo = "importacion-cronograma.xlsx";
             const link = document.createElement("a");
             link.href = url;
@@ -241,38 +238,4 @@ export default {
 }
 </script>
 
-<style scoped>
-td.acta-actions {
-    white-space: nowrap;
-}
-
-.input-file {
-    opacity: 0;
-    position: absolute;
-    z-index: -1;
-}
-
-.custom-file-upload {
-    display: inline-block;
-    background-color: #6366F1;
-    color: #fff;
-    font-size: 1rem;
-    padding: 6px 10px;
-    cursor: pointer;
-    border-radius: 4px;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    margin-right: 5px;
-}
-
-.custom-file-upload span {
-    display: inline-block;
-    max-width: 160px;
-    margin-right: 8px;
-    font-size: 0.9rem;
-    vertical-align: middle;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-</style>
+<style scoped></style>

@@ -50,6 +50,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('/users/datatable', [UserController::class, 'datatable'])->name('users.datatable');
     Route::post('/users/indicadores', [UserController::class, 'saveIndicador'])->name('users.saveIndicador');
+    Route::get('/users/empresas', [UserController::class, 'getEmpresas'])->name('users.empresas');
     Route::resource('users', UserController::class);
 });
 

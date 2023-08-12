@@ -9,6 +9,17 @@
                             <h5>Acta</h5>
                             <form @submit.prevent="submit">
                                 <div class="p-fluid formgrid grid">
+                                    <div class="field col-12 md:col-6" :style="{ display: isAdmin ? 'unset' : 'none' }">
+                                        <label for="user_id">Usuario</label>
+                                        <Dropdown @change="getEmpresas()" v-model="form.user" :options="usuarios"
+                                            optionLabel="name" placeholder="Selecciona un usuario" class="w-full"
+                                            required />
+                                    </div>
+                                    <div class="field col-12 md:col-6" :style="{ display: isAdmin ? 'unset' : 'none' }">
+                                        <label for="empresa_id">Empresa</label>
+                                        <Dropdown v-model="form.empresa" :options="empresas" optionLabel="name"
+                                            placeholder="Selecciona una empresa" class="w-full" required />
+                                    </div>
                                     <div class="field col-12 md:col-4">
                                         <label for="fecha">Fecha</label>
                                         <InputText v-model="form.fecha" id="fecha" type="date" />
@@ -32,15 +43,17 @@
                                     </div>
                                     <div class="field col-12 md:col-12">
                                         <label for="asistentes">Asistentes</label>
-                                        <TextArea v-model="form.asistentes" rows="2" cols="30" class="w-full p-inputtextarea p-inputtext p-component"/>
+                                        <TextArea v-model="form.asistentes" rows="2" cols="30"
+                                            class="w-full p-inputtextarea p-inputtext p-component" />
                                     </div>
                                     <div class="field col-12 md:col-12">
                                         <label for="temas">Temas tratados en la sesión</label>
-                                        <TextArea v-model="form.temas" rows="3" cols="30" class="w-full p-inputtextarea p-inputtext p-component"/>
+                                        <TextArea v-model="form.temas" rows="3" cols="30"
+                                            class="w-full p-inputtextarea p-inputtext p-component" />
                                     </div>
                                 </div>
                                 <Button class="p-button p-component p-button-danger p-button-raised mx-2" label="Cancelar"
-                                    @click="this.$inertia.get(this.route('actas.show', acta.id));" />
+                                    @click="backPage()" />
                                 <Button label="Actualizar" type="submit"></Button>
                             </form>
                         </div>
@@ -56,6 +69,7 @@ import Button from "primevue/button";
 import InputText from "primevue/inputtext";
 import TextArea from 'primevue/textarea';
 import Dropdown from 'primevue/dropdown';
+import axios from "axios";
 
 export default {
     name: "Edit",
@@ -69,7 +83,11 @@ export default {
     },
     props: {
         acta: [],
-        errors: Object
+        errors: Object,
+        current_empresa: "",
+        current_user: "",
+        usuarios: [],
+        empresas: []
     },
     data() {
         return {
@@ -82,15 +100,45 @@ export default {
                 asistentes: this.acta.asistentes,
                 temas: this.acta.temas,
             },
-            modalidades: [ 'Presencial', 'Virtual', 'Mixta']
+            modalidades: ['Presencial', 'Virtual', 'Mixta'],
+            isAdmin: false,
+            empresas: this.empresas
         }
     },
     mounted() {
+        const empresaSeleccionada = this.empresas.find(empresa => empresa.id === this.current_empresa.id);
+        if (empresaSeleccionada) {
+            this.form.empresa = empresaSeleccionada;
+        }
+
+        const usuarioSeleccionado = this.usuarios.find(usuario => usuario.id === this.current_user.id);
+        if (usuarioSeleccionado) {
+            this.form.user = usuarioSeleccionado;
+        }
+
+        if (this.$page.props.auth.roles[0] == "ADMIN") {
+            this.isAdmin = true
+        }
     },
     methods: {
         submit() {
             this.$inertia.put(route('actas.update', { 'acta': this.acta }), this.form);
         },
+        getEmpresas() {
+            axios.get('/users/empresas?user_id=' + this.form.user.id).then(response => {
+                if (response.data) {
+                    console.log(response.data)
+                    this.empresas = response.data
+                }
+            })
+        },
+        backPage(){
+            if(this.isAdmin){
+                this.$inertia.get(this.route('actas.index'));
+            }else{
+                this.$inertia.get(this.route('empresas.show', current_empresa.id));
+            }
+        }
     }
 }
 </script>

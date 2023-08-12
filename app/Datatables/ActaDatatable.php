@@ -15,6 +15,8 @@ class ActaDatatable extends Datatable
         return function (Acta $acta) {
             return [
                 'id' => $acta->id,
+                'user' => $acta->user,
+                'empresa' => $acta->empresa,
                 'numero_sesion' => $acta->numero_sesion,
                 'fecha' => $acta->fecha,
                 'hora_inicio' => $acta->hora_inicio,

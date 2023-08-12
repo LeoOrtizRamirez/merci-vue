@@ -91,3 +91,37 @@ h6.categoria {
 .p-column-filter-row .p-column-filter-menu-button, .p-column-filter-row .p-column-filter-clear-button {
     margin-left: 0.2rem !important;
 }
+
+td.acta-actions {
+    white-space: nowrap;
+}
+
+.input-file {
+    opacity: 0;
+    position: absolute;
+    z-index: -1;
+}
+
+.custom-file-upload {
+    display: inline-block;
+    background-color: #6366F1;
+    color: #fff;
+    font-size: 1rem;
+    padding: 6px 10px;
+    cursor: pointer;
+    border-radius: 4px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    margin-right: 5px;
+}
+
+.custom-file-upload span {
+    display: inline-block;
+    max-width: 160px;
+    margin-right: 8px;
+    font-size: 0.9rem;
+    vertical-align: middle;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

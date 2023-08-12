@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Datatables\EmpresaDatatable;
 use App\Http\Controllers\Controller;
+use App\Models\Acta;
 use App\Models\Empresa;
 use App\Models\Estado;
 use Illuminate\Http\Request;
@@ -59,7 +60,10 @@ class EmpresaController extends Controller
 
     public function show(Empresa $empresa)
     {
-        return Inertia::render('Empresa/Show', compact('empresa'));
+        $actas = Acta::where('empresa_id', $empresa->id)
+            ->where('user_id', Auth::user()->id)
+            ->get();
+        return Inertia::render('Empresa/Show', compact('empresa', 'actas'));
     }
 
     public function edit(Empresa $empresa)

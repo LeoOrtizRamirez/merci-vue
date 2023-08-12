@@ -7,10 +7,13 @@ use App\Http\Controllers\Controller;
 use App\Models\Acta;
 use App\Models\Actividade;
 use App\Models\Categoria;
+use App\Models\Empresa;
 use App\Models\Estado;
 use App\Models\Tarea;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Response;
 use Inertia\Inertia;
 use Maatwebsite\Excel\Concerns\ToModel;
@@ -32,9 +35,22 @@ class ActaController extends Controller
         return response()->json($data);
     }
 
-    public function create(): Response
+    public function create(Request $request): Response
     {
-        return Inertia::render('Acta/Create');
+        if(isset($request->empresa_id)){
+            $current_empresa = Empresa::find($request->empresa_id);
+        }else{
+            $current_empresa = Empresa::find(1);
+        }
+        
+        $current_user = Auth::user();
+        $usuarios = User::all();
+
+        $user = Auth::user();
+        $empresas_ids = $user->empresas->pluck('empresa_id')->toArray();
+        $empresas = Empresa::whereIn('id', $empresas_ids)->get();
+        /* $empresas = Empresa::all(); */
+        return Inertia::render('Acta/Create', compact('current_empresa','current_user','usuarios', 'empresas'));
     }
 
     public function store(Request $request)
@@ -47,6 +63,8 @@ class ActaController extends Controller
         $acta->modalidad_encuentro = $request->modalidad_encuentro;
         $acta->asistentes = $request->asistentes;
         $acta->temas = $request->temas;
+        $acta->user_id = $request->user["id"];
+        $acta->empresa_id = $request->empresa["id"];
         $acta->save();
         return redirect()->route('actas.show', $acta->id);
     }
@@ -60,7 +78,16 @@ class ActaController extends Controller
 
     public function edit(Acta $acta)
     {
-        return Inertia::render('Acta/Edit', compact('acta'));
+        $current_empresa = Empresa::find($acta->empresa_id);
+        $current_user = User::find($acta->user_id);
+        
+        $usuarios = User::all();
+
+        /* $user = Auth::user();
+        $empresas_ids = $user->empresas->pluck('empresa_id')->toArray();
+        $empresas = Empresa::whereIn('id', $empresas_ids)->get(); */
+        $empresas = Empresa::all();
+        return Inertia::render('Acta/Edit', compact('acta', 'current_empresa','current_user','usuarios', 'empresas'));
     }
 
     public function update(Request $request, Acta $acta)
@@ -73,6 +100,8 @@ class ActaController extends Controller
         $acta->modalidad_encuentro = $request->modalidad_encuentro;
         $acta->asistentes = $request->asistentes;
         $acta->temas = $request->temas;
+        $acta->user_id = $request->user["id"];
+        $acta->empresa_id = $request->empresa["id"];
         $acta->save();
         return redirect()->route('actas.show', $acta->id);
     }
@@ -123,6 +152,8 @@ class ActaController extends Controller
         $acta->modalidad_encuentro = $data[0][1][4];
         $acta->asistentes = $data[0][1][5];
         $acta->temas = $data[0][1][6];
+        $acta->empresa_id = $request->empresa_id;
+        $acta->user_id = Auth::user()->id;
         $acta->save();
 
         // Procesamos los datos del archivo
@@ -178,7 +209,10 @@ class ActaController extends Controller
             }
         }
 
-        $actas = Acta::all();
+        $actas = Acta::where('empresa_id', $request->empresa_id)
+            ->where('user_id', Auth::user()->id)
+            ->with('empresa', 'user')
+            ->get();
         // Retornamos una respuesta
         return response()->json([
             'message' => 'Archivo importado con éxito',

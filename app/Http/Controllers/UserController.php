@@ -337,6 +337,13 @@ class UserController extends Controller
         return redirect()->back();
     }
 
+    public function getEmpresas(Request $request){
+        $user = User::find($request->user_id);
+        $empresas_ids = $user->empresas->pluck('empresa_id')->toArray();
+        $empresas = Empresa::whereIn('id', $empresas_ids)->get();
+        return $empresas;
+    }
+
     /*     public function getPermissions(){
         foreach (Auth::user()->getAllPermissions() as $permission) {
             $permissions[] = $permission->name;

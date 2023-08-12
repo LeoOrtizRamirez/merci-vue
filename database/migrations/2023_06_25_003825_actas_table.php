@@ -22,6 +22,16 @@ class ActasTable extends Migration
             $table->string('modalidad_encuentro')->nullable();
             $table->string('asistentes')->nullable();
             $table->string('temas')->nullable();
+
+            $table->unsignedBigInteger('user_id')->nullable()->unsigned();
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('users');
+
+            $table->unsignedBigInteger('empresa_id')->nullable()->unsigned();
+            $table->foreign('empresa_id')
+                ->references('id')
+                ->on('empresas');
             $table->timestamps();
         });
     }
