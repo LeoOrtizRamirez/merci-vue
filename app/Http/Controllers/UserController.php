@@ -92,7 +92,7 @@ class UserController extends Controller
         }
 
 
-        return redirect()->route('users.index');
+        return redirect()->route('users.show', $user->id);
     }
 
     public function show(User $user)
@@ -316,7 +316,7 @@ class UserController extends Controller
             $user_indicador->save();
         }
 
-        return redirect()->route('users.index');
+        return redirect()->route('users.show', $user->id);
     }
 
     public function destroy(User $user): RedirectResponse
