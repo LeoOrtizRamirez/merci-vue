@@ -7,39 +7,47 @@
                         <Button v-permission="'acta.edit'" icon="pi pi-pencil"
                             class="p-button-success p-button-sm mr-1 p-button-rounded p-button-outlined"
                             @click="edit(acta.id)" />
-                        <h4 class="m-0">Acta</h4>
+                        <h4 class="m-0">Acta -
+                            <span v-permission="'acta.show'" @click="showCronograma(acta.id)" class="external mx-2">
+                                Ver cronograma 
+                                <i class="pi pi-external-link"></i>
+                            </span>
+                            -
+                            <span v-permission="'acta.show'" @click="showDashboard()" class="external mx-2">
+                                Ver dashboard 
+                                <i class="pi pi-external-link"></i>
+                            </span>
+                        </h4>
                     </div>
-                    <div class="flex justify-between items-center px-2 py-2">
-                        <p class="m-0 font-bold">Ver cronograma:</p>
-                        <Button v-permission="'acta.show'" icon="pi pi-calendar"
-                                    class="mx-2 p-button-primary p-button-sm mr-1 p-button-rounded p-button-outlined"
-                                    @click="showCronograma(acta.id)" />
+                    <div class="flex justify-between items-center px-2 py-2 show-subtitle">
+                        <p class="m-0 font-bold">Empresa</p>
+                        <p class="ml-2">{{ acta.empresa.name }}</p>
                     </div>
-                    <div class="flex justify-between items-center px-2 py-2">
+                    <div class="flex justify-between items-center px-2 py-2 show-subtitle">
                         <p class="m-0 font-bold">Número de la sesión:</p>
                         <p class="ml-2">{{ acta.numero_sesion }}</p>
                     </div>
-                    <div class="flex justify-between items-center px-2 py-2">
+                    <div class="flex justify-between items-center px-2 py-2 show-subtitle">
                         <p class="m-0 font-bold">Fecha: </p>
                         <p class="ml-2"> {{ acta.fecha }} </p>
                     </div>
-                    <div class="flex justify-between items-center px-2 py-2">
+                    <div class="flex justify-between items-center px-2 py-2 show-subtitle">
                         <p class="m-0 font-bold">Hora de inicio:</p>
                         <p class="ml-2">{{ acta.hora_inicio }}</p>
                     </div>
-                    <div class="flex justify-between items-center px-2 py-2">
+                    <div class="flex justify-between items-center px-2 py-2 show-subtitle">
                         <p class="m-0 font-bold">Hora de finalización:</p>
                         <p class="ml-2">{{ acta.hora_finalizacion }}</p>
                     </div>
-                    <div class="flex justify-between items-center px-2 py-2">
+                    <div class="flex justify-between items-center px-2 py-2 show-subtitle">
                         <p class="m-0 font-bold">Modalidad de encuentro:</p>
                         <p class="ml-2">{{ acta.modalidad_encuentro }}</p>
                     </div>
-                    <div class="flex justify-between items-center px-2 py-2">
+                    <div class="flex justify-between items-center px-2 py-2 show-subtitle">
                         <p class="m-0 font-bold">Asistentes:</p>
                         <p class="ml-2">{{ acta.asistentes }}</p>
                     </div>
-                    <div class="flex justify-between items-center px-2 py-2">
+                    <div class="flex justify-between items-center px-2 py-2 show-subtitle">
                         <p class="m-0 font-bold">Temas tratados en la sesión:</p>
                         <p class="ml-2">{{ acta.temas }}</p>
                     </div>
@@ -232,7 +240,8 @@
             </div>
         </div>
         <template #footer>
-            <Button label="Cancelar" icon="pi pi-times" class="p-button-danger p-button-raised mx-2" @click="hideEditDialog" />
+            <Button label="Cancelar" icon="pi pi-times" class="p-button-danger p-button-raised mx-2"
+                @click="hideEditDialog" />
             <Button label="Guardar" icon="pi pi-check" class="" @click="updateModel" />
         </template>
     </Dialog>
@@ -434,7 +443,7 @@ export default {
             if (this.model) {
                 console.log("model", this.model)
                 console.log(typeof miVariable)
-                axios.put(this.route('tareas.update',  this.model), this.model)
+                axios.put(this.route('tareas.update', this.model), this.model)
                     .then((response) => {
                         this.model = response.data.data;
                         /* this.models.unshift(this.model); */
@@ -459,8 +468,18 @@ export default {
             this.modelEditDialog = false;
             this.model = {};
         },
+        showDashboard(){
+            this.$inertia.get('/dashboard?empresa_id=' + this.acta.empresa_id + '&acta_id=' + this.acta.id);
+        }
     }
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.external {
+    font-size: 17px;
+    font-weight: 400 !important;
+    letter-spacing: -1px;
+    cursor: pointer;
+}
+</style>

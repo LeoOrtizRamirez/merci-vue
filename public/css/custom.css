@@ -62,7 +62,7 @@ td.date {
     max-width: 90px;
 }
 
-.confirmation-content{
+.confirmation-content {
     display: flex;
 }
 
@@ -76,19 +76,20 @@ h6.categoria {
     margin-bottom: 0px !important;
 }
 
-#categorias td{
+#categorias td {
     height: 45px;
 }
 
-#categorias > tbody > tr td:nth-child(1) {
+#categorias>tbody>tr td:nth-child(1) {
     width: 500px;
 }
 
-.p-datatable .p-datatable-thead > tr > th{
+.p-datatable .p-datatable-thead>tr>th {
     padding: 0.3rem 0rem !important;
 }
 
-.p-column-filter-row .p-column-filter-menu-button, .p-column-filter-row .p-column-filter-clear-button {
+.p-column-filter-row .p-column-filter-menu-button,
+.p-column-filter-row .p-column-filter-clear-button {
     margin-left: 0.2rem !important;
 }
 
@@ -124,4 +125,10 @@ td.acta-actions {
     vertical-align: middle;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+@media only screen and (max-width: 600px) {
+    .flex.justify-between.items-center.px-2.py-2 {
+        justify-content: space-between;
+    }
 }

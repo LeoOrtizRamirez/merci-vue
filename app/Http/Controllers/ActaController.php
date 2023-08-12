@@ -71,6 +71,7 @@ class ActaController extends Controller
 
     public function show(Acta $acta)
     {
+        $acta = Acta::where('id', $acta->id)->with('empresa')->first();
         $estados = Estado::where('tipo', 2)->get();
         $actividades = Actividade::all();
         return Inertia::render('Acta/Show', compact('acta', 'actividades', 'estados'));
