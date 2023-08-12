@@ -4,7 +4,7 @@
             <div class="card mb-0">
                 <div class="flex justify-content-between">
                     <div>
-                        <div class="text-900 font-medium text-xl"><span class="text-green-500 font-medium">1</span></div>
+                        <div class="text-900 font-medium text-xl"><span class="text-green-500 font-medium">{{ total_actas }}</span></div>
                         <span class="block text-500 font-medium mb-3">Encuentros</span>
                     </div>
                     <div class="flex align-items-center justify-content-center bg-blue-100 border-round"
@@ -15,7 +15,19 @@
             </div>
         </div>
         <div class="col-12 lg:col-6 xl:col-3">
-            <div class="card mb-0 cursor-pointer" @click="showCronograma(acta_id)">
+            <div v-if="total_actas > 0" class="card mb-0 cursor-pointer" @click="showCronograma(acta_id)">
+                <div class="flex justify-content-between mb-3">
+                    <div>
+                        <span class="block text-500 font-medium">Acceso <br> Cronograma</span>
+                        <!-- <div class="text-900 font-medium text-xl"><span class="text-green-500 font-medium">{{ new Intl.NumberFormat('en-US').format(loans) }}</span></div> -->
+                    </div>
+                    <div class="flex align-items-center justify-content-center bg-orange-100 border-round"
+                        style="width:2.5rem;height:2.5rem">
+                        <i class="pi pi-external-link text-orange-500 text-xl"></i>
+                    </div>
+                </div>
+            </div>
+            <div v-else class="card mb-0">
                 <div class="flex justify-content-between mb-3">
                     <div>
                         <span class="block text-500 font-medium">Acceso <br> Cronograma</span>
@@ -45,7 +57,7 @@
         <div class="col-12 lg:col-6 xl:col-3">
             <div class="card mb-0">
                 <div class="flex justify-content-between">
-                    <img src="/images/logo-merci.png" alt="" class="w-full">
+                    <img :src="logo" alt="" class="w-full">
                     <!-- <div>
                         <span class="block text-500 font-medium mb-3">Caja</span>
                         <div class="text-900 font-medium text-xl"><span class="text-green-500 font-medium">{{ new Intl.NumberFormat('en-US').format(current_balance) }}</span></div>
@@ -142,7 +154,9 @@ export default {
         chartClientesNuevos: [],
         indicadores_ids: [],
         result:[],
-        acta_id:""
+        acta_id:"",
+        total_actas:0,
+        logo:""
     },
     data() {
         return {

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Acta;
+use App\Models\Empresa;
 use App\Models\Tarea;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -15,10 +16,23 @@ class DashboardController extends Controller
 {
     public function index(Request $request): Response
     {
+        $acta_id = 1;
+        $total_actas = 0;
+        $logo = "/images/logo-merci.png";
+        if(isset($request->empresa_id)){
+            $logo = "/images/" . Empresa::find($request->empresa_id)->logo;
+            $actas = Acta::where('empresa_id', $request->empresa_id)
+            ->where('user_id', Auth::user()->id)
+            ->get();
+            if(isset($actas[0])){
+                $acta_id = $actas->last()->id;
+                $total_actas = sizeof($actas);
+            }
+        }
+
         $user = Auth::user();
         $indicadores = $user->indicadores;
 
-        $acta_id = 1;
         $result = DB::table('tareas as t')
         ->join('actividades as a', 'a.id', '=', 't.actividad_id')
         ->join('categorias as c', 'c.id', '=', 'a.categoria_id')
@@ -123,6 +137,6 @@ class DashboardController extends Controller
                     break;
             }
         }
-        return Inertia::render('Dashboard', compact('chartVentasPresupuesto', 'chartTtlCotizaciones', 'chartEfectividadComercial', 'chartClientesNuevos', 'indicadores_ids', 'result', 'acta_id'));
+        return Inertia::render('Dashboard', compact('chartVentasPresupuesto', 'chartTtlCotizaciones', 'chartEfectividadComercial', 'chartClientesNuevos', 'indicadores_ids', 'result', 'acta_id', 'total_actas', 'logo'));
     }
 }
