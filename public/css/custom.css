@@ -132,3 +132,13 @@ td.acta-actions {
         justify-content: space-between;
     }
 }
+
+tr:has(button[style="margin-left: 0rem; visibility: visible;"]) td.actions,
+tr:has(button[style="margin-left: 0rem; visibility: hidden;"]) td.actions
+{
+    visibility: hidden;
+}
+
+.p-invalid{
+    color: red;
+}

@@ -111,78 +111,40 @@ class UserController extends Controller
         $users = User::all();
         $indicadores = Indicadore::whereIn('id', $user_indicadores_ids)->get();
 
-        $arbol = [];
-        foreach ($user->indicadores as $index => $item) {
-            $arbol[$index] = [
-                "key" => "" . $index . "",
-                "data" => [
-                    "name" => $item->indicador->name,
-                ],
-            ];
-            foreach ($item->datos as $key => $dato) {
-                switch ($item->indicador->id) {
-                    case 1:
-                        $arbol[$index]["children"][$key] = [
-                            "key" => $index . "-" . $key,
-                            "data" => [
-                                "name" => "MES: " . $dato->mes,
-                                "size" => "VENTAS: " . $dato->data_1,
-                                "type" => "PRESUPUESTO: " . $dato->data_2
-                            ]
-                        ];
-                        break;
-                    case 2:
-                        $arbol[$index]["children"][$key] = [
-                            "key" => $index . "-" . $key,
-                            "data" => [
-                                "name" => "MES: " . $dato->mes,
-                                "size" => "TTL COTIZACIONES: " . $dato->data_1,
-                                "type" => "N COTIZACIONES: " . $dato->data_2
-                            ]
-                        ];
-                        break;
-                    case 3:
-                        $arbol[$index]["children"][$key] = [
-                            "key" => $index . "-" . $key,
-                            "data" => [
-                                "name" => "MES: " . $dato->mes,
-                                "size" => "PORCENTAJE: " . $dato->data_1,
-                                "type" => ""
-                            ]
-                        ];
-                        break;
-                    case 4:
-                        $arbol[$index]["children"][$key] = [
-                            "key" => $index . "-" . $key,
-                            "data" => [
-                                "name" => "MES: " . $dato->mes,
-                                "size" => "CLIENTES: " . $dato->data_1,
-                                "type" => ""
-                            ]
-                        ];
-                        break;
-                }
-            }
-        }
+        $arbol = $this->getArboldIndicadores();
 
         return Inertia::render('User/Show', compact('user', 'users', 'indicadores', 'arbol'));
     }
 
     public function saveIndicador(Request $request)
     {
-        $user = User::find($request->user["id"]);
-        $user_indicadores = UserIndicadore::where('user_id', $request->user["id"])
-            ->where('indicador_id', $request->indicador["id"])->first();
-
-        if ($user_indicadores) {
-            $users_indicadores_dato = new UsersIndicadoresDato;
+        //$user = User::find($request->user["id"]);
+        if (isset($request->id)) {
+            $users_indicadores_dato = UsersIndicadoresDato::find($request->id);
             $users_indicadores_dato->mes = $request->mes;
             $users_indicadores_dato->data_1 = $request->data_1;
             $users_indicadores_dato->data_2 = $request->data_2;
-            $users_indicadores_dato->user_indicadore_id = $user_indicadores->id;
             $users_indicadores_dato->save();
+        } else {
+            $user_indicadores = UserIndicadore::where('user_id', $request->user["id"])
+                ->where('indicador_id', $request->indicador["id"])->first();
+
+            if ($user_indicadores) {
+                $users_indicadores_dato = new UsersIndicadoresDato;
+                $users_indicadores_dato->mes = $request->mes;
+                $users_indicadores_dato->data_1 = $request->data_1;
+                $users_indicadores_dato->data_2 = $request->data_2;
+                $users_indicadores_dato->user_indicadore_id = $user_indicadores->id;
+                $users_indicadores_dato->save();
+            }
         }
 
+        $arbol = $this->getArboldIndicadores();
+        return json_encode($arbol);
+    }
+
+    public function getArboldIndicadores(){
+        $user = Auth::user();
         $arbol = [];
         foreach ($user->indicadores as $index => $item) {
             $arbol[$index] = [
@@ -198,8 +160,13 @@ class UserController extends Controller
                             "key" => $index . "-" . $key,
                             "data" => [
                                 "name" => "MES: " . $dato->mes,
-                                "size" => "VENTAS: " . $dato->data_1,
-                                "type" => "PRESUPUESTO: " . $dato->data_2
+                                "size" => "VENTAS: " . number_format($dato->data_1),
+                                "type" => "PRESUPUESTO: " . number_format($dato->data_2),
+                                "node" => $item,
+                                "dato_1" => $dato->data_1,
+                                "dato_2" => $dato->data_2,
+                                "mes" => $dato->mes,
+                                "id" => $dato->id
                             ]
                         ];
                         break;
@@ -208,8 +175,13 @@ class UserController extends Controller
                             "key" => $index . "-" . $key,
                             "data" => [
                                 "name" => "MES: " . $dato->mes,
-                                "size" => "TTL COTIZACIONES: " . $dato->data_1,
-                                "type" => "N COTIZACIONES: " . $dato->data_2
+                                "size" => "TTL COTIZACIONES: " . number_format($dato->data_1),
+                                "type" => "N COTIZACIONES: " . number_format($dato->data_2),
+                                "node" => $item,
+                                "dato_1" => $dato->data_1,
+                                "dato_2" => $dato->data_2,
+                                "mes" => $dato->mes,
+                                "id" => $dato->id
                             ]
                         ];
                         break;
@@ -219,7 +191,12 @@ class UserController extends Controller
                             "data" => [
                                 "name" => "MES: " . $dato->mes,
                                 "size" => "PORCENTAJE: " . $dato->data_1,
-                                "type" => ""
+                                "type" => "",
+                                "node" => $item,
+                                "dato_1" => $dato->data_1,
+                                "dato_2" => $dato->data_2,
+                                "mes" => $dato->mes,
+                                "id" => $dato->id
                             ]
                         ];
                         break;
@@ -228,14 +205,29 @@ class UserController extends Controller
                             "key" => $index . "-" . $key,
                             "data" => [
                                 "name" => "MES: " . $dato->mes,
-                                "size" => "CLIENTES: " . $dato->data_1,
-                                "type" => ""
+                                "size" => "CLIENTES: " . number_format($dato->data_1),
+                                "type" => "",
+                                "node" => $item,
+                                "dato_1" => $dato->data_1,
+                                "dato_2" => $dato->data_2,
+                                "mes" => $dato->mes,
+                                "id" => $dato->id
                             ]
                         ];
                         break;
                 }
             }
         }
+        return $arbol;
+    }
+
+    public function deleteIndicador(Request $request, $id){
+        $users_indicadores_dato = UsersIndicadoresDato::find($id);
+        if($users_indicadores_dato){
+            $users_indicadores_dato->delete();
+        }
+
+        $arbol = $this->getArboldIndicadores();
         return json_encode($arbol);
     }
 
@@ -305,6 +297,11 @@ class UserController extends Controller
 
         //Eliminar Indicadores
         foreach ($user->indicadores as $key => $indicador) {
+            //Eliminar datos de indicadores
+            $users_indicadores_datos = UsersIndicadoresDato::where('user_indicadore_id', $indicador->id)->get();
+            foreach ($users_indicadores_datos as $key => $value) {
+                $value->delete();
+            }
             $indicador->delete();
         }
 
@@ -337,7 +334,8 @@ class UserController extends Controller
         return redirect()->back();
     }
 
-    public function getEmpresas(Request $request){
+    public function getEmpresas(Request $request)
+    {
         $user = User::find($request->user_id);
         $empresas_ids = $user->empresas->pluck('empresa_id')->toArray();
         $empresas = Empresa::whereIn('id', $empresas_ids)->get();

@@ -39,85 +39,21 @@
                             <h4 class="m-0">Indicadores</h4>
                         </div>
 
-                        <TreeTable :value="arbol">
+                        <TreeTable :value="arbol" :tableProps="{ style: { minWidth: '650px' } }" style="overflow: auto">
                             <Column field="name" header="Nombre" expander></Column>
                             <Column field="size" header=""></Column>
                             <Column field="type" header=""></Column>
-                        </TreeTable>
-
-
-                        <!-- <DataTable ref="dt" :value="datatable.data" :lazy="true" data-key="id" :paginator="true" :rows="50"
-                            :loading="datatable.loading" :total-records="datatable.totalRecords"
-                            v-model:filters="datatable.filters"
-                            paginator-template="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
-                            :rows-per-page-options="[10, 25, 50]"
-                            current-page-report-template="Mostrando del {first} al {last} de {totalRecords} resultados"
-                            @page="onPage($event)" @sort="onSort($event)" @filter="onSort($event)">
-                            <Column field="acta_id" header="Acta">
+                            <Column field="actions" header="Acciones" class="actions">
                                 <template #body="slotProps">
-                                    {{ slotProps.data.acta_id }}
-                                </template>
-                                <template #filter="{ filterModel }">
-                                    <InputText type="text" v-model="filterModel.value" class="p-column-filter"
-                                        placeholder="Search by name" />
-                                </template>
-                            </Column>
-                            <Column field="descripcion" header="Tarea">
-                                <template #body="slotProps">
-                                    <span class="large-text">{{ slotProps.data.descripcion }}</span>
-                                </template>
-                            </Column>
-                            <Column field="categoria" header="Categoria">
-                                <template #body="slotProps">
-                                    {{ slotProps.data.categoria_name }}
-                                </template>
-                            </Column>
-                            <Column field="actividad" header="Actividad">
-                                <template #body="slotProps">
-                                    {{ slotProps.data.actividad_name }}
-                                </template>
-                            </Column>
-                            <Column field="responsable" header="Responsable">
-                                <template #body="slotProps">
-                                    <span class="large-text">{{ slotProps.data.responsable }}</span>
-                                </template>
-                            </Column>
-                            <Column field="fecha_inicio" header="Fecha Inicio" class="date">
-                                <template #body="slotProps">
-                                    <span class="date">{{ slotProps.data.fecha_inicio }}</span>
-                                </template>
-                            </Column>
-                            <Column field="fecha_fin" header="Fecha Fin" class="date">
-                                <template #body="slotProps">
-                                    <span class="date">{{ slotProps.data.fecha_fin }}</span>
-                                </template>
-                            </Column>
-                            <Column field="estado" header="Estado">
-                                <template #body="slotProps">
-                                    <Tag :style="{ background: slotProps.data.estado_backgroundColor }">
-                                        <span style="font-size: 11px;">{{ slotProps.data.estado_name }}</span>
-                                    </Tag>
-                                </template>
-                            </Column>
-                            <Column field="fecha_finalizacion" header="Fecha Finalización" class="date">
-                                <template #body="slotProps">
-                                    <span class="date">{{ slotProps.data.fecha_finalizacion }}</span>
-                                </template>
-                            </Column>
-                            <Column header="Acciones" style="min-width: 150px;">
-                                <template #body="slotProps">
-                                    <Button v-permission="'tarea.edit'" icon="pi pi-pencil"
+                                    <Button v-permission="'acta.edit'" icon="pi pi-pencil"
                                         class="p-button-success p-button-sm mr-1 p-button-rounded p-button-outlined"
-                                        @click="editModel(slotProps.data)" />
-                                    <Button v-permission="'tarea.destroy'" icon="pi pi-trash"
+                                        @click="editIndicador(slotProps.node.data)" />
+                                    <Button v-permission="'acta.destroy'" icon="pi pi-trash"
                                         class="p-button-sm p-button-danger p-button-rounded p-button-outlined"
-                                        @click="showDeleteDialog(slotProps.data)" />
+                                        @click="showDeleteDialog(slotProps.node.data)" />
                                 </template>
                             </Column>
-                            <template #empty>
-                                Sin registros.
-                            </template>
-                        </DataTable> -->
+                        </TreeTable>
                     </div>
                 </div>
             </div>
@@ -126,126 +62,66 @@
 
     <DeleteDialog ref="deleteDialog" v-model:visible="deleteDialog" :loading="deletingModel" @delete="onDelete" />
 
-    <Dialog v-model:visible="modelDialog" :style="{ width: '750px' }" header="Crear Indicador" :modal="true"
+    <Dialog v-model:visible="modelDialog" :style="{ width: '750px' }" v-model:header="header" :modal="true"
         class="p-fluid">
         <div class="p-fluid formgrid grid">
             <div class="field col-12 md:col-6">
-                <label for="mes">MES</label>
-                <InputText type="month" id="mes" v-model.trim="model.mes" required="true" autofocus
-                    :class="{ 'p-invalid': submitted && !model.mes }" />
-                <small class="p-invalid" v-if="submitted && !model.mes">MES es requerido.</small>
-            </div>
-            <!-- <div class="field col-12 md:col-6">
-                <label for="actividad">USUARIO</label>
-                <Dropdown v-model="model.user" :options="users" optionLabel="name" placeholder="Selecciona un Usuario"
-                    :class="{ 'p-invalid': submitted && !model.user }" required />
-                <small class="p-invalid" v-if="submitted && !model.actividad">Usuario es requerido.</small>
-            </div> -->
-            <div class="field col-12 md:col-6">
                 <label for="actividad">INDICADOR</label>
                 <Dropdown v-model="model.indicador" :options="indicadores" optionLabel="name"
-                    placeholder="Selecciona un Indicador" :class="{ 'p-invalid': submitted && !model.user }" required
+                    placeholder="Selecciona un Indicador" :class="{ 'p-invalid': submitted && model.indicador == '' }" required
                     v-on:change="clearData" />
-                <small class="p-invalid" v-if="submitted && !model.indicador">Indicador es requerido.</small>
+                <small class="p-invalid" v-if="submitted && model.indicador == ''">INDICADOR ES REQUERIDO.</small>
+            </div>
+            <div class="field col-12 md:col-6">
+                <label for="mes">MES</label>
+                <InputText type="month" id="mes" v-model.trim="model.mes" required="true" autofocus
+                    :class="{ 'p-invalid': submitted && model.mes == ''}" />
+                <small class="p-invalid" v-if="submitted && model.mes == ''">MES ES REQUERIDO.</small>
             </div>
 
             <div class="field col-12 md:col-12" v-if="model.indicador.id == 1">
-                <label type="number" for="data_1">VENTAS</label>
+                <label for="data_1">VENTAS</label>
                 <InputNumber id="data_1" v-model.trim="model.data_1" required="true" autofocus
-                    :class="{ 'p-invalid': submitted && !model.data_1 }" />
-                <small class="p-invalid" v-if="submitted && !model.data_1">Ventas es requerido.</small>
+                    :class="{ 'p-invalid': submitted && model.data_1 == ''}" />
+                <small class="p-invalid" v-if="submitted && model.data_1 == ''">VENTAS ES REQUERIDO.</small>
             </div>
             <div class="field col-12 md:col-12" v-if="model.indicador.id == 1">
-                <label type="number" for="data_1">PRESUPUESTO</label>
+                <label for="data_1">PRESUPUESTO</label>
                 <InputNumber id="data_2" v-model.trim="model.data_2" required="true" autofocus
-                    :class="{ 'p-invalid': submitted && !model.data_2 }" />
-                <small class="p-invalid" v-if="submitted && !model.data_2">Ventas es requerido.</small>
+                    :class="{ 'p-invalid': submitted && model.data_2 == ''}" />
+                <small class="p-invalid" v-if="submitted && model.data_2 == ''">PRESUPUESTO ES REQUERIDO.</small>
             </div>
 
             <div class="field col-12 md:col-12" v-if="model.indicador.id == 2">
-                <label type="number" for="data_1">TTL COTIZACIONES</label>
+                <label for="data_1">TTL COTIZACIONES</label>
                 <InputNumber id="data_1" v-model.trim="model.data_1" required="true" autofocus
-                    :class="{ 'p-invalid': submitted && !model.data_1 }" />
-                <small class="p-invalid" v-if="submitted && !model.data_1">TTL COTIZACIONES es requerido.</small>
+                    :class="{ 'p-invalid': submitted && model.data_1 == ''}" />
+                <small class="p-invalid" v-if="submitted && model.data_1 == ''">TTL COTIZACIONES ES REQUERIDO.</small>
             </div>
             <div class="field col-12 md:col-12" v-if="model.indicador.id == 2">
                 <label for="data_1">N COTIZACIONES</label>
-                <InputNumber type="number" id="data_2" v-model.trim="model.data_2" required="true" autofocus
-                    :class="{ 'p-invalid': submitted && !model.data_2 }" />
-                <small class="p-invalid" v-if="submitted && !model.data_2">N COTIZACIONES es requerido.</small>
+                <InputNumber id="data_2" v-model.trim="model.data_2" required="true" autofocus
+                    :class="{ 'p-invalid': submitted && model.data_2 == ''}" />
+                <small class="p-invalid" v-if="submitted && model.data_2 == ''">N COTIZACIONES ES REQUERIDO.</small>
             </div>
 
             <div class="field col-12 md:col-12" v-if="model.indicador.id == 3">
                 <label for="data_1">PORCENTAJE</label>
-                <InputNumber type="number" id="data_1" v-model.trim="model.data_1" required="true" autofocus
-                    :class="{ 'p-invalid': submitted && !model.data_1 }" />
-                <small class="p-invalid" v-if="submitted && !model.data_1">PORCENTAJE es requerido.</small>
+                <InputNumber id="data_1" v-model.trim="model.data_1" required="true" autofocus
+                    :class="{ 'p-invalid': submitted && model.data_1 == ''}" />
+                <small class="p-invalid" v-if="submitted && model.data_1 == ''">PORCENTAJE ES REQUERIDO.</small>
             </div>
 
             <div class="field col-12 md:col-12" v-if="model.indicador.id == 4">
                 <label for="data_1">CLIENTES</label>
-                <InputNumber type="number" id="data_1" v-model.trim="model.data_1" required="true" autofocus
-                    :class="{ 'p-invalid': submitted && !model.data_1 }" />
-                <small class="p-invalid" v-if="submitted && !model.data_1">CLIENTES es requerido.</small>
+                <InputNumber id="data_1" v-model.trim="model.data_1" required="true" autofocus
+                    :class="{ 'p-invalid': submitted && model.data_1 == ''}" />
+                <small class="p-invalid" v-if="submitted && model.data_1 == ''">CLIENTES ES REQUERIDO.</small>
             </div>
         </div>
         <template #footer>
             <Button label="Cancelar" icon="pi pi-times" class="p-button-danger p-button-raised mx-2" @click="hideDialog" />
-            <Button label="Guardar" icon="pi pi-check" class="" @click="saveModel" />
-        </template>
-    </Dialog>
-
-    <Dialog v-model:visible="modelEditDialog" :style="{ width: '750px' }" header="Editar Tarea" :modal="true"
-        class="p-fluid">
-        <div class="p-fluid formgrid grid">
-            <div class="field col-12 md:col-12">
-                <label for="name">Tarea</label>
-                <InputText id="descripcion" v-model.trim="model.descripcion" required="true" autofocus
-                    :class="{ 'p-invalid': submitted && !model.descripcion }" />
-                <small class="p-invalid" v-if="submitted && !model.descripcion">Descripción es requerida.</small>
-            </div>
-            <div class="field col-12 md:col-6">
-                <label for="actividad">Actividad</label>
-                <Dropdown v-model="model.actividad" :options="actividades" optionLabel="name"
-                    placeholder="Selecciona una Actividad" :class="{ 'p-invalid': submitted && !model.actividad }"
-                    required />
-                <small class="p-invalid" v-if="submitted && !model.actividad">Responsable es requerido.</small>
-            </div>
-            <div class="field col-12 md:col-6">
-                <label for="estado">Estado</label>
-                <Dropdown v-model="model.estado" :options="estados" optionLabel="name" placeholder="Selecciona un Estado"
-                    :class="{ 'p-invalid': submitted && !model.estado }" required />
-                <small class="p-invalid" v-if="submitted && !model.estado">Responsable es requerido.</small>
-            </div>
-            <div class="field col-12 md:col-12">
-                <label for="responsable">Responsable</label>
-                <InputText id="responsable" v-model.trim="model.responsable" required="true" autofocus
-                    :class="{ 'p-invalid': submitted && !model.responsable }" />
-                <small class="p-invalid" v-if="submitted && !model.responsable">Responsable es requerido.</small>
-            </div>
-            <div class="field col-12 md:col-4">
-                <label for="fecha_inicio">Fecha Inicio</label>
-                <InputText id="fecha_inicio" v-model.trim="model.fecha_inicio" required="true" autofocus
-                    :class="{ 'p-invalid': submitted && !model.fecha_inicio }" type="date" />
-                <small class="p-invalid" v-if="submitted && !model.fecha_inicio">Responsable es requerido.</small>
-            </div>
-            <div class="field col-12 md:col-4">
-                <label for="fecha_fin">Fecha Fin</label>
-                <InputText id="fecha_fin" v-model.trim="model.fecha_fin" required="true" autofocus
-                    :class="{ 'p-invalid': submitted && !model.fecha_fin }" type="date" />
-                <small class="p-invalid" v-if="submitted && !model.fecha_fin">Responsable es requerido.</small>
-            </div>
-            <div class="field col-12 md:col-4">
-                <label for="fecha_finalizacion">Fecha finalización</label>
-                <InputText id="fecha_finalizacion" v-model.trim="model.fecha_finalizacion" required="true" autofocus
-                    :class="{ 'p-invalid': submitted && !model.fecha_finalizacion }" type="date" />
-                <small class="p-invalid" v-if="submitted && !model.fecha_finalizacion">Responsable es requerido.</small>
-            </div>
-        </div>
-        <template #footer>
-            <Button label="Cancelar" icon="pi pi-times" class="p-button-danger p-button-raised mx-2"
-                @click="hideEditDialog" />
-            <Button label="Guardar" icon="pi pi-check" class="" @click="updateModel" />
+            <Button label="Guardar" icon="pi pi-check" class="" @click="saveModel()" />
         </template>
     </Dialog>
 </template>
@@ -306,6 +182,7 @@ export default {
             modelDialog: false,
             modelEditDialog: false,
             model: {
+                id: "",
                 mes: "",
                 data_1: "",
                 data_2: "",
@@ -313,43 +190,54 @@ export default {
                 user: this.user
             },
             submitted: false,
+            arbol: this.arbol,
+            header: "Crear Indicador"
         }
     },
     mounted() {
-        console.log("this.users" + this.user)
     },
     methods: {
         edit(id) {
             this.$inertia.get(this.route('users.edit', id));
         },
-        showDeleteDialog(model) {
-            this.selectedModel = model;
-            this.deleteDialog = true;
-        },
         onDelete() {
             this.deletingModel = true;
-            this.$inertia.delete(this.route('tareas.destroy', this.selectedModel.id), {
-                onSuccess: () => {
-                    this.deletingModel = false;
-                    this.deleteDialog = false;
-                    this.loadLazyData();
-                    this.$refs.deleteDialog.onClose();
-                    this.$toast.add({
-                        severity: "success",
-                        summary: "Exitoso",
-                        detail: "Tarea Eliminada!",
-                        life: 3000,
+            this.submitted = true;
+            if (this.model) {
+                axios.post('/users/indicadores-delete/' + this.selectedModel)
+                    .then((response) => {
+                        //this.model = response.data.data;
+                        this.$toast.add({
+                            severity: "success",
+                            summary: "Exitoso!",
+                            detail: "Indicador Eliminado",
+                            life: 3000,
+                        });
+                        this.arbol = response.data
+                    })
+                    .catch((error) => {
+                        this.$toast.add({
+                            severity: "error",
+                            summary: "Error",
+                            detail: error,
+                            life: 3000,
+                        });
                     });
-                }
-            })
+            }
+            this.clearModel()
+            this.deletingModel = false;
+            this.deleteDialog = false;
+            this.$refs.deleteDialog.onClose();
         },
         hideDialog() {
-            this.modelDialog = false;
+            this.clearModel()
             this.submitted = false;
+            this.modelDialog = false;
         },
         openNew() {
-            this.model = { ...this.model, user: this.user };
+            this.clearModel()
             this.submitted = false;
+            this.header = "Crear Indicador"
             this.modelDialog = true;
         },
         editModel(model) {
@@ -360,29 +248,30 @@ export default {
             this.model.actividad = actividad
             this.model.estado = estado
 
-            console.log(this.model)
             this.submitted = false;
             this.modelEditDialog = true;
         },
-        hideEditDialog() {
-            this.modelEditDialog = false;
-            this.submitted = false;
-        },
         saveModel() {
+            var message = ""
+            if (this.model.id == "") {
+                message = "Indicador creado"
+            } else {
+                message = "Indicador actualizado"
+            }
             this.submitted = true;
-            if (this.model) {
+
+            if (this.model.mes != "" && this.model.data_1 != "" && this.model.indicador != "" && this.model.user != "") {
                 axios.post(this.route('users.saveIndicador'), this.model)
                     .then((response) => {
-                        this.model = response.data.data;
-                        /* this.models.unshift(this.model); */
                         this.$toast.add({
                             severity: "success",
                             summary: "Exitoso!",
-                            detail: "Indicador creada",
+                            detail: message,
                             life: 3000,
                         });
-                        console.log("arbol", response.data)
-                        this.$arbol = response.data
+                        this.arbol = response.data
+                        this.clearModel()
+                        this.modelDialog = false
                     })
                     .catch((error) => {
                         this.$toast.add({
@@ -393,42 +282,36 @@ export default {
                         });
                     });
             }
-            this.modelDialog = false;
-            this.model = {};
-        },
-        updateModel() {
-            this.submitted = true;
-            if (this.model) {
-                console.log("model", this.model)
-                console.log(typeof miVariable)
-                axios.put(this.route('tareas.update', this.model), this.model)
-                    .then((response) => {
-                        this.model = response.data.data;
-                        /* this.models.unshift(this.model); */
-                        this.$toast.add({
-                            severity: "success",
-                            summary: "Exitoso!",
-                            detail: "Tarea actualizada",
-                            life: 3000,
-                        });
-                        this.datatable.data = response.data
-                        console.log("datatable.data", this.datatable.data)
-                    })
-                    .catch((error) => {
-                        this.$toast.add({
-                            severity: "error",
-                            summary: "Error",
-                            detail: error,
-                            life: 3000,
-                        });
-                    });
-            }
-            this.modelEditDialog = false;
-            this.model = {};
         },
         clearData() {
             this.model.data_1 = ""
             this.model.data_2 = ""
+        },
+        showDeleteDialog(item) {
+            this.selectedModel = item.id;
+            this.deleteDialog = true;
+        },
+        editIndicador(item) {
+            const indicadorSeleccionados = this.indicadores.find(indicador => indicador.name === item.node.indicador.name);
+            if (indicadorSeleccionados) {
+                this.model.indicador = indicadorSeleccionados;
+            }
+
+            this.model.id = item.id
+            this.model.data_1 = item.dato_1
+            this.model.data_2 = item.dato_2
+            this.model.mes = item.mes
+
+            this.header = "Actualizar Indicador"
+            this.modelDialog = true;
+        },
+        clearModel() {
+            this.model.id = "";
+            this.model.mes = "";
+            this.model.data_1 = "";
+            this.model.data_2 = "";
+            this.model.indicador = "";
+            this.model.user = this.user;
         }
     }
 }
