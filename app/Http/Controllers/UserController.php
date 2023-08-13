@@ -143,7 +143,8 @@ class UserController extends Controller
         return json_encode($arbol);
     }
 
-    public function getArboldIndicadores(){
+    public function getArboldIndicadores()
+    {
         $user = Auth::user();
         $arbol = [];
         foreach ($user->indicadores as $index => $item) {
@@ -221,9 +222,10 @@ class UserController extends Controller
         return $arbol;
     }
 
-    public function deleteIndicador(Request $request, $id){
+    public function deleteIndicador(Request $request, $id)
+    {
         $users_indicadores_dato = UsersIndicadoresDato::find($id);
-        if($users_indicadores_dato){
+        if ($users_indicadores_dato) {
             $users_indicadores_dato->delete();
         }
 
@@ -295,22 +297,34 @@ class UserController extends Controller
             $user_empresa->save();
         }
 
-        //Eliminar Indicadores
-        foreach ($user->indicadores as $key => $indicador) {
-            //Eliminar datos de indicadores
-            $users_indicadores_datos = UsersIndicadoresDato::where('user_indicadore_id', $indicador->id)->get();
-            foreach ($users_indicadores_datos as $key => $value) {
-                $value->delete();
-            }
-            $indicador->delete();
+        $ids_indicadores_actualizados = [];
+        foreach ($request->indicadores as $element) {
+            $ids_indicadores_actualizados[] = $element["id"];
+        }
+        $indicadores_actuales = UserIndicadore::where('user_id', Auth::user()->id)->get();
+        $ids_indicadores_actuales = [];
+        foreach ($indicadores_actuales as $element) {
+            $ids_indicadores_actuales[] = $element->indicador_id;
         }
 
-        //Guardar Indicadores
-        foreach ($request->indicadores as $key => $indicador) {
-            $user_indicador = new UserIndicadore;
-            $user_indicador->indicador_id = $indicador["id"];
-            $user_indicador->user_id = $user->id;
-            $user_indicador->save();
+        if (count(array_diff($ids_indicadores_actualizados, $ids_indicadores_actuales)) == 0 && count(array_diff($ids_indicadores_actuales, $ids_indicadores_actualizados)) == 0) { 
+        }else{
+            //Eliminar Indicadores
+            foreach ($user->indicadores as $key => $indicador) {
+                //Eliminar datos de indicadores
+                $users_indicadores_datos = UsersIndicadoresDato::where('user_indicadore_id', $indicador->id)->get();
+                foreach ($users_indicadores_datos as $key => $value) {
+                    $value->delete();
+                }
+                $indicador->delete();
+            }
+            //Guardar Indicadores
+            foreach ($request->indicadores as $key => $indicador) {
+                $user_indicador = new UserIndicadore;
+                $user_indicador->indicador_id = $indicador["id"];
+                $user_indicador->user_id = $user->id;
+                $user_indicador->save();
+            }
         }
 
         return redirect()->route('users.show', $user->id);
