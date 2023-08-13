@@ -131,6 +131,12 @@ td.acta-actions {
     .flex.justify-between.items-center.px-2.py-2 {
         justify-content: space-between;
     }
+
+    .import-entregable {
+        margin-top: 0px !important;
+        margin-left: 0.5rem !important;
+        margin-right: 0.5rem !important;
+    }
 }
 
 tr:has(button[style="margin-left: 0rem; visibility: visible;"]) td.actions,
@@ -141,4 +147,10 @@ tr:has(button[style="margin-left: 0rem; visibility: hidden;"]) td.actions
 
 .p-invalid{
     color: red;
+}
+
+.import-entregable {
+    margin-top: 2rem;
+    margin-bottom: 0px !important;
+    padding-bottom: 14px;
 }

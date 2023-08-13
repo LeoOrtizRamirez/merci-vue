@@ -31,7 +31,11 @@
                         </Column>
                         <Column field="extension" header="Tipo">
                             <template #body="slotProps">
-                                {{ slotProps.data.extension }}
+                                <img v-if="excelExtension.includes(slotProps.data.extension.toUpperCase())" src='/images/documentos/Excel.svg' alt="" height="30">
+                                <img v-if="slotProps.data.extension.toUpperCase() == 'PDF'" src='/images/documentos/PDF.svg' alt="" height="30">
+                                <img v-if="slotProps.data.extension.toUpperCase() == 'WORD'" src='/images/documentos/Word.svg' alt="" height="30">
+                                <img v-if="slotProps.data.extension.toUpperCase() == 'PNG'" src='/images/documentos/png.png' alt="" height="30">
+                                <img v-if="desconocidasExtensiones.includes(slotProps.data.extension.toUpperCase())" src='/images/documentos/Desconocido.svg' alt="" height="30">
                             </template>
                         </Column>
                         <Column field="url" header="Documento">
@@ -44,7 +48,7 @@
                                 <Button v-permission="'entregable.edit'" icon="pi pi-pencil"
                                     class="p-button-success p-button-sm mr-1 p-button-rounded p-button-outlined"
                                     @click="edit(slotProps.data.id)" />
-                                <Button v-permission="'entregable.destroy'" v-if="slotProps.data.visible == false" icon="pi pi-trash"
+                                <Button v-permission="'entregable.destroy'" icon="pi pi-trash"
                                     class="p-button-sm p-button-danger p-button-rounded p-button-outlined"
                                     @click="showDeleteDialog(slotProps.data)" />
                             </template>
@@ -106,6 +110,8 @@ export default {
             selectedModel: null,
             deleteDialog: false,
             deletingModel: false,
+            excelExtension:['XLSX','XLS','XLSM','XLSB','XLTM','XLTX'],
+            desconocidasExtensiones:['123', '3G2', '3GP', '7Z', 'AAC', 'AC3', 'ACCDB', 'AIFF', 'AMR', 'ASF', 'AVI', 'BMP', 'C', 'CLASS', 'CPP', 'CR2', 'CSS', 'CSV', 'CUE', 'DAT', 'DB', 'DBF', 'DDS', 'DNG', 'DOC', 'DOCX', 'DWG', 'DXF', 'EPS', 'EXE', 'FLAC', 'FLV', 'GIF', 'GZ', 'H', 'HTML', 'ICS', 'IFF', 'INDD', 'ISO', 'JAR', 'JAVA', 'JPEG', 'JPG', 'JS', 'JSON', 'JSP', 'KEY', 'LOG', 'M4A', 'M4B', 'M4P', 'M4V', 'MAX', 'MDB', 'MID', 'MKV', 'MOV', 'MP3', 'MP4', 'MPA', 'MPEG', 'MPG', 'MSG', 'NC', 'NES', 'NUMBERS', 'OBJ', 'ODP', 'ODS', 'ODT', 'OGG', 'OTF', 'PAGES', 'PDB', 'PEF', 'PHP', 'PNG', 'PPT', 'PPTX', 'PRPROJ', 'PS', 'PSD', 'PY', 'RAR', 'RAW', 'RM', 'ROM', 'RPM', 'RTF', 'RW2', 'RWL', 'SH', 'SLN', 'SRT', 'SVG', 'SWF', 'TAR', 'TBZ2', 'TGA', 'TGZ', 'TIF', 'TIFF', 'TORRENT', 'TTF', 'TXT', 'VOB', 'WAV', 'WEBM', 'WMA', 'WMV', 'WPD', 'WPS', 'XLR', 'XML', 'YUV', 'ZIP']
         }
     },
     datatableService: null,
@@ -158,7 +164,7 @@ export default {
                     this.$toast.add({
                         severity: "success",
                         summary: "Exitoso",
-                        detail: "Categoria Eliminada!",
+                        detail: "Entregable Eliminado!",
                         life: 3000,
                     });
                 }

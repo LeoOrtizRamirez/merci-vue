@@ -14,10 +14,13 @@
                                         <InputText v-model="form.name" id="name" type="text" required />
                                     </div>
                                     <div class="field col-12 md:col-6">
-                                        <label for="estado">Logo</label>
-                                        <input type="file" name="image" @change="handleFileUpload">
+                                        <label for="file-upload" class="custom-file-upload import-entregable">
+                                            <span class="pi pi-upload"></span>
+                                            <span>{{ fileName }}</span>
+                                            <input id="file-upload" name="image" ref="archivo" type="file"
+                                                class="input-file" @change="handleFileUpload">
+                                        </label>
                                     </div>
-
                                 </div>
                                 <Button class="p-button p-component p-button-danger p-button-raised mx-2" label="Cancelar"
                                     @click="this.$inertia.get(this.route('entregables.index'));" />
@@ -54,9 +57,8 @@ export default {
         return {
             form: {
                 name: "",
-                nit: "",
-                estado: ""
             },
+            fileName: 'Seleccionar archivo'
         }
     },
     mounted() {
@@ -76,6 +78,10 @@ export default {
         },
 
         handleFileUpload(event) {
+            const input = event.target;
+            const fileName = input.files[0].name;
+            this.fileName = fileName;
+
             this.formData = new FormData();
             this.formData.append('image', event.target.files[0]);
         },

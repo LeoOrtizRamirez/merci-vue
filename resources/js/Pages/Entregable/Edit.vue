@@ -6,7 +6,7 @@
 
                     <div class="col-12">
                         <div class="card">
-                            <h5>Empresa</h5>
+                            <h5>Entregable</h5>
                             <form @submit.prevent="submit">
                                 <div class="p-fluid formgrid grid">
                                     <div class="field col-12 md:col-6">
@@ -14,17 +14,16 @@
                                         <InputText v-model="form.name" id="name" type="text" required />
                                     </div>
                                     <div class="field col-12 md:col-6">
-                                        <label for="nit">NIT</label>
-                                        <InputText v-model="form.nit" id="nit" type="text" required />
-                                    </div>
-                                    <div class="field col-12 md:col-6">
-                                        <label for="estado">Estado</label>
-                                        <Dropdown v-model="form.estado" :options="estados" optionLabel="name"
-                                            placeholder="Selecciona un Estado" class="w-full" required />
+                                        <label for="file-upload" class="custom-file-upload import-entregable">
+                                            <span class="pi pi-upload"></span>
+                                            <span>{{ fileName }}</span>
+                                            <input id="file-upload" name="image" ref="archivo" type="file"
+                                                class="input-file" @change="handleFileUpload">
+                                        </label>
                                     </div>
                                 </div>
                                 <Button class="p-button p-component p-button-danger p-button-raised mx-2" label="Cancelar"
-                                    @click="this.$inertia.get(this.route('empresas.index'));" />
+                                    @click="this.$inertia.get(this.route('entregables.index'));" />
                                 <Button label="Actualizar" type="submit"></Button>
                             </form>
                         </div>
@@ -39,6 +38,7 @@ import AppLayout from "../../Layouts/AppLayout";
 import Button from "primevue/button";
 import InputText from "primevue/inputtext";
 import Dropdown from 'primevue/dropdown';
+import axios from "axios";
 
 export default {
     name: "Edit",
@@ -50,28 +50,41 @@ export default {
         Dropdown
     },
     props: {
-        empresa: [],
-        estados: [],
+        entregable: [],
         errors: Object
     },
     data() {
         return {
             form: {
-                name: this.empresa.name,
-                nit: this.empresa.nit,
-                estado: this.empresa.estado,
+                id: this.entregable.id,
+                name: this.entregable.name,
             },
+            fileName: this.entregable.url,
+            formData: new FormData()
         }
     },
     mounted() {
-        const estadoSeleccionado = this.estados.find(estado => estado.id === this.empresa.estado_id);
-        if (estadoSeleccionado) {
-            this.form.estado = estadoSeleccionado;
-        }
     },
     methods: {
         submit() {
-            this.$inertia.put(route('empresas.update', { 'empresa': this.empresa }), this.form);
+            this.formData.append("id", this.form.id);
+            this.formData.append("name", this.form.name);
+            axios.post('/api/update-entregable', this.formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            }).then(response => {
+                this.$inertia.get(route('entregables.index'));
+            }).catch(error => {
+                console.log(error.response.data);
+            });
+        },
+
+        handleFileUpload(event) {
+            const input = event.target;
+            const fileName = input.files[0].name;
+            this.fileName = fileName;
+            this.formData.append('image', event.target.files[0]);
         },
     }
 }
