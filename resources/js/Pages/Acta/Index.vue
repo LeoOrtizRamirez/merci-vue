@@ -64,9 +64,9 @@
                         </Column>
                         <Column header="Acciones" class="acta-actions">
                             <template #body="slotProps">
-                                <Button v-permission="'acta.show'" icon="pi pi-calendar"
+                                <!-- <Button v-permission="'acta.show'" icon="pi pi-calendar"
                                     class="p-button-primary p-button-sm mr-1 p-button-rounded p-button-outlined"
-                                    @click="showCronograma(slotProps.data.id)" />
+                                    @click="showCronograma(slotProps.data.id)" /> -->
                                 <Button v-permission="'acta.show'" icon="pi pi-search"
                                     class="p-button-primary p-button-sm mr-1 p-button-rounded p-button-outlined"
                                     @click="show(slotProps.data.id)" />
