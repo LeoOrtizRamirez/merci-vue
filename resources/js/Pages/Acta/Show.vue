@@ -7,7 +7,7 @@
                         <Button v-permission="'acta.edit'" icon="pi pi-pencil"
                             class="p-button-success p-button-sm mr-1 p-button-rounded p-button-outlined"
                             @click="edit(acta.id)" />
-                        <Button v-permission="'acta.edit'" icon="pi pi-download"
+                        <Button v-permission="'acta.download'" icon="pi pi-download"
                             class="p-button-primary p-button-sm mr-1 p-button-rounded p-button-outlined"
                             @click="downloadPdf" />
                         <h4 class="m-0">Acta -

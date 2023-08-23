@@ -4,7 +4,13 @@
             <div class="p-col-12">
                 <div class="grid">
 
-                    <div class="col-12">
+                    <div class="col-12" v-if="['ADMIN', 'CONSULTOR', 'CLIENTE'].includes(form.name)">
+                        <div class="card">
+                            <h5>Rol - {{form.name }}</h5>
+                        </div>
+                    </div>
+
+                    <div class="col-12" v-else>
                         <div class="card">
                             <h5>Rol</h5>
                             <form @submit.prevent="submit">

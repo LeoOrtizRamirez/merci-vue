@@ -56,8 +56,8 @@
         </div>
         <div class="col-12 lg:col-6 xl:col-3">
             <div class="card mb-0">
-                <div class="flex justify-content-between">
-                    <img :src="logo" alt="" class="w-full">
+                <div class="justify-content-between text-center">
+                    <img :src="logo" alt="" width="120">
                     <!-- <div>
                         <span class="block text-500 font-medium mb-3">Caja</span>
                         <div class="text-900 font-medium text-xl"><span class="text-green-500 font-medium">{{ new Intl.NumberFormat('en-US').format(current_balance) }}</span></div>
