@@ -7,14 +7,17 @@
                         <Button v-permission="'acta.edit'" icon="pi pi-pencil"
                             class="p-button-success p-button-sm mr-1 p-button-rounded p-button-outlined"
                             @click="edit(acta.id)" />
+                        <Button v-permission="'acta.edit'" icon="pi pi-download"
+                            class="p-button-primary p-button-sm mr-1 p-button-rounded p-button-outlined"
+                            @click="downloadPdf" />
                         <h4 class="m-0">Acta -
                             <span v-permission="'acta.show'" @click="showCronograma(acta.id)" class="external mx-2">
-                                Ver cronograma 
+                                Ver cronograma
                                 <i class="pi pi-external-link"></i>
                             </span>
                             -
                             <span v-permission="'acta.show'" @click="showDashboard()" class="external mx-2">
-                                Ver dashboard 
+                                Ver dashboard
                                 <i class="pi pi-external-link"></i>
                             </span>
                         </h4>
@@ -67,15 +70,6 @@
                             :rows-per-page-options="[10, 25, 50]"
                             current-page-report-template="Mostrando del {first} al {last} de {totalRecords} resultados"
                             @page="onPage($event)" @sort="onSort($event)" @filter="onSort($event)">
-                            <Column field="acta_id" header="Acta">
-                                <template #body="slotProps">
-                                    {{ slotProps.data.acta_id }}
-                                </template>
-                                <template #filter="{ filterModel }">
-                                    <InputText type="text" v-model="filterModel.value" class="p-column-filter"
-                                        placeholder="Search by name" />
-                                </template>
-                            </Column>
                             <Column field="descripcion" header="Tarea">
                                 <template #body="slotProps">
                                     <span class="large-text">{{ slotProps.data.descripcion }}</span>
@@ -96,12 +90,12 @@
                                     <span class="large-text">{{ slotProps.data.responsable }}</span>
                                 </template>
                             </Column>
-                            <Column field="fecha_inicio" header="Fecha Inicio" class="date">
+                            <Column field="fecha_inicio" header="Inicio" class="date">
                                 <template #body="slotProps">
                                     <span class="date">{{ slotProps.data.fecha_inicio }}</span>
                                 </template>
                             </Column>
-                            <Column field="fecha_fin" header="Fecha Fin" class="date">
+                            <Column field="fecha_fin" header="Fin" class="date">
                                 <template #body="slotProps">
                                     <span class="date">{{ slotProps.data.fecha_fin }}</span>
                                 </template>
@@ -113,12 +107,12 @@
                                     </Tag>
                                 </template>
                             </Column>
-                            <Column field="fecha_finalizacion" header="Fecha Finalización" class="date">
+                            <Column field="fecha_finalizacion" header="Finalización" class="date">
                                 <template #body="slotProps">
                                     <span class="date">{{ slotProps.data.fecha_finalizacion }}</span>
                                 </template>
                             </Column>
-                            <Column header="Acciones" style="min-width: 150px;">
+                            <Column header="Acciones">
                                 <template #body="slotProps">
                                     <Button v-permission="'tarea.edit'" icon="pi pi-pencil"
                                         class="p-button-success p-button-sm mr-1 p-button-rounded p-button-outlined"
@@ -137,6 +131,110 @@
             </div>
         </div>
     </div>
+    <!--VISTA PARA PDF-->
+    <div ref="pdfContent" v-if="printPdf">
+        <div class="p-grid">
+            <div class="p-col-12">
+                <div class="card">
+                    <div class="flex mb-2">
+                        <h4 class="m-0">Acta
+                        </h4>
+                    </div>
+                    <div class="flex justify-between items-center px-2 py-2 show-subtitle">
+                        <p class="m-0 font-bold">Empresa</p>
+                        <p class="ml-2">{{ acta.empresa.name }}</p>
+                    </div>
+                    <div class="flex justify-between items-center px-2 py-2 show-subtitle">
+                        <p class="m-0 font-bold">Número de la sesión:</p>
+                        <p class="ml-2">{{ acta.numero_sesion }}</p>
+                    </div>
+                    <div class="flex justify-between items-center px-2 py-2 show-subtitle">
+                        <p class="m-0 font-bold">Fecha: </p>
+                        <p class="ml-2"> {{ acta.fecha }} </p>
+                    </div>
+                    <div class="flex justify-between items-center px-2 py-2 show-subtitle">
+                        <p class="m-0 font-bold">Hora de inicio:</p>
+                        <p class="ml-2">{{ acta.hora_inicio }}</p>
+                    </div>
+                    <div class="flex justify-between items-center px-2 py-2 show-subtitle">
+                        <p class="m-0 font-bold">Hora de finalización:</p>
+                        <p class="ml-2">{{ acta.hora_finalizacion }}</p>
+                    </div>
+                    <div class="flex justify-between items-center px-2 py-2 show-subtitle">
+                        <p class="m-0 font-bold">Modalidad de encuentro:</p>
+                        <p class="ml-2">{{ acta.modalidad_encuentro }}</p>
+                    </div>
+                    <div class="flex justify-between items-center px-2 py-2 show-subtitle">
+                        <p class="m-0 font-bold">Asistentes:</p>
+                        <p class="ml-2">{{ acta.asistentes }}</p>
+                    </div>
+                    <div class="flex justify-between items-center px-2 py-2 show-subtitle">
+                        <p class="m-0 font-bold">Temas tratados en la sesión:</p>
+                        <p class="ml-2">{{ acta.temas }}</p>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="card">
+                        <div class="flex mb-2">
+                            <h4 class="m-0">Tareas</h4>
+                        </div>
+                        <DataTable :class="`p-datatable-sm`" ref="dt" :value="datatable.data" :lazy="true" data-key="id"
+                            :paginator="false" :loading="datatable.loading" :total-records="datatable.totalRecords"
+                            v-model:filters="datatable.filters"
+                            paginator-template="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
+                            :rows-per-page-options="[10, 25, 50]"
+                            current-page-report-template="Mostrando del {first} al {last} de {totalRecords} resultados"
+                            @page="onPage($event)" @sort="onSort($event)" @filter="onSort($event)">
+                            <Column field="descripcion" header="Tarea">
+                                <template #body="slotProps">
+                                    <span class="large-text">{{ slotProps.data.descripcion }}</span>
+                                </template>
+                            </Column>
+                            <Column field="categoria" header="Categoria">
+                                <template #body="slotProps">
+                                    {{ slotProps.data.categoria_name }}
+                                </template>
+                            </Column>
+                            <Column field="actividad" header="Actividad">
+                                <template #body="slotProps">
+                                    {{ slotProps.data.actividad_name }}
+                                </template>
+                            </Column>
+                            <Column field="responsable" header="Responsable">
+                                <template #body="slotProps">
+                                    <span class="large-text">{{ slotProps.data.responsable }}</span>
+                                </template>
+                            </Column>
+                            <Column field="fecha_inicio" header="Inicio" class="date">
+                                <template #body="slotProps">
+                                    <span class="date">{{ slotProps.data.fecha_inicio }}</span>
+                                </template>
+                            </Column>
+                            <Column field="fecha_fin" header="Fin" class="date">
+                                <template #body="slotProps">
+                                    <span class="date">{{ slotProps.data.fecha_fin }}</span>
+                                </template>
+                            </Column>
+                            <Column field="estado" header="Estado">
+                                <template #body="slotProps">
+                                    <span>{{ slotProps.data.estado_name }}</span>
+                                </template>
+                            </Column>
+                            <Column field="fecha_finalizacion" header="Finalización" class="date">
+                                <template #body="slotProps">
+                                    <span class="date">{{ slotProps.data.fecha_finalizacion }}</span>
+                                </template>
+                            </Column>
+                            <template #empty>
+                                Sin registros.
+                            </template>
+                        </DataTable>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--VISTA PARA PDF-->
 
     <DeleteDialog ref="deleteDialog" v-model:visible="deleteDialog" :loading="deletingModel" @delete="onDelete" />
 
@@ -262,6 +360,7 @@ import InputText from "primevue/inputtext";
 import Dropdown from 'primevue/dropdown';
 import axios from "axios";
 import Tag from 'primevue/tag';
+import html2pdf from 'html2pdf.js';
 
 export default {
     name: "Index",
@@ -321,6 +420,7 @@ export default {
 
             },
             submitted: false,
+            printPdf: false
         }
     },
     datatableService: null,
@@ -468,8 +568,20 @@ export default {
             this.modelEditDialog = false;
             this.model = {};
         },
-        showDashboard(){
+        showDashboard() {
             this.$inertia.get('/dashboard?empresa_id=' + this.acta.empresa_id + '&acta_id=' + this.acta.id);
+        },
+        downloadPdf() {
+            this.printPdf = true
+            setTimeout(() => {
+                console.log("1 Segundo esperado")
+                const content = this.$refs.pdfContent;
+                html2pdf(content);
+            }, 1000);
+            setTimeout(() => {
+                console.log("5 Segundo esperado")
+                this.printPdf = false
+            }, 1000);
         }
     }
 }
@@ -481,5 +593,13 @@ export default {
     font-weight: 400 !important;
     letter-spacing: -1px;
     cursor: pointer;
+}
+
+.p-datatable.p-component.p-datatable-responsive-stack.p-datatable-sm {
+    font-size: 0.8rem !important;
+}
+
+.p-datatable-sm .p-datatable-tbody>tr>td {
+    padding: 0.3rem 0.3rem !important;
 }
 </style>

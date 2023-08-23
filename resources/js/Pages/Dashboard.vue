@@ -1,7 +1,7 @@
 <template>
     <div class="grid">
         <div class="col-12 lg:col-6 xl:col-3">
-            <div class="card mb-0">
+            <div class="card mb-0" @click="showActas()">
                 <div class="flex justify-content-between">
                     <div>
                         <div class="text-900 font-medium text-xl"><span class="text-green-500 font-medium">{{ total_actas }}</span></div>
@@ -174,6 +174,9 @@ export default {
         },
         showEntregables(){
             this.$inertia.get(this.route('entregables.index'));
+        },
+        showActas(){
+            this.$inertia.get(this.route('actas.index'));
         }
     }
 };

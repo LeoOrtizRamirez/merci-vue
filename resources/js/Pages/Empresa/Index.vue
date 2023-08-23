@@ -8,6 +8,7 @@
                             class="p-button-primary p-button-sm mr-1 p-button-rounded p-button-outlined"
                             @click="this.$inertia.get(this.route('empresas.create'));" />
                         <h4 v-if="user.role_name == 'ADMIN'">Empresas</h4>
+                        <h4 v-else-if="user.role_name == 'CLIENTE'">Empresa</h4>
                         <h4 v-else>Clientes</h4>
                     </div>
 

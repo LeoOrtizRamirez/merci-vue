@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Datatables\EntregableDatatable;
 use App\Http\Controllers\Controller;
 use App\Models\Entregable;
+use App\Models\UserEmpresa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -15,7 +16,8 @@ class EntregableController extends Controller
 {
     public function index(): Response
     {
-        $entregables = Entregable::all();
+        $entregables = Entregable::where('user_id', Auth::user()->id)->get();
+
         $user = Auth::user();
         return Inertia::render('Entregable/Index', compact('entregables', 'user'));
     }

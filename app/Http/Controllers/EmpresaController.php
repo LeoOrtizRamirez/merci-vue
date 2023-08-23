@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Acta;
 use App\Models\Empresa;
 use App\Models\Estado;
+use App\Models\UserEmpresa;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
@@ -60,9 +61,20 @@ class EmpresaController extends Controller
 
     public function show(Empresa $empresa)
     {
-        $actas = Acta::where('empresa_id', $empresa->id)
+        $user = Auth::user();
+        $role_name = $user->getRoleNames()[0];
+
+
+        if($role_name == "CLIENTE"){
+            //Obtener empresa del cliente
+            $user_empresa = UserEmpresa::where('user_id', Auth::user()->id)->first();
+            $actas = Acta::where('empresa_id', $user_empresa->empresa_id)
+            ->get();
+        }else{
+            $actas = Acta::where('empresa_id', $empresa->id)
             ->where('user_id', Auth::user()->id)
             ->get();
+        }
         return Inertia::render('Empresa/Show', compact('empresa', 'actas'));
     }
 

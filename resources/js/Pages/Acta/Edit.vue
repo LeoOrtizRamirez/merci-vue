@@ -136,7 +136,7 @@ export default {
             if(this.isAdmin){
                 this.$inertia.get(this.route('actas.index'));
             }else{
-                this.$inertia.get(this.route('empresas.show', current_empresa.id));
+                this.$inertia.get(this.route('empresas.show', this.current_empresa.id));
             }
         }
     }

@@ -9,21 +9,7 @@
                             @click="this.$inertia.get(this.route('entregables.create'));" />
                         <h4>Entregables</h4>
                     </div>
-
-
-
-                    <DataTable ref="dt" :value="datatable.data" :lazy="true" data-key="id" :paginator="true" :rows="50"
-                        :loading="datatable.loading" :total-records="datatable.totalRecords"
-                        v-model:filters="datatable.filters"
-                        paginator-template="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
-                        :rows-per-page-options="[10, 25, 50]"
-                        current-page-report-template="Mostrando del {first} al {last} de {totalRecords} resultados"
-                        @page="onPage($event)" @sort="onSort($event)" @filter="onSort($event)">
-                        <!-- <template #header>
-                                <h5 class="p-m-0">
-                                    Clientes
-                                </h5>
-                        </template> -->
+                    <DataTable :value="entregables" :paginator="false">
                         <Column field="name" header="Nombre">
                             <template #body="slotProps">
                                 {{ slotProps.data.name }}
@@ -90,6 +76,7 @@ export default {
     },
     props:{
         user:[],
+        entregables: []
     },
     data() {
         return {
@@ -100,6 +87,7 @@ export default {
                 filters: {
                     'global': { value: null, matchMode: FilterMatchMode.CONTAINS },
                     'status': { value: null, matchMode: FilterMatchMode.EQUALS },
+                    'user_id': { value: this.user.id, matchMode: FilterMatchMode.EQUALS },
                 },
                 lazyParams: {}
             },
@@ -114,38 +102,11 @@ export default {
             desconocidasExtensiones:['123', '3G2', '3GP', '7Z', 'AAC', 'AC3', 'ACCDB', 'AIFF', 'AMR', 'ASF', 'AVI', 'BMP', 'C', 'CLASS', 'CPP', 'CR2', 'CSS', 'CSV', 'CUE', 'DAT', 'DB', 'DBF', 'DDS', 'DNG', 'DOC', 'DOCX', 'DWG', 'DXF', 'EPS', 'EXE', 'FLAC', 'FLV', 'GIF', 'GZ', 'H', 'HTML', 'ICS', 'IFF', 'INDD', 'ISO', 'JAR', 'JAVA', 'JPEG', 'JPG', 'JS', 'JSON', 'JSP', 'KEY', 'LOG', 'M4A', 'M4B', 'M4P', 'M4V', 'MAX', 'MDB', 'MID', 'MKV', 'MOV', 'MP3', 'MP4', 'MPA', 'MPEG', 'MPG', 'MSG', 'NC', 'NES', 'NUMBERS', 'OBJ', 'ODP', 'ODS', 'ODT', 'OGG', 'OTF', 'PAGES', 'PDB', 'PEF', 'PHP', 'PNG', 'PPT', 'PPTX', 'PRPROJ', 'PS', 'PSD', 'PY', 'RAR', 'RAW', 'RM', 'ROM', 'RPM', 'RTF', 'RW2', 'RWL', 'SH', 'SLN', 'SRT', 'SVG', 'SWF', 'TAR', 'TBZ2', 'TGA', 'TGZ', 'TIF', 'TIFF', 'TORRENT', 'TTF', 'TXT', 'VOB', 'WAV', 'WEBM', 'WMA', 'WMV', 'WPD', 'WPS', 'XLR', 'XML', 'YUV', 'ZIP']
         }
     },
-    datatableService: null,
     created() {
-        this.datatableService = new DatatableService();
     },
     mounted() {
-        this.datatable.loading = true;
-        this.datatable.lazyParams = {
-            first: 0,
-            rows: this.$refs.dt.rows,
-            sortField: 'id',
-            sortOrder: -1,
-            filters: this.datatable.filters
-        };
-        this.loadLazyData();
     },
     methods: {
-        loadLazyData() {
-            this.datatable.loading = true;
-            this.datatableService.getData(this.route('entregables.datatable'), this.datatable.lazyParams).then(data => {
-                this.datatable.data = data.data;
-                this.datatable.totalRecords = data.total;
-                this.datatable.loading = false;
-            });
-        },
-        onPage(event) {
-            this.datatable.lazyParams = event;
-            this.loadLazyData();
-        },
-        onSort(event) {
-            this.datatable.lazyParams = event;
-            this.loadLazyData();
-        },
         edit(id) {
             this.$inertia.get(this.route('entregables.edit', id));
         },
@@ -159,7 +120,7 @@ export default {
                 onSuccess: () => {
                     this.deletingModel = false;
                     this.deleteDialog = false;
-                    this.loadLazyData();
+                    //this.loadLazyData();
                     this.$refs.deleteDialog.onClose();
                     this.$toast.add({
                         severity: "success",
