@@ -120,12 +120,16 @@ class ActaController extends Controller
 
     public function cronograma(Request $request)
     {
-        if(isset($request->empresa_id)){
+        $user = Auth::user();
+        if($user->getRoleNames()[0] == "CLIENTE"){
             $actas = Acta::where('empresa_id', $request->empresa_id)
-            ->where('user_id', Auth::user()->id)
+            ->get();
+        }else if(isset($request->empresa_id)){
+            $actas = Acta::where('empresa_id', $request->empresa_id)
+            ->where('user_id', $user->id)
             ->get();
         }else{
-            $actas = Acta::where('user_id', Auth::user()->id)->get();
+            $actas = Acta::where('user_id', $user->id)->get();
         }
         
         $actas_ids = [];

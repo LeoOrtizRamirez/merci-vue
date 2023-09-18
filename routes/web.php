@@ -39,7 +39,9 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         $empresa = $request->input('empresa_id');
         $user = Auth::user();
         $user->role_name = $user->getRoleNames()[0];
-        if ($user->role_name == "ADMIN" || isset($empresa)) {
+        if($user->role_name == "CLIENTE"){
+            return app()->call('App\Http\Controllers\DashboardController@index');
+        }else if (isset($empresa)) {
             return app()->call('App\Http\Controllers\DashboardController@index');
         } else {
             return app()->call('App\Http\Controllers\EmpresaController@index');

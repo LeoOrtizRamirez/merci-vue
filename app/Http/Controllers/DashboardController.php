@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Acta;
 use App\Models\Empresa;
+use App\Models\UserEmpresa;
 use App\Models\Tarea;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,17 +17,29 @@ class DashboardController extends Controller
 {
     public function index(Request $request): Response
     {
+        $user = Auth::user();
+        $user_empresa = UserEmpresa::where('user_id', $user->id)->first();
+        $role_name = $user->getRoleNames()[0];
         $empresa_id = null;
         $logo = "/images/logo-merci.png";
-        if (isset($request->empresa_id)) {
+
+
+        if($role_name == "CLIENTE"){
+            $empresa_id = $user_empresa->empresa_id;
+            $logo = "/images/" . Empresa::find($user_empresa->empresa_id)->logo;
+
+            $actas = Acta::where('empresa_id', $user_empresa->empresa_id)
+                ->where('user_id',$user->id)
+                ->get();
+        }else if (isset($request->empresa_id)) {
             $empresa_id = $request->empresa_id;
             $logo = "/images/" . Empresa::find($request->empresa_id)->logo;
 
             $actas = Acta::where('empresa_id', $request->empresa_id)
-                ->where('user_id', Auth::user()->id)
+                ->where('user_id',$user->id)
                 ->get();
         }else{
-            $actas = Acta::where('user_id', Auth::user()->id)->get();
+            $actas = Acta::where('user_id',$user->id)->get();
         }
 
         $actas_ids = [];
@@ -36,8 +49,6 @@ class DashboardController extends Controller
 
         $total_actas = sizeof($actas_ids);
         
-
-        $user = Auth::user();
         $indicadores = $user->indicadores;
 
         $result = DB::table('tareas as t')
