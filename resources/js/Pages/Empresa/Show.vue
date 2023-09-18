@@ -11,7 +11,7 @@
                     </div>
                     <div class="grid grid-cols-2 mx-4 my-4">
                         <div class="container_image">
-                            <img :src="`/images/${empresa.logo}`" alt="" width="100">
+                            <img :src="`/public/images/${empresa.logo}`" alt="" width="100">
                         </div>
                         <div>
                             <div class="flex justify-between items-center px-2 py-2">

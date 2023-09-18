@@ -118,10 +118,22 @@ class ActaController extends Controller
         return redirect()->back();
     }
 
-    public function cronograma($id)
+    public function cronograma(Request $request)
     {
-        $acta = Acta::with('tareas')->find($id);
-        $tareas = $acta->tareas;
+        if(isset($request->empresa_id)){
+            $actas = Acta::where('empresa_id', $request->empresa_id)
+            ->where('user_id', Auth::user()->id)
+            ->get();
+        }else{
+            $actas = Acta::where('user_id', Auth::user()->id)->get();
+        }
+        
+        $actas_ids = [];
+        if($actas){
+            $actas_ids = $actas->pluck('id')->toArray();
+        }
+
+        $tareas = Tarea::whereIn('acta_id', $actas_ids)->get();
 
         foreach ($tareas as $key => $tarea) {
             $tarea->estado_name = $tarea->estado->name;
@@ -133,7 +145,10 @@ class ActaController extends Controller
             $dias = $segundos / 86400;
             $tarea->desviacion = $dias;
         }
-        return Inertia::render('Acta/Cronograma', compact('acta', 'tareas'));
+
+        $estados = Estado::where('tipo', 2)->get();
+        $actividades = Actividade::all();
+        return Inertia::render('Acta/Cronograma', compact('tareas', 'estados', 'actividades'));
     }
 
     public function import(Request $request)

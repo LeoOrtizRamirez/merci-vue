@@ -17,16 +17,16 @@
                         </Column>
                         <Column field="extension" header="Tipo">
                             <template #body="slotProps">
-                                <img v-if="excelExtension.includes(slotProps.data.extension.toUpperCase())" src='/images/documentos/Excel.svg' alt="" height="30">
-                                <img v-if="slotProps.data.extension.toUpperCase() == 'PDF'" src='/images/documentos/PDF.svg' alt="" height="30">
-                                <img v-if="slotProps.data.extension.toUpperCase() == 'WORD'" src='/images/documentos/Word.svg' alt="" height="30">
-                                <img v-if="slotProps.data.extension.toUpperCase() == 'PNG'" src='/images/documentos/png.png' alt="" height="30">
-                                <img v-if="desconocidasExtensiones.includes(slotProps.data.extension.toUpperCase())" src='/images/documentos/Desconocido.svg' alt="" height="30">
+                                <img v-if="excelExtension.includes(slotProps.data.extension.toUpperCase())" src='/public/images/documentos/Excel.svg' alt="" height="30">
+                                <img v-if="slotProps.data.extension.toUpperCase() == 'PDF'" src='/public/images/documentos/PDF.svg' alt="" height="30">
+                                <img v-if="slotProps.data.extension.toUpperCase() == 'WORD'" src='/public/images/documentos/Word.svg' alt="" height="30">
+                                <img v-if="slotProps.data.extension.toUpperCase() == 'PNG'" src='/public/images/documentos/png.png' alt="" height="30">
+                                <img v-if="desconocidasExtensiones.includes(slotProps.data.extension.toUpperCase())" src='/public/images/documentos/Desconocido.svg' alt="" height="30">
                             </template>
                         </Column>
                         <Column field="url" header="Documento">
                             <template #body="slotProps">
-                                <a :href="`/images/entregables/${user.id}/${slotProps.data.url}`" target="_blank">{{ slotProps.data.url }}</a>
+                                <a :href="`/public/images/entregables/${user.id}/${slotProps.data.url}`" target="_blank">{{ slotProps.data.url }}</a>
                             </template>
                         </Column>
                         <Column header="Acciones" style="width: 150px;">

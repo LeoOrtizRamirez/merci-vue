@@ -80,7 +80,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('/actas/datatable', [ActaController::class, 'datatable'])->name('actas.datatable');
-    Route::get('/actas/cronograma/{id}', [ActaController::class, 'cronograma'])->name('actas.cronograma');
+    Route::get('/actas/cronograma', [ActaController::class, 'cronograma'])->name('actas.cronograma');
     Route::post('/importar-archivo', [ActaController::class, 'import'])->name('actas.import');
     Route::resource('actas', ActaController::class);
 });

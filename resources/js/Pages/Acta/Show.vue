@@ -428,7 +428,6 @@ export default {
         this.datatableService = new DatatableService();
     },
     mounted() {
-        console.log(this.actividades[0])
         this.datatable.loading = true;
         this.datatable.lazyParams = {
             first: 0,
@@ -454,7 +453,6 @@ export default {
                 this.datatable.totalRecords = data.total;
                 this.datatable.loading = false;
             });
-            console.log("datatable.data", this.datatable.data)
         },
         onPage(event) {
             this.datatable.lazyParams = event;
@@ -502,7 +500,6 @@ export default {
             this.model.actividad = actividad
             this.model.estado = estado
 
-            console.log(this.model)
             this.submitted = false;
             this.modelEditDialog = true;
         },
@@ -524,7 +521,6 @@ export default {
                             life: 3000,
                         });
                         this.datatable.data = response.data
-                        console.log("datatable.data", this.datatable.data)
                     })
                     .catch((error) => {
                         this.$toast.add({
@@ -541,8 +537,6 @@ export default {
         updateModel() {
             this.submitted = true;
             if (this.model) {
-                console.log("model", this.model)
-                console.log(typeof miVariable)
                 axios.put(this.route('tareas.update', this.model), this.model)
                     .then((response) => {
                         this.model = response.data.data;
@@ -554,7 +548,6 @@ export default {
                             life: 3000,
                         });
                         this.datatable.data = response.data
-                        console.log("datatable.data", this.datatable.data)
                     })
                     .catch((error) => {
                         this.$toast.add({

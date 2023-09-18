@@ -65,6 +65,7 @@ class RoleHasPermissionSeeder extends Seeder
             ['permission_id' => 26, 'role_id' => 3],
             ['permission_id' => 29, 'role_id' => 3],
             ['permission_id' => 30, 'role_id' => 3],
+            ['permission_id' => 37, 'role_id' => 3],
 
             //CLIENTE
             ['permission_id' => 14, 'role_id' => 2],

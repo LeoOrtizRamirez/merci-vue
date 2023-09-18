@@ -182,7 +182,7 @@ export default {
             }];
         },
         logo() {
-            return (this.layoutColorMode === 'dark') ? "images/logo-white.svg" : "images/logo.svg";
+            return (this.layoutColorMode === 'dark') ? "public/images/logo-white.svg" : "public/images/logo.svg";
         }
     },
     beforeUpdate() {

@@ -1,7 +1,7 @@
 <template>
     <div class="layout-topbar">
         <Link href="/" class="layout-topbar-logo">
-            <img src="/images/logo-merci.png" alt="">
+            <img src="/images/logo-horizontal-completo.png" alt="">
         </Link>
         <button class="p-link layout-menu-button layout-topbar-button" @click="onMenuToggle">
             <i class="pi pi-bars"></i>

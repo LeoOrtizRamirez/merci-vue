@@ -15,19 +15,7 @@
             </div>
         </div>
         <div class="col-12 lg:col-6 xl:col-3">
-            <div v-if="total_actas > 0" class="card mb-0 cursor-pointer" @click="showCronograma(acta_id)">
-                <div class="flex justify-content-between mb-3">
-                    <div>
-                        <span class="block text-500 font-medium">Acceso <br> Cronograma</span>
-                        <!-- <div class="text-900 font-medium text-xl"><span class="text-green-500 font-medium">{{ new Intl.NumberFormat('en-US').format(loans) }}</span></div> -->
-                    </div>
-                    <div class="flex align-items-center justify-content-center bg-orange-100 border-round"
-                        style="width:2.5rem;height:2.5rem">
-                        <i class="pi pi-external-link text-orange-500 text-xl"></i>
-                    </div>
-                </div>
-            </div>
-            <div v-else class="card mb-0">
+            <div class="card mb-0 cursor-pointer" @click="showCronograma()">
                 <div class="flex justify-content-between mb-3">
                     <div>
                         <span class="block text-500 font-medium">Acceso <br> Cronograma</span>
@@ -70,7 +58,7 @@
         </div>
 
 
-        <div class="col-12 lg:col-12 xl:col-12">
+        <div class="col-12 lg:col-12 xl:col-12" v-if="total_actas > 0">
             <div class="card">
                 <div class="table-responsive">
                     <table class="table align-items-center w-full" id="categorias">
@@ -87,12 +75,12 @@
                         <tbody>
                             <tr v-for="item in result">
                                 <td>
-                                    <img src="/images/icons/icono-azul.png" class="absolute" style="width: 30px" alt="" />
+                                    <img src="/public/images/icons/icono-azul.png" class="absolute" style="width: 30px" alt="" />
                                     <h6 class="categoria">{{ item.categoria_name }}</h6>
                                 </td>
                                 <td>
                                     <div class="d-flex">
-                                        <ProgressBar :value="item.tareas_terminadas * 100 / item.tareas_totales"></ProgressBar>
+                                        <ProgressBar :value=" Math.round(item.tareas_terminadas * 100 / item.tareas_totales)"></ProgressBar>
                                     </div>
                                 </td>
                             </tr>
@@ -156,7 +144,8 @@ export default {
         result:[],
         acta_id:"",
         total_actas:0,
-        logo:""
+        logo:"",
+        empresa_id:null
     },
     data() {
         return {
@@ -169,8 +158,8 @@ export default {
         }
     },
     methods:{
-        showCronograma(id) {
-            this.$inertia.get(this.route('actas.cronograma', id));
+        showCronograma() {
+            this.$inertia.get('/actas/cronograma?empresa_id='+this.empresa_id);
         },
         showEntregables(){
             this.$inertia.get(this.route('entregables.index'));

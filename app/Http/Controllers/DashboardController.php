@@ -16,28 +16,26 @@ class DashboardController extends Controller
 {
     public function index(Request $request): Response
     {
-        $acta_id = 0;
-        $total_actas = 0;
+        $empresa_id = null;
         $logo = "/images/logo-merci.png";
         if (isset($request->empresa_id)) {
+            $empresa_id = $request->empresa_id;
             $logo = "/images/" . Empresa::find($request->empresa_id)->logo;
 
             $actas = Acta::where('empresa_id', $request->empresa_id)
                 ->where('user_id', Auth::user()->id)
                 ->get();
-            $total_actas = sizeof($actas);
-
-            if (isset($request->acta_id)) {
-                $acta = Acta::find($request->acta_id);
-                if ($acta) {
-                    $acta_id = $acta->id;
-                }
-            } else {
-                if (isset($actas[0])) {
-                    $acta_id = $actas->last()->id;       
-                }
-            }
+        }else{
+            $actas = Acta::where('user_id', Auth::user()->id)->get();
         }
+
+        $actas_ids = [];
+        if($actas){
+            $actas_ids = $actas->pluck('id')->toArray();
+        }
+
+        $total_actas = sizeof($actas_ids);
+        
 
         $user = Auth::user();
         $indicadores = $user->indicadores;
@@ -46,7 +44,7 @@ class DashboardController extends Controller
             ->join('actividades as a', 'a.id', '=', 't.actividad_id')
             ->join('categorias as c', 'c.id', '=', 'a.categoria_id')
             ->select(DB::raw('SUM(IF(t.estado_id = 6, 1, 0)) AS tareas_terminadas'), DB::raw('count(t.id) as tareas_totales'), 'c.name as categoria_name')
-            ->where('acta_id', '=', $acta_id)
+            ->whereIn('acta_id', $actas_ids)
             ->groupBy('c.name')
             ->get();
 
@@ -146,6 +144,6 @@ class DashboardController extends Controller
                     break;
             }
         }
-        return Inertia::render('Dashboard', compact('chartVentasPresupuesto', 'chartTtlCotizaciones', 'chartEfectividadComercial', 'chartClientesNuevos', 'indicadores_ids', 'result', 'acta_id', 'total_actas', 'logo'));
+        return Inertia::render('Dashboard', compact('chartVentasPresupuesto', 'chartTtlCotizaciones', 'chartEfectividadComercial', 'chartClientesNuevos', 'indicadores_ids', 'result', 'total_actas', 'logo', 'empresa_id'));
     }
 }
