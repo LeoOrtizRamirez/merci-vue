@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Datatables\EntregableDatatable;
 use App\Http\Controllers\Controller;
+use App\Models\Empresa;
 use App\Models\Entregable;
 use App\Models\UserEmpresa;
 use Illuminate\Http\Request;
@@ -16,7 +17,8 @@ class EntregableController extends Controller
 {
     public function index(): Response
     {
-        $entregables = Entregable::where('user_id', Auth::user()->id)->get();
+        //$entregables = Entregable::where('user_id', Auth::user()->id)->get();
+        $entregables = null;
 
         $user = Auth::user();
         return Inertia::render('Entregable/Index', compact('entregables', 'user'));
@@ -31,9 +33,10 @@ class EntregableController extends Controller
         return response()->json($data);
     }
 
-    public function create(): Response
+    public function create(Request $request): Response
     {
-        return Inertia::render('Entregable/Create');
+        $empresa_id = $request->empresa_id;
+        return Inertia::render('Entregable/Create', compact('empresa_id'));
     }
 
     public function store(Request $request)
@@ -95,9 +98,10 @@ class EntregableController extends Controller
         $entregable->name = $request->name;
         $entregable->extension = $extension;
         $entregable->url = $imageName;
-        $entregable->user_id = Auth::user()->id;
+        $entregable->empresa_id = $request->empresa_id;
+
         $entregable->save();
-        return redirect()->route('entregables.index');
+        return redirect()->route('empresas.show', $entregable->empresa_id);
     }
 
     public function updateImage(Request $request)
@@ -125,8 +129,8 @@ class EntregableController extends Controller
             $entregable->url = $imageName;
         }
 
-        $entregable->user_id = Auth::user()->id;
+        $entregable->empresa_id = $request->empresa_id;
         $entregable->save();
-        return redirect()->route('entregables.index');
+        return redirect()->route('empresas.show', $entregable->empresa_id);
     }
 }

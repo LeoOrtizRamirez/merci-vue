@@ -87,7 +87,7 @@ export default {
                 filters: {
                     'global': { value: null, matchMode: FilterMatchMode.CONTAINS },
                     'status': { value: null, matchMode: FilterMatchMode.EQUALS },
-                    'user_id': { value: this.user.id, matchMode: FilterMatchMode.EQUALS },
+                    'empresa_id': { value: this.user.id, matchMode: FilterMatchMode.EQUALS },
                 },
                 lazyParams: {}
             },

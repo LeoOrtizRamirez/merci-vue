@@ -18,8 +18,8 @@ class CreateEntregablesTable extends Migration
             $table->string('name')->nullable();
             $table->string('extension')->nullable();
             $table->string('url')->nullable();
-            $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->unsignedBigInteger('empresa_id');
+            $table->foreign('empresa_id')->references('id')->on('empresas');
             $table->timestamps();
         });
     }

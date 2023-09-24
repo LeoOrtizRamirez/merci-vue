@@ -52,8 +52,6 @@ export default {
                                 { label: 'Actividades', icon: 'pi pi-fw pi-list', to: this.route('actividades.index'), },
                             ]
                         },
-                        { label: 'Actas', icon: 'pi pi-fw pi-book', to: this.route('actas.index'), },
-                        { label: 'Entregables', icon: 'pi pi-fw pi-book', to: this.route('entregables.index'), },
                         {
                             label: 'Cerrar sesión', icon: 'pi pi-fw pi-sign-out', command: () => {
                                 this.$inertia.post(this.route('logout'))
@@ -68,7 +66,6 @@ export default {
                     label: 'Menu',
                     items: [
                         { label: 'Clientes', icon: 'pi pi-fw pi-users', to: this.route('empresas.index'), },
-                        { label: 'Entregables', icon: 'pi pi-fw pi-book', to: this.route('entregables.index'), },
                         {
                             label: 'Cerrar sesión', icon: 'pi pi-fw pi-sign-out', command: () => {
                                 this.$inertia.post(this.route('logout'))
@@ -82,7 +79,6 @@ export default {
                     label: 'Menu',
                     items: [
                         { label: 'Dashboard', icon: 'pi pi-fw pi-home', to: this.route('dashboard'), prefix: 'dashboard' },
-                        { label: 'Entregables', icon: 'pi pi-fw pi-book', to: this.route('entregables.index'), },
                         {
                             label: 'Cerrar sesión', icon: 'pi pi-fw pi-sign-out', command: () => {
                                 this.$inertia.post(this.route('logout'))

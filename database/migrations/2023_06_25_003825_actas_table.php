@@ -20,8 +20,8 @@ class ActasTable extends Migration
             $table->time('hora_inicio')->nullable();
             $table->time('hora_finalizacion')->nullable();
             $table->string('modalidad_encuentro')->nullable();
-            $table->string('asistentes')->nullable();
-            $table->string('temas')->nullable();
+            $table->text('asistentes')->nullable();
+            $table->text('temas')->nullable();
 
             $table->unsignedBigInteger('user_id')->nullable()->unsigned();
             $table->foreign('user_id')

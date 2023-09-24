@@ -23,7 +23,7 @@
                                     </div>
                                 </div>
                                 <Button class="p-button p-component p-button-danger p-button-raised mx-2" label="Cancelar"
-                                    @click="this.$inertia.get(this.route('entregables.index'));" />
+                                    @click="this.$inertia.get(this.route('empresas.show', entregable.empresa_id));" />
                                 <Button label="Actualizar" type="submit"></Button>
                             </form>
                         </div>
@@ -69,12 +69,13 @@ export default {
         submit() {
             this.formData.append("id", this.form.id);
             this.formData.append("name", this.form.name);
+            this.formData.append("empresa_id", this.entregable.empresa_id);
             axios.post('/api/update-entregable', this.formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
             }).then(response => {
-                this.$inertia.get(route('entregables.index'));
+                this.$inertia.get(route('empresas.show', this.entregable.empresa_id));
             }).catch(error => {
                 console.log(error.response.data);
             });

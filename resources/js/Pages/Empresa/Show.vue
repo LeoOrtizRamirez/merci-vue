@@ -6,7 +6,7 @@
                     <div class="flex mb-2">
                         <Button v-permission="'empresa.edit'" icon="pi pi-pencil"
                             class="p-button-success p-button-sm mr-1 p-button-rounded p-button-outlined"
-                            @click="edit(empresa.id)" />
+                            @click="edit(empresa.id, 'empresas')" />
                         <h4 class="m-0">Empresa</h4>
                     </div>
                     <div class="grid grid-cols-2 mx-4 my-4">
@@ -28,32 +28,84 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="title">
-                        <Button v-permission="'acta.create'" icon="pi pi-fw pi-plus"
-                            class="p-button-primary p-button-sm mr-1 p-button-rounded p-button-outlined"
-                            @click="this.$inertia.get('/actas/create?empresa_id=' + empresa.id);" />
-                        
-                        
-                        <h4>
-                            Actas
-                            <i v-permission="'acta.import'" title="Descargar archivo con ejemplo de importación" class="pi pi-fw pi-download cursor-pointer" @click="descargarArchivo"></i>
-                        </h4>
-                        <!-- <Button icon="pi pi-fw pi-download" title="Descargar archivo con ejemplo de importación" class="mx-2 p-button-primary p-button-sm mr-1 p-button-rounded p-button-outlined" @click="descargarArchivo"/> -->
-                    </div>
-                    <div class="title" v-permission="'acta.import'">
-                        <form @submit.prevent="importarArchivo">
-                            <label for="file-upload" class="custom-file-upload">
-                                <span class="pi pi-upload"></span>
-                                <span>{{ fileName }}</span>
-                                <input id="file-upload" name="file-upload" ref="archivo" type="file" class="input-file"
-                                    @change="handleFileUpload">
-                            </label>
-                            <button v-if="fileName != 'Importar'" class="p-button p-component" type="submit">
-                                <span class="p-button-label">Guardar</span>
-                            </button>
-                        </form>
-                    </div>
+                            <Button v-permission="'acta.create'" icon="pi pi-fw pi-plus"
+                                class="p-button-primary p-button-sm mr-1 p-button-rounded p-button-outlined"
+                                @click="this.$inertia.get(`/entregables/create?empresa_id=${empresa.id}`);" />
+                            <h4>Entregables</h4>
+                        </div>
 
-                        <DataTable ref="dt" :value="actas" :lazy="true" data-key="id" :paginator="true" :rows="50" 
+                        <DataTable :value="entregables" :paginator="false">
+                            <Column field="name" header="Nombre">
+                                <template #body="slotProps">
+                                    {{ slotProps.data.name }}
+                                </template>
+                            </Column>
+                            <Column field="extension" header="Tipo">
+                                <template #body="slotProps">
+                                    <img v-if="excelExtension.includes(slotProps.data.extension.toUpperCase())"
+                                        src='/public/images/documentos/Excel.svg' alt="" height="30">
+                                    <img v-if="slotProps.data.extension.toUpperCase() == 'PDF'"
+                                        src='/public/images/documentos/PDF.svg' alt="" height="30">
+                                    <img v-if="slotProps.data.extension.toUpperCase() == 'WORD'"
+                                        src='/public/images/documentos/Word.svg' alt="" height="30">
+                                    <img v-if="slotProps.data.extension.toUpperCase() == 'PNG'"
+                                        src='/public/images/documentos/png.png' alt="" height="30">
+                                    <img v-if="desconocidasExtensiones.includes(slotProps.data.extension.toUpperCase())"
+                                        src='/public/images/documentos/Desconocido.svg' alt="" height="30">
+                                </template>
+                            </Column>
+                            <Column field="url" header="Documento">
+                                <template #body="slotProps">
+                                    <a :href="`/public/images/entregables/${empresa.id}/${slotProps.data.url}`"
+                                        target="_blank">{{ slotProps.data.url }}</a>
+                                </template>
+                            </Column>
+                            <Column header="Acciones" style="width: 150px;">
+                                <template #body="slotProps">
+                                    <Button v-permission="'entregable.edit'" icon="pi pi-pencil"
+                                        class="p-button-success p-button-sm mr-1 p-button-rounded p-button-outlined"
+                                        @click="edit(slotProps.data.id, 'entregables')" />
+                                    <Button v-permission="'entregable.destroy'" icon="pi pi-trash"
+                                        class="p-button-sm p-button-danger p-button-rounded p-button-outlined"
+                                        @click="showDeleteDialog(slotProps.data)" />
+                                </template>
+                            </Column>
+                            <template #empty>
+                                Sin registros.
+                            </template>
+                        </DataTable>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="card">
+                        <div class="title">
+                            <Button v-permission="'acta.create'" icon="pi pi-fw pi-plus"
+                                class="p-button-primary p-button-sm mr-1 p-button-rounded p-button-outlined"
+                                @click="this.$inertia.get('/actas/create?empresa_id=' + empresa.id);" />
+
+
+                            <h4>
+                                Actas
+                                <i v-permission="'acta.import'" title="Descargar archivo con ejemplo de importación"
+                                    class="pi pi-fw pi-download cursor-pointer" @click="descargarArchivo"></i>
+                            </h4>
+                            <!-- <Button icon="pi pi-fw pi-download" title="Descargar archivo con ejemplo de importación" class="mx-2 p-button-primary p-button-sm mr-1 p-button-rounded p-button-outlined" @click="descargarArchivo"/> -->
+                        </div>
+                        <div class="title" v-permission="'acta.import'">
+                            <form @submit.prevent="importarArchivo">
+                                <label for="file-upload" class="custom-file-upload">
+                                    <span class="pi pi-upload"></span>
+                                    <span>{{ fileName }}</span>
+                                    <input id="file-upload" name="file-upload" ref="archivo" type="file" class="input-file"
+                                        @change="handleFileUpload">
+                                </label>
+                                <button v-if="fileName != 'Importar'" class="p-button p-component" type="submit">
+                                    <span class="p-button-label">Guardar</span>
+                                </button>
+                            </form>
+                        </div>
+
+                        <DataTable ref="dt" :value="actas" :lazy="true" data-key="id" :paginator="true" :rows="2"
                             :loading="loading" :total-records="totalRecords"
                             paginator-template="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
                             :rows-per-page-options="[10, 25, 50]"
@@ -274,7 +326,8 @@ export default {
         actividades: [],
         estados: [],
         arbol: [],
-        actas: []
+        actas: [],
+        entregables: []
     },
     data() {
         return {
@@ -298,14 +351,17 @@ export default {
             },
             submitted: false,
             loading: false,
-            fileName: 'Importar'
+            fileName: 'Importar',
+            excelExtension:['XLSX','XLS','XLSM','XLSB','XLTM','XLTX'],
+            desconocidasExtensiones:['123', '3G2', '3GP', '7Z', 'AAC', 'AC3', 'ACCDB', 'AIFF', 'AMR', 'ASF', 'AVI', 'BMP', 'C', 'CLASS', 'CPP', 'CR2', 'CSS', 'CSV', 'CUE', 'DAT', 'DB', 'DBF', 'DDS', 'DNG', 'DOC', 'DOCX', 'DWG', 'DXF', 'EPS', 'EXE', 'FLAC', 'FLV', 'GIF', 'GZ', 'H', 'HTML', 'ICS', 'IFF', 'INDD', 'ISO', 'JAR', 'JAVA', 'JPEG', 'JPG', 'JS', 'JSON', 'JSP', 'KEY', 'LOG', 'M4A', 'M4B', 'M4P', 'M4V', 'MAX', 'MDB', 'MID', 'MKV', 'MOV', 'MP3', 'MP4', 'MPA', 'MPEG', 'MPG', 'MSG', 'NC', 'NES', 'NUMBERS', 'OBJ', 'ODP', 'ODS', 'ODT', 'OGG', 'OTF', 'PAGES', 'PDB', 'PEF', 'PHP', 'PNG', 'PPT', 'PPTX', 'PRPROJ', 'PS', 'PSD', 'PY', 'RAR', 'RAW', 'RM', 'ROM', 'RPM', 'RTF', 'RW2', 'RWL', 'SH', 'SLN', 'SRT', 'SVG', 'SWF', 'TAR', 'TBZ2', 'TGA', 'TGZ', 'TIF', 'TIFF', 'TORRENT', 'TTF', 'TXT', 'VOB', 'WAV', 'WEBM', 'WMA', 'WMV', 'WPD', 'WPS', 'XLR', 'XML', 'YUV', 'ZIP']
         }
     },
     mounted() {
+        console.log("this.entregables", this.entregables)
     },
     methods: {
-        edit(id) {
-            this.$inertia.get(this.route('empresas.edit', id));
+        edit(id, page) {
+            this.$inertia.get(this.route(page+'.edit', id));
         },
         showDeleteDialog(model) {
             this.selectedModel = model;
@@ -460,13 +516,15 @@ export default {
         showCronograma(id) {
             this.$inertia.get(this.route('actas.cronograma', id));
         },
+        onPage(event) {
+            this.datatable.lazyParams = event;
+            this.loadLazyData();
+        },
     }
 }
 </script>
 
-<style scoped>
-.container_image {
+<style scoped>.container_image {
     display: flex;
     align-items: center;
-}
-</style>
+}</style>
