@@ -30,32 +30,6 @@
                         <p class="m-0 ml-2" v-for="empresa in user.empresas" :key="empresa">{{ empresa }}</p><br>
                     </div>
                 </div>
-                <div class="col-12">
-                    <div class="card">
-                        <div class="flex mb-2">
-                            <Button v-permission="'user.create'" icon="pi pi-fw pi-plus"
-                                class="p-button-primary p-button-sm mr-1 p-button-rounded p-button-outlined"
-                                @click="openNew" />
-                            <h4 class="m-0">Indicadores</h4>
-                        </div>
-
-                        <TreeTable :value="arbol" :tableProps="{ style: { minWidth: '650px' } }" style="overflow: auto">
-                            <Column field="name" header="Nombre" expander></Column>
-                            <Column field="size" header=""></Column>
-                            <Column field="type" header=""></Column>
-                            <Column field="actions" header="Acciones" class="actions">
-                                <template #body="slotProps">
-                                    <Button v-permission="'acta.edit'" icon="pi pi-pencil"
-                                        class="p-button-success p-button-sm mr-1 p-button-rounded p-button-outlined"
-                                        @click="editIndicador(slotProps.node.data)" />
-                                    <Button v-permission="'acta.destroy'" icon="pi pi-trash"
-                                        class="p-button-sm p-button-danger p-button-rounded p-button-outlined"
-                                        @click="showDeleteDialog(slotProps.node.data)" />
-                                </template>
-                            </Column>
-                        </TreeTable>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
@@ -251,38 +225,6 @@ export default {
             this.submitted = false;
             this.modelEditDialog = true;
         },
-        saveModel() {
-            var message = ""
-            if (this.model.id == "") {
-                message = "Indicador creado"
-            } else {
-                message = "Indicador actualizado"
-            }
-            this.submitted = true;
-
-            if (this.model.mes != "" && this.model.data_1 != "" && this.model.indicador != "" && this.model.user != "") {
-                axios.post(this.route('users.saveIndicador'), this.model)
-                    .then((response) => {
-                        this.$toast.add({
-                            severity: "success",
-                            summary: "Exitoso!",
-                            detail: message,
-                            life: 3000,
-                        });
-                        this.arbol = response.data
-                        this.clearModel()
-                        this.modelDialog = false
-                    })
-                    .catch((error) => {
-                        this.$toast.add({
-                            severity: "error",
-                            summary: "Error",
-                            detail: error,
-                            life: 3000,
-                        });
-                    });
-            }
-        },
         clearData() {
             this.model.data_1 = ""
             this.model.data_2 = ""
@@ -291,28 +233,6 @@ export default {
             this.selectedModel = item.id;
             this.deleteDialog = true;
         },
-        editIndicador(item) {
-            const indicadorSeleccionados = this.indicadores.find(indicador => indicador.name === item.node.indicador.name);
-            if (indicadorSeleccionados) {
-                this.model.indicador = indicadorSeleccionados;
-            }
-
-            this.model.id = item.id
-            this.model.data_1 = item.dato_1
-            this.model.data_2 = item.dato_2
-            this.model.mes = item.mes
-
-            this.header = "Actualizar Indicador"
-            this.modelDialog = true;
-        },
-        clearModel() {
-            this.model.id = "";
-            this.model.mes = "";
-            this.model.data_1 = "";
-            this.model.data_2 = "";
-            this.model.indicador = "";
-            this.model.user = this.user;
-        }
     }
 }
 </script>

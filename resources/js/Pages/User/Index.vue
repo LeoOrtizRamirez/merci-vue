@@ -46,9 +46,6 @@
                         </Column>
                         <Column header="Acciones" style="width: 150px;">
                             <template #body="slotProps">
-                                <Button v-permission="'user.show'" icon="pi pi-search"
-                                    class="p-button-primary p-button-sm mr-1 p-button-rounded p-button-outlined"
-                                    @click="show(slotProps.data.id)" />
                                 <Button v-permission="'user.edit'" icon="pi pi-pencil"
                                     class="p-button-success p-button-sm mr-1 p-button-rounded p-button-outlined"
                                     @click="edit(slotProps.data.id)" />

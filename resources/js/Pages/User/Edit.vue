@@ -25,12 +25,6 @@
                                             placeholder="Ingresa una contraseña" />
                                     </div>
                                     <div class="field col-12 md:col-6">
-                                        <label for="indicadores">Indicadores</label>
-                                        <MultiSelect v-model="form.indicadores" :options="indicadores" optionLabel="name"
-                                            placeholder="Selecciona los Indicadores" :maxSelectedLabels="3" class="w-full"
-                                            required />
-                                    </div>
-                                    <div class="field col-12 md:col-6">
                                         <label for="rol">Rol</label>
                                         <Dropdown v-model="form.rol" :options="roles" optionLabel="name" @change="formatEstado()"
                                             placeholder="Selecciona un Rol" class="w-full" required />
@@ -77,12 +71,10 @@ export default {
     },
     props: {
         user: [],
-        indicadores: [],
         empresas: [],
         roles: [],
         current_user: [],
         rol: [],
-        user_indicadores_ids: [],
         user_empresas_ids: [],
         errors: Object
     },
@@ -91,7 +83,6 @@ export default {
             form: {
                 id: this.current_user.id,
                 name: this.current_user.name,
-                indicadores: this.current_user.indicadores,
                 password: this.current_user.password,
                 email: this.current_user.email,
                 empresa: this.current_user.empresa,
@@ -107,10 +98,6 @@ export default {
         const rolSeleccionado = this.roles.find(rol => rol.name === this.rol);
         if (rolSeleccionado) {
             this.form.rol = rolSeleccionado;
-        }
-        const indicadoresSeleccionados = this.indicadores.filter(indicador => this.user_indicadores_ids.includes(indicador.id));
-        if (indicadoresSeleccionados) {
-            this.form.indicadores = indicadoresSeleccionados;
         }
 
         if (this.form.rol.name != 'CLIENTE') {
