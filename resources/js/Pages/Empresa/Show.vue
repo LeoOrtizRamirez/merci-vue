@@ -32,7 +32,7 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="flex mb-2">
-                            <Button v-permission="'user.create'" icon="pi pi-fw pi-plus"
+                            <Button v-permission="'indicador.create'" icon="pi pi-fw pi-plus"
                                 class="p-button-primary p-button-sm mr-1 p-button-rounded p-button-outlined"
                                 @click="openNew" />
                             <h4 class="m-0">Indicadores</h4>
@@ -44,10 +44,10 @@
                             <Column field="type" header=""></Column>
                             <Column field="actions" header="Acciones" class="actions">
                                 <template #body="slotProps">
-                                    <Button v-permission="'acta.edit'" icon="pi pi-pencil"
+                                    <Button v-permission="'indicador.edit'" icon="pi pi-pencil"
                                         class="p-button-success p-button-sm mr-1 p-button-rounded p-button-outlined"
                                         @click="editIndicador(slotProps.node.data)" />
-                                    <Button v-permission="'acta.destroy'" icon="pi pi-trash"
+                                    <Button v-permission="'indicador.destroy'" icon="pi pi-trash"
                                         class="p-button-sm p-button-danger p-button-rounded p-button-outlined"
                                         @click="showDeleteDialog(slotProps.node.data, 'indicadores')" />
                                 </template>

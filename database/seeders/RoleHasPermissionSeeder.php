@@ -58,6 +58,10 @@ class RoleHasPermissionSeeder extends Seeder
             ['permission_id' => 40, 'role_id' => 1],
             ['permission_id' => 41, 'role_id' => 1],
             ['permission_id' => 42, 'role_id' => 1],
+            ['permission_id' => 43, 'role_id' => 1],
+            ['permission_id' => 44, 'role_id' => 1],
+            ['permission_id' => 45, 'role_id' => 1],
+            ['permission_id' => 46, 'role_id' => 1],
 
             //CONSULTOR
             ['permission_id' => 14, 'role_id' => 3],
@@ -66,6 +70,10 @@ class RoleHasPermissionSeeder extends Seeder
             ['permission_id' => 29, 'role_id' => 3],
             ['permission_id' => 30, 'role_id' => 3],
             ['permission_id' => 37, 'role_id' => 3],
+            ['permission_id' => 43, 'role_id' => 3],
+            ['permission_id' => 44, 'role_id' => 3],
+            ['permission_id' => 45, 'role_id' => 3],
+            ['permission_id' => 46, 'role_id' => 3],
 
             //CLIENTE
             ['permission_id' => 14, 'role_id' => 2],

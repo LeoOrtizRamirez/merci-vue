@@ -19,7 +19,6 @@ class IndicadoreSeeder extends Seeder
             ['name' => 'Cotizaciones'],
             ['name' => 'Efectividad comercial'],
             ['name' => 'Clientes nuevos'],
-            ['name' => 'Visitas / reuniones'],
         ];
         DB::table('indicadores')->insert($indicadores);
     }
