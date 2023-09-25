@@ -2,13 +2,20 @@
     <app-layout>
         <div class="mb-5">
             <div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
-                <div v-if="$page.props.jetstream.canUpdateProfileInformation">
+                <div v-role="'ADMIN'">
+                    <update-profile-information-form :user="$page.props.user" class="mb-5"/>
+                </div>
+
+                <div v-role="'ADMIN'">
+                    <update-password-form class="mb-5"/>
+                </div>
+                <!-- <div v-if="$page.props.jetstream.canUpdateProfileInformation">
                     <update-profile-information-form :user="$page.props.user" class="mb-5"/>
                 </div>
 
                 <div v-if="$page.props.jetstream.canUpdatePassword">
                     <update-password-form class="mb-5"/>
-                </div>
+                </div> -->
 
                 <logout-other-browser-sessions-form :sessions="sessions" class="mt-10 sm:mt-0"/>
             </div>
