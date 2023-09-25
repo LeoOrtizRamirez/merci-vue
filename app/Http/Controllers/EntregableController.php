@@ -17,10 +17,17 @@ class EntregableController extends Controller
 {
     public function index(): Response
     {
-        //$entregables = Entregable::where('user_id', Auth::user()->id)->get();
+        $user = Auth::user();
+        $user_empresa = UserEmpresa::where('user_id', $user->id)->first();
+        $role_name = $user->getRoleNames()[0];
+
         $entregables = null;
 
-        $user = Auth::user();
+        if($role_name == "CLIENTE"){
+            $empresa = Empresa::find($user_empresa->empresa_id);
+            $entregables = Entregable::where('empresa_id', $empresa->id)->get();
+        }
+        
         return Inertia::render('Entregable/Index', compact('entregables', 'user'));
     }
 
