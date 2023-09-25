@@ -21,6 +21,15 @@ class DashboardController extends Controller
         $user_empresa = UserEmpresa::where('user_id', $user->id)->first();
         $role_name = $user->getRoleNames()[0];
         $empresa_id = null;
+        
+        $empresa = null;
+        $indicadores = [];
+
+        if(!is_null($empresa)){
+            $empresa = Empresa::find($empresa_id);
+            $indicadores = $empresa->indicadores;
+        }
+        
         $logo = "/images/logo-merci.png";
 
 
@@ -32,6 +41,9 @@ class DashboardController extends Controller
                 ->where('user_id',$user->id)
                 ->get();
         }else if (isset($request->empresa_id)) {
+            $empresa = Empresa::find($request->empresa_id);
+            $indicadores = $empresa->indicadores;
+
             $empresa_id = $request->empresa_id;
             $logo = "/images/" . Empresa::find($request->empresa_id)->logo;
 
@@ -48,8 +60,6 @@ class DashboardController extends Controller
         }
 
         $total_actas = sizeof($actas_ids);
-        
-        $indicadores = $user->indicadores;
 
         $result = DB::table('tareas as t')
             ->join('actividades as a', 'a.id', '=', 't.actividad_id')
