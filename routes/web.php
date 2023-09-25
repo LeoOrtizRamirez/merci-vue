@@ -51,8 +51,6 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('/users/datatable', [UserController::class, 'datatable'])->name('users.datatable');
-    Route::post('/users/indicadores', [UserController::class, 'saveIndicador'])->name('users.saveIndicador');
-    Route::post('/users/indicadores-delete/{id}/', [UserController::class, 'deleteIndicador'])->name('users.deleteIndicador');
     Route::get('/users/empresas', [UserController::class, 'getEmpresas'])->name('users.empresas');
     Route::resource('users', UserController::class);
 });
@@ -60,6 +58,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('/empresas/datatable', [EmpresaController::class, 'datatable'])->name('empresas.datatable');
     Route::post('/api/upload-image', [EmpresaController::class, 'uploadImage'])->name('empresas.image');
+    Route::post('/empresas/indicadores', [EmpresaController::class, 'saveIndicador'])->name('empresas.saveIndicador');
+    Route::post('/empresas/indicadores-delete/{id}/', [EmpresaController::class, 'deleteIndicador'])->name('empresas.deleteIndicador');
     Route::resource('empresas', EmpresaController::class);
 });
 

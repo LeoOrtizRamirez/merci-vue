@@ -39,6 +39,7 @@ import Button from "primevue/button";
 import InputText from "primevue/inputtext";
 import Dropdown from 'primevue/dropdown';
 import axios from "axios";
+import Toast from 'primevue/toast';
 
 export default {
     name: "Edit",
@@ -47,7 +48,8 @@ export default {
         AppLayout,
         Button,
         InputText,
-        Dropdown
+        Dropdown,
+        Toast
     },
     props: {
         entregable: [],
@@ -75,6 +77,12 @@ export default {
                     'Content-Type': 'multipart/form-data'
                 }
             }).then(response => {
+                this.$toast.add({
+                    severity: "success",
+                    summary: "Exitoso!",
+                    detail: "Entregable actualizado",
+                    life: 3000,
+                });
                 this.$inertia.get(route('empresas.show', this.entregable.empresa_id));
             }).catch(error => {
                 console.log(error.response.data);

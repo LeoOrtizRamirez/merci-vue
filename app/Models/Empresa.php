@@ -12,4 +12,9 @@ class Empresa extends Model
     public function estado(){
         return $this->belongsTo('App\Models\Estado');
     }
+
+    public function indicadores()
+    {
+        return $this->hasMany('App\Models\EmpresaIndicadore');
+    }
 }

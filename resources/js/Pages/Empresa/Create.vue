@@ -23,6 +23,11 @@
                                             placeholder="Selecciona un Estado" class="w-full" required />
                                     </div>
                                     <div class="field col-12 md:col-6">
+                                        <label for="indicadores">Indicadores</label>
+                                        <MultiSelect v-model="form.indicadores" :options="indicadores" optionLabel="name"
+                                            placeholder="Selecciona los Indicadores" :maxSelectedLabels="3" class="w-full" required/>
+                                    </div>
+                                    <div class="field col-12 md:col-6">
                                         <label for="estado">Logo</label>
                                         <input type="file" name="image" @change="handleFileUpload">
                                     </div>
@@ -44,6 +49,7 @@
 import AppLayout from "../../Layouts/AppLayout";
 import Button from "primevue/button";
 import InputText from "primevue/inputtext";
+import MultiSelect from 'primevue/multiselect';
 import Dropdown from 'primevue/dropdown';
 import axios from 'axios';
 
@@ -54,17 +60,21 @@ export default {
         AppLayout,
         Button,
         InputText,
-        Dropdown
+        Dropdown,
+        MultiSelect
     },
     props: {
-        estados: []
+        estados: [],
+        indicadores: [],
     },
     data() {
         return {
+            selectedIndicadores: [],
             form: {
                 name: "",
                 nit: "",
-                estado: ""
+                estado: "",
+                indicadores: "",
             },
         }
     },

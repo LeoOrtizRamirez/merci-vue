@@ -45,11 +45,6 @@ class User extends Authenticatable
        return $name_empresas;
     }
 
-    public function indicadores()
-    {
-        return $this->hasMany('App\Models\UserIndicadore');
-    }
-
     /**
      * The attributes that are mass assignable.
      *

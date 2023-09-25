@@ -31,6 +31,32 @@
                 </div>
                 <div class="col-12">
                     <div class="card">
+                        <div class="flex mb-2">
+                            <Button v-permission="'user.create'" icon="pi pi-fw pi-plus"
+                                class="p-button-primary p-button-sm mr-1 p-button-rounded p-button-outlined"
+                                @click="openNew" />
+                            <h4 class="m-0">Indicadores</h4>
+                        </div>
+
+                        <TreeTable :value="arbol" :tableProps="{ style: { minWidth: '650px' } }" style="overflow: auto">
+                            <Column field="name" header="Nombre" expander></Column>
+                            <Column field="size" header=""></Column>
+                            <Column field="type" header=""></Column>
+                            <Column field="actions" header="Acciones" class="actions">
+                                <template #body="slotProps">
+                                    <Button v-permission="'acta.edit'" icon="pi pi-pencil"
+                                        class="p-button-success p-button-sm mr-1 p-button-rounded p-button-outlined"
+                                        @click="editIndicador(slotProps.node.data)" />
+                                    <Button v-permission="'acta.destroy'" icon="pi pi-trash"
+                                        class="p-button-sm p-button-danger p-button-rounded p-button-outlined"
+                                        @click="showDeleteDialog(slotProps.node.data, 'indicadores')" />
+                                </template>
+                            </Column>
+                        </TreeTable>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="card">
                         <div class="title">
                             <Button v-permission="'acta.create'" icon="pi pi-fw pi-plus"
                                 class="p-button-primary p-button-sm mr-1 p-button-rounded p-button-outlined"
@@ -158,7 +184,7 @@
 
     <DeleteDialog ref="deleteDialog" v-model:visible="deleteDialog" :loading="deletingModel" @delete="onDelete" />
 
-    <Dialog v-model:visible="modelDialog" :style="{ width: '750px' }" header="Crear Indicador" :modal="true"
+    <Dialog v-model:visible="modelDialog" :style="{ width: '750px' }" :header="header" :modal="true"
         class="p-fluid">
         <div class="p-fluid formgrid grid">
             <div class="field col-12 md:col-6">
@@ -167,12 +193,6 @@
                     :class="{ 'p-invalid': submitted && !model.mes }" />
                 <small class="p-invalid" v-if="submitted && !model.mes">MES es requerido.</small>
             </div>
-            <!-- <div class="field col-12 md:col-6">
-                <label for="actividad">USUARIO</label>
-                <Dropdown v-model="model.empresa" :options="empresas" optionLabel="name" placeholder="Selecciona un Usuario"
-                    :class="{ 'p-invalid': submitted && !model.empresa }" required />
-                <small class="p-invalid" v-if="submitted && !model.actividad">Usuario es requerido.</small>
-            </div> -->
             <div class="field col-12 md:col-6">
                 <label for="actividad">INDICADOR</label>
                 <Dropdown v-model="model.indicador" :options="indicadores" optionLabel="name"
@@ -182,41 +202,41 @@
             </div>
 
             <div class="field col-12 md:col-12" v-if="model.indicador.id == 1">
-                <label type="number" for="data_1">VENTAS</label>
+                <label for="data_1">VENTAS</label>
                 <InputNumber id="data_1" v-model.trim="model.data_1" required="true" autofocus
                     :class="{ 'p-invalid': submitted && !model.data_1 }" />
                 <small class="p-invalid" v-if="submitted && !model.data_1">Ventas es requerido.</small>
             </div>
             <div class="field col-12 md:col-12" v-if="model.indicador.id == 1">
-                <label type="number" for="data_1">PRESUPUESTO</label>
+                <label for="data_1">PRESUPUESTO</label>
                 <InputNumber id="data_2" v-model.trim="model.data_2" required="true" autofocus
                     :class="{ 'p-invalid': submitted && !model.data_2 }" />
                 <small class="p-invalid" v-if="submitted && !model.data_2">Ventas es requerido.</small>
             </div>
 
             <div class="field col-12 md:col-12" v-if="model.indicador.id == 2">
-                <label type="number" for="data_1">TTL COTIZACIONES</label>
+                <label for="data_1">TTL COTIZACIONES</label>
                 <InputNumber id="data_1" v-model.trim="model.data_1" required="true" autofocus
                     :class="{ 'p-invalid': submitted && !model.data_1 }" />
                 <small class="p-invalid" v-if="submitted && !model.data_1">TTL COTIZACIONES es requerido.</small>
             </div>
             <div class="field col-12 md:col-12" v-if="model.indicador.id == 2">
                 <label for="data_1">N COTIZACIONES</label>
-                <InputNumber type="number" id="data_2" v-model.trim="model.data_2" required="true" autofocus
+                <InputNumber id="data_2" v-model.trim="model.data_2" required="true" autofocus
                     :class="{ 'p-invalid': submitted && !model.data_2 }" />
                 <small class="p-invalid" v-if="submitted && !model.data_2">N COTIZACIONES es requerido.</small>
             </div>
 
             <div class="field col-12 md:col-12" v-if="model.indicador.id == 3">
                 <label for="data_1">PORCENTAJE</label>
-                <InputNumber type="number" id="data_1" v-model.trim="model.data_1" required="true" autofocus
+                <InputNumber id="data_1" v-model.trim="model.data_1" required="true" autofocus
                     :class="{ 'p-invalid': submitted && !model.data_1 }" />
                 <small class="p-invalid" v-if="submitted && !model.data_1">PORCENTAJE es requerido.</small>
             </div>
 
             <div class="field col-12 md:col-12" v-if="model.indicador.id == 4">
                 <label for="data_1">CLIENTES</label>
-                <InputNumber type="number" id="data_1" v-model.trim="model.data_1" required="true" autofocus
+                <InputNumber id="data_1" v-model.trim="model.data_1" required="true" autofocus
                     :class="{ 'p-invalid': submitted && !model.data_1 }" />
                 <small class="p-invalid" v-if="submitted && !model.data_1">CLIENTES es requerido.</small>
             </div>
@@ -285,8 +305,6 @@
 <script>
 import AppLayout from "../../Layouts/AppLayout";
 import DataTable from "primevue/datatable";
-import { FilterMatchMode } from "primevue/api";
-import DatatableService from "../../Services/DatatableService";
 import Menubar from "primevue/menubar";
 import Column from "primevue/column";
 import Button from "primevue/button";
@@ -326,7 +344,7 @@ export default {
         estados: [],
         arbol: [],
         actas: [],
-        entregables: []
+        entregables: [],
     },
     data() {
         return {
@@ -341,6 +359,7 @@ export default {
             deletePage: "",
             modelDialog: false,
             modelEditDialog: false,
+            arbol: this.arbol,
             model: {
                 mes: "",
                 data_1: "",
@@ -369,29 +388,60 @@ export default {
         },
         onDelete() {
             this.deletingModel = true;
-            this.$inertia.delete(this.route(`${this.deletePage}.destroy`, this.selectedModel.id), {
-                onSuccess: () => {
-                    this.deletingModel = false;
-                    this.deleteDialog = false;
-                    /* this.loadLazyData(); */
-                    this.$refs.deleteDialog.onClose();
-                    this.$toast.add({
-                        severity: "success",
-                        summary: "Exitoso",
-                        detail: "Registro Eliminado!",
-                        life: 3000,
-                    });
-                }
-            })
+
+            switch (this.deletePage) {
+                case 'indicadores':
+                    axios.post('/empresas/indicadores-delete/' + this.selectedModel.id)
+                        .then((response) => {
+                            //this.model = response.data.data;
+                            this.deletingModel = false;
+                            this.deleteDialog = false;
+                            /* this.loadLazyData(); */
+                            this.$refs.deleteDialog.onClose();
+                            this.$toast.add({
+                                severity: "success",
+                                summary: "Exitoso!",
+                                detail: "Indicador Eliminado",
+                                life: 3000,
+                            });
+                            this.arbol = response.data
+                        })
+                        .catch((error) => {
+                            this.$toast.add({
+                                severity: "error",
+                                summary: "Error",
+                                detail: error,
+                                life: 3000,
+                            });
+                        });
+                    break;
+                default:
+                    this.$inertia.delete(this.route(`${this.deletePage}.destroy`, this.selectedModel.id), {
+                        onSuccess: () => {
+                            this.deletingModel = false;
+                            this.deleteDialog = false;
+                            /* this.loadLazyData(); */
+                            this.$refs.deleteDialog.onClose();
+                            this.$toast.add({
+                                severity: "success",
+                                summary: "Exitoso",
+                                detail: "Registro Eliminado!",
+                                life: 3000,
+                            });
+                        }
+                    })
+                    break;
+            }
         },
         hideDialog() {
             this.modelDialog = false;
             this.submitted = false;
         },
         openNew() {
-            this.model = { ...this.model, empresa: this.empresa };
+            this.clearModel()
             this.submitted = false;
             this.modelDialog = true;
+            this.header = "Crear Indicador"
         },
         editModel(model) {
             var actividad = this.actividades.filter(actividad => actividad.name == model.actividad_name)[0]
@@ -412,18 +462,20 @@ export default {
         saveModel() {
             this.submitted = true;
             if (this.model) {
+                let message = 'Indicador creado'
+                if(this.header == 'Actualizar Indicador'){
+                    message = 'Indicador actualizado'
+                }
                 axios.post(this.route('empresas.saveIndicador'), this.model)
                     .then((response) => {
                         this.model = response.data.data;
-                        /* this.models.unshift(this.model); */
                         this.$toast.add({
                             severity: "success",
                             summary: "Exitoso!",
-                            detail: "Indicador creada",
+                            detail: message,
                             life: 3000,
                         });
-                        console.log("arbol", response.data)
-                        this.$arbol = response.data
+                        this.arbol = response.data
                     })
                     .catch((error) => {
                         this.$toast.add({
@@ -437,40 +489,19 @@ export default {
             this.modelDialog = false;
             this.model = {};
         },
-        updateModel() {
-            this.submitted = true;
-            if (this.model) {
-                console.log("model", this.model)
-                console.log(typeof miVariable)
-                axios.put(this.route('tareas.update', this.model), this.model)
-                    .then((response) => {
-                        this.model = response.data.data;
-                        /* this.models.unshift(this.model); */
-                        this.$toast.add({
-                            severity: "success",
-                            summary: "Exitoso!",
-                            detail: "Tarea actualizada",
-                            life: 3000,
-                        });
-                        this.actas = response.data
-                        console.log("actas", this.actas)
-                    })
-                    .catch((error) => {
-                        this.$toast.add({
-                            severity: "error",
-                            summary: "Error",
-                            detail: error,
-                            life: 3000,
-                        });
-                    });
-            }
-            this.modelEditDialog = false;
-            this.model = {};
-        },
         clearData() {
             this.model.data_1 = ""
             this.model.data_2 = ""
         },
+        clearModel(){
+            this.model = {  
+                mes: "",
+                data_1: "",
+                data_2: "",
+                indicador: "",
+                empresa: this.empresa 
+            };
+        },  
         async importarArchivo() {
             this.loading = true;
             let formData = new FormData();
@@ -521,6 +552,21 @@ export default {
         onPage(event) {
             this.datatable.lazyParams = event;
             this.loadLazyData();
+        },
+        editIndicador(item) {
+            this.clearModel()
+            const indicadorSeleccionados = this.indicadores.find(indicador => indicador.name === item.node.indicador.name);
+            if (indicadorSeleccionados) {
+                this.model.indicador = indicadorSeleccionados;
+            }
+
+            this.model.id = item.id
+            this.model.data_1 = item.dato_1
+            this.model.data_2 = item.dato_2
+            this.model.mes = item.mes
+
+            this.header = "Actualizar Indicador"
+            this.modelDialog = true;
         },
     }
 }

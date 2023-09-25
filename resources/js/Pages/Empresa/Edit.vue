@@ -22,6 +22,12 @@
                                         <Dropdown v-model="form.estado" :options="estados" optionLabel="name"
                                             placeholder="Selecciona un Estado" class="w-full" required />
                                     </div>
+                                    <div class="field col-12 md:col-6">
+                                        <label for="indicadores">Indicadores</label>
+                                        <MultiSelect v-model="form.indicadores" :options="indicadores" optionLabel="name"
+                                            placeholder="Selecciona los Indicadores" :maxSelectedLabels="3" class="w-full"
+                                            required />
+                                    </div>
                                 </div>
                                 <Button class="p-button p-component p-button-danger p-button-raised mx-2" label="Cancelar"
                                     @click="this.$inertia.get(this.route('empresas.index'));" />
@@ -39,6 +45,7 @@ import AppLayout from "../../Layouts/AppLayout";
 import Button from "primevue/button";
 import InputText from "primevue/inputtext";
 import Dropdown from 'primevue/dropdown';
+import MultiSelect from 'primevue/multiselect';
 
 export default {
     name: "Edit",
@@ -47,10 +54,14 @@ export default {
         AppLayout,
         Button,
         InputText,
-        Dropdown
+        Dropdown,
+        MultiSelect
     },
     props: {
         empresa: [],
+        indicadores: [],
+        current_empresa: [],
+        empresa_indicadores_ids: [],
         estados: [],
         errors: Object
     },
@@ -60,6 +71,7 @@ export default {
                 name: this.empresa.name,
                 nit: this.empresa.nit,
                 estado: this.empresa.estado,
+                indicadores: this.current_empresa.indicadores,
             },
         }
     },
@@ -67,6 +79,11 @@ export default {
         const estadoSeleccionado = this.estados.find(estado => estado.id === this.empresa.estado_id);
         if (estadoSeleccionado) {
             this.form.estado = estadoSeleccionado;
+        }
+
+        const indicadoresSeleccionados = this.indicadores.filter(indicador => this.empresa_indicadores_ids.includes(indicador.id));
+        if (indicadoresSeleccionados) {
+            this.form.indicadores = indicadoresSeleccionados;
         }
     },
     methods: {

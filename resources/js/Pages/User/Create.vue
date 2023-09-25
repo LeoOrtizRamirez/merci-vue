@@ -22,11 +22,6 @@
                                         <InputText v-model="form.password" id="password" type="password" placeholder="Ingresa una contraseña" required />
                                     </div>
                                     <div class="field col-12 md:col-6">
-                                        <label for="indicadores">Indicadores</label>
-                                        <MultiSelect v-model="form.indicadores" :options="indicadores" optionLabel="name"
-                                            placeholder="Selecciona los Indicadores" :maxSelectedLabels="3" class="w-full" required/>
-                                    </div>
-                                    <div class="field col-12 md:col-6">
                                         <label for="rol">Rol</label>
                                         <Dropdown v-model="form.rol" :options="roles" optionLabel="name" @change="formatEstado()"
                                             placeholder="Selecciona una Empresa" class="w-full" required/>
@@ -74,18 +69,15 @@ export default {
         FileUpload
     },
     props: {
-        indicadores: [],
         empresas: [],
         roles: [],
         errors: Object
     },
     data() {
         return {
-            selectedIndicadores: [],
             selectedEstado: null,
             form: {
                 name: "",
-                indicadores: "",
                 password: "",
                 rePassword: "",
                 email: "",

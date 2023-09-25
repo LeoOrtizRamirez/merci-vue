@@ -12,8 +12,8 @@ use App\Models\Indicadore;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\UserEmpresa;
-use App\Models\UserIndicadore;
-use App\Models\UsersIndicadoresDato;
+use App\Models\EmpresaIndicadore;
+use App\Models\EmpresasIndicadoresDato;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -83,15 +83,6 @@ class UserController extends Controller
         //Agregar Rol
         $user->assignRole($request->rol["name"]);
 
-        //Guardar Indicadores
-        foreach ($request->indicadores as $key => $indicador) {
-            $user_indicador = new UserIndicadore;
-            $user_indicador->indicador_id = $indicador["id"];
-            $user_indicador->user_id = $user->id;
-            $user_indicador->save();
-        }
-
-
         return redirect()->route('users.show', $user->id);
     }
 
@@ -102,45 +93,20 @@ class UserController extends Controller
         $user->empresas = $empresas;
         $user->role_name = $user->getRoleNames()[0];
 
-        $user_indicadores = $user->indicadores;
+        /* $user_indicadores = $user->indicadores;
         $user_indicadores_ids = [];
         foreach ($user_indicadores as $key => $item) {
             $user_indicadores_ids[] = $item->indicador->id;
-        }
+        } */
 
         $users = User::all();
-        $indicadores = Indicadore::whereIn('id', $user_indicadores_ids)->get();
+        //$indicadores = Indicadore::whereIn('id', $user_indicadores_ids)->get();
+        $indicadores = null;
 
-        $arbol = $this->getArboldIndicadores();
+        //$arbol = $this->getArboldIndicadores();
+        $arbol = null;
 
         return Inertia::render('User/Show', compact('user', 'users', 'indicadores', 'arbol'));
-    }
-
-    public function saveIndicador(Request $request)
-    {
-        //$user = User::find($request->user["id"]);
-        if (isset($request->id)) {
-            $users_indicadores_dato = UsersIndicadoresDato::find($request->id);
-            $users_indicadores_dato->mes = $request->mes;
-            $users_indicadores_dato->data_1 = $request->data_1;
-            $users_indicadores_dato->data_2 = $request->data_2;
-            $users_indicadores_dato->save();
-        } else {
-            $user_indicadores = UserIndicadore::where('user_id', $request->user["id"])
-                ->where('indicador_id', $request->indicador["id"])->first();
-
-            if ($user_indicadores) {
-                $users_indicadores_dato = new UsersIndicadoresDato;
-                $users_indicadores_dato->mes = $request->mes;
-                $users_indicadores_dato->data_1 = $request->data_1;
-                $users_indicadores_dato->data_2 = $request->data_2;
-                $users_indicadores_dato->user_indicadore_id = $user_indicadores->id;
-                $users_indicadores_dato->save();
-            }
-        }
-
-        $arbol = $this->getArboldIndicadores();
-        return json_encode($arbol);
     }
 
     public function getArboldIndicadores()
@@ -224,7 +190,7 @@ class UserController extends Controller
 
     public function deleteIndicador(Request $request, $id)
     {
-        $users_indicadores_dato = UsersIndicadoresDato::find($id);
+        $users_indicadores_dato = EmpresasIndicadoresDato::find($id);
         if ($users_indicadores_dato) {
             $users_indicadores_dato->delete();
         }
@@ -242,11 +208,11 @@ class UserController extends Controller
         $roles = Role::all();
         $current_user = $user;
         $rol = $user->getRoleNames()[0];
-        $user_indicadores = $user->indicadores;
+        /* $user_indicadores = $user->indicadores;
         $user_indicadores_ids = [];
         foreach ($user_indicadores as $key => $user_indicador) {
             $user_indicadores_ids[] = $user_indicador->indicador_id;
-        }
+        } */
         $user_empresas = $user->empresas;
         $user_empresas_ids = [];
         foreach ($user_empresas as $key => $user_empresa) {
@@ -295,36 +261,6 @@ class UserController extends Controller
             $user_empresa->user_id = $user->id;
             $user_empresa->empresa_id = $empresa["id"];
             $user_empresa->save();
-        }
-
-        $ids_indicadores_actualizados = [];
-        foreach ($request->indicadores as $element) {
-            $ids_indicadores_actualizados[] = $element["id"];
-        }
-        $indicadores_actuales = UserIndicadore::where('user_id', Auth::user()->id)->get();
-        $ids_indicadores_actuales = [];
-        foreach ($indicadores_actuales as $element) {
-            $ids_indicadores_actuales[] = $element->indicador_id;
-        }
-
-        if (count(array_diff($ids_indicadores_actualizados, $ids_indicadores_actuales)) == 0 && count(array_diff($ids_indicadores_actuales, $ids_indicadores_actualizados)) == 0) { 
-        }else{
-            //Eliminar Indicadores
-            foreach ($user->indicadores as $key => $indicador) {
-                //Eliminar datos de indicadores
-                $users_indicadores_datos = UsersIndicadoresDato::where('user_indicadore_id', $indicador->id)->get();
-                foreach ($users_indicadores_datos as $key => $value) {
-                    $value->delete();
-                }
-                $indicador->delete();
-            }
-            //Guardar Indicadores
-            foreach ($request->indicadores as $key => $indicador) {
-                $user_indicador = new UserIndicadore;
-                $user_indicador->indicador_id = $indicador["id"];
-                $user_indicador->user_id = $user->id;
-                $user_indicador->save();
-            }
         }
 
         return redirect()->route('users.show', $user->id);

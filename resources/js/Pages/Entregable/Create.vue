@@ -40,6 +40,7 @@ import Button from "primevue/button";
 import InputText from "primevue/inputtext";
 import Dropdown from 'primevue/dropdown';
 import axios from 'axios';
+import Toast from 'primevue/toast';
 
 export default {
     name: "Create",
@@ -48,7 +49,8 @@ export default {
         AppLayout,
         Button,
         InputText,
-        Dropdown
+        Dropdown,
+        Toast
     },
     props: {
         estados: [],
@@ -74,6 +76,12 @@ export default {
                     'Content-Type': 'multipart/form-data'
                 }
             }).then(response => {
+                this.$toast.add({
+                    severity: "success",
+                    summary: "Exitoso!",
+                    detail: "Entregable creado",
+                    life: 3000,
+                });
                 this.$inertia.get(route('empresas.show', this.form.empresa_id));
             }).catch(error => {
                 console.log(error.response.data);
