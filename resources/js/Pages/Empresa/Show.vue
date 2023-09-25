@@ -8,6 +8,10 @@
                             class="p-button-success p-button-sm mr-1 p-button-rounded p-button-outlined"
                             @click="edit(empresa.id, 'empresas')" />
                         <h4 class="m-0">Empresa</h4>
+                        <span v-permission="'acta.show'" @click="showCronograma()" class="external mx-2">
+                            Ver cronograma
+                            <i class="pi pi-external-link"></i>
+                        </span>
                     </div>
                     <div class="grid grid-cols-2 mx-4 my-4">
                         <div class="container_image">
@@ -67,7 +71,7 @@
                                         @click="edit(slotProps.data.id, 'entregables')" />
                                     <Button v-permission="'entregable.destroy'" icon="pi pi-trash"
                                         class="p-button-sm p-button-danger p-button-rounded p-button-outlined"
-                                        @click="showDeleteDialog(slotProps.data)" />
+                                        @click="showDeleteDialog(slotProps.data, 'entregables')" />
                                 </template>
                             </Column>
                             <template #empty>
@@ -105,12 +109,7 @@
                             </form>
                         </div>
 
-                        <DataTable ref="dt" :value="actas" :lazy="true" data-key="id" :paginator="true" :rows="2"
-                            :loading="loading" :total-records="totalRecords"
-                            paginator-template="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
-                            :rows-per-page-options="[10, 25, 50]"
-                            current-page-report-template="Mostrando del {first} al {last} de {totalRecords} resultados"
-                            @page="onPage($event)" @sort="onSort($event)" @filter="onSort($event)">
+                        <DataTable ref="dt" :value="actas" :paginator="false">
                             <Column field="numero_sesion" header="# sesión">
                                 <template #body="slotProps">
                                     {{ slotProps.data.numero_sesion }}
@@ -144,7 +143,7 @@
                                         @click="editActa(slotProps.data.id)" />
                                     <Button v-permission="'acta.destroy'" icon="pi pi-trash"
                                         class="p-button-sm p-button-danger p-button-rounded p-button-outlined"
-                                        @click="showDeleteDialog(slotProps.data)" />
+                                        @click="showDeleteDialog(slotProps.data, 'actas')" />
                                 </template>
                             </Column>
                             <template #empty>
@@ -331,7 +330,6 @@ export default {
     },
     data() {
         return {
-            actas: this.actas,
             totalRecords: this.actas.length,
             importDialog: false,
             importForm: this.$inertia.form({
@@ -340,6 +338,7 @@ export default {
             selectedModel: null,
             deleteDialog: false,
             deletingModel: false,
+            deletePage: "",
             modelDialog: false,
             modelEditDialog: false,
             model: {
@@ -352,8 +351,8 @@ export default {
             submitted: false,
             loading: false,
             fileName: 'Importar',
-            excelExtension:['XLSX','XLS','XLSM','XLSB','XLTM','XLTX'],
-            desconocidasExtensiones:['123', '3G2', '3GP', '7Z', 'AAC', 'AC3', 'ACCDB', 'AIFF', 'AMR', 'ASF', 'AVI', 'BMP', 'C', 'CLASS', 'CPP', 'CR2', 'CSS', 'CSV', 'CUE', 'DAT', 'DB', 'DBF', 'DDS', 'DNG', 'DOC', 'DOCX', 'DWG', 'DXF', 'EPS', 'EXE', 'FLAC', 'FLV', 'GIF', 'GZ', 'H', 'HTML', 'ICS', 'IFF', 'INDD', 'ISO', 'JAR', 'JAVA', 'JPEG', 'JPG', 'JS', 'JSON', 'JSP', 'KEY', 'LOG', 'M4A', 'M4B', 'M4P', 'M4V', 'MAX', 'MDB', 'MID', 'MKV', 'MOV', 'MP3', 'MP4', 'MPA', 'MPEG', 'MPG', 'MSG', 'NC', 'NES', 'NUMBERS', 'OBJ', 'ODP', 'ODS', 'ODT', 'OGG', 'OTF', 'PAGES', 'PDB', 'PEF', 'PHP', 'PNG', 'PPT', 'PPTX', 'PRPROJ', 'PS', 'PSD', 'PY', 'RAR', 'RAW', 'RM', 'ROM', 'RPM', 'RTF', 'RW2', 'RWL', 'SH', 'SLN', 'SRT', 'SVG', 'SWF', 'TAR', 'TBZ2', 'TGA', 'TGZ', 'TIF', 'TIFF', 'TORRENT', 'TTF', 'TXT', 'VOB', 'WAV', 'WEBM', 'WMA', 'WMV', 'WPD', 'WPS', 'XLR', 'XML', 'YUV', 'ZIP']
+            excelExtension: ['XLSX', 'XLS', 'XLSM', 'XLSB', 'XLTM', 'XLTX'],
+            desconocidasExtensiones: ['123', '3G2', '3GP', '7Z', 'AAC', 'AC3', 'ACCDB', 'AIFF', 'AMR', 'ASF', 'AVI', 'BMP', 'C', 'CLASS', 'CPP', 'CR2', 'CSS', 'CSV', 'CUE', 'DAT', 'DB', 'DBF', 'DDS', 'DNG', 'DOC', 'DOCX', 'DWG', 'DXF', 'EPS', 'EXE', 'FLAC', 'FLV', 'GIF', 'GZ', 'H', 'HTML', 'ICS', 'IFF', 'INDD', 'ISO', 'JAR', 'JAVA', 'JPEG', 'JPG', 'JS', 'JSON', 'JSP', 'KEY', 'LOG', 'M4A', 'M4B', 'M4P', 'M4V', 'MAX', 'MDB', 'MID', 'MKV', 'MOV', 'MP3', 'MP4', 'MPA', 'MPEG', 'MPG', 'MSG', 'NC', 'NES', 'NUMBERS', 'OBJ', 'ODP', 'ODS', 'ODT', 'OGG', 'OTF', 'PAGES', 'PDB', 'PEF', 'PHP', 'PNG', 'PPT', 'PPTX', 'PRPROJ', 'PS', 'PSD', 'PY', 'RAR', 'RAW', 'RM', 'ROM', 'RPM', 'RTF', 'RW2', 'RWL', 'SH', 'SLN', 'SRT', 'SVG', 'SWF', 'TAR', 'TBZ2', 'TGA', 'TGZ', 'TIF', 'TIFF', 'TORRENT', 'TTF', 'TXT', 'VOB', 'WAV', 'WEBM', 'WMA', 'WMV', 'WPD', 'WPS', 'XLR', 'XML', 'YUV', 'ZIP']
         }
     },
     mounted() {
@@ -361,24 +360,25 @@ export default {
     },
     methods: {
         edit(id, page) {
-            this.$inertia.get(this.route(page+'.edit', id));
+            this.$inertia.get(this.route(page + '.edit', id));
         },
-        showDeleteDialog(model) {
+        showDeleteDialog(model, page) {
             this.selectedModel = model;
             this.deleteDialog = true;
+            this.deletePage = page
         },
         onDelete() {
             this.deletingModel = true;
-            this.$inertia.delete(this.route('tareas.destroy', this.selectedModel.id), {
+            this.$inertia.delete(this.route(`${this.deletePage}.destroy`, this.selectedModel.id), {
                 onSuccess: () => {
                     this.deletingModel = false;
                     this.deleteDialog = false;
-                    this.loadLazyData();
+                    /* this.loadLazyData(); */
                     this.$refs.deleteDialog.onClose();
                     this.$toast.add({
                         severity: "success",
                         summary: "Exitoso",
-                        detail: "Tarea Eliminada!",
+                        detail: "Registro Eliminado!",
                         life: 3000,
                     });
                 }
@@ -487,9 +487,11 @@ export default {
                 life: 3000,
             });
 
-            this.actas = response.data.data
+            this.$inertia.get(this.route('actas.show', response.data.data));
+
+            /* this.actas = response.data.data
             this.actas.totalRecords = response.data.data.length;
-            this.loading = false;
+            this.loading = false; */
         },
         handleFileUpload(event) {
             const input = event.target;
@@ -513,8 +515,8 @@ export default {
         editActa(id) {
             this.$inertia.get(this.route('actas.edit', id));
         },
-        showCronograma(id) {
-            this.$inertia.get(this.route('actas.cronograma', id));
+        showCronograma() {
+            this.$inertia.get(this.route('actas.cronograma'));
         },
         onPage(event) {
             this.datatable.lazyParams = event;
@@ -524,7 +526,9 @@ export default {
 }
 </script>
 
-<style scoped>.container_image {
+<style scoped>
+.container_image {
     display: flex;
     align-items: center;
-}</style>
+}
+</style>

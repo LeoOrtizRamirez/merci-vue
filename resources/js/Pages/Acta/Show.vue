@@ -11,13 +11,8 @@
                             class="p-button-primary p-button-sm mr-1 p-button-rounded p-button-outlined"
                             @click="downloadPdf" />
                         <h4 class="m-0">Acta -
-                            <span v-permission="'acta.show'" @click="showCronograma(acta.id)" class="external mx-2">
+                            <span v-permission="'acta.show'" @click="showCronograma()" class="external mx-2">
                                 Ver cronograma
-                                <i class="pi pi-external-link"></i>
-                            </span>
-                            -
-                            <span v-permission="'acta.show'" @click="showDashboard()" class="external mx-2">
-                                Ver dashboard
                                 <i class="pi pi-external-link"></i>
                             </span>
                         </h4>
@@ -439,8 +434,8 @@ export default {
         this.loadLazyData();
     },
     methods: {
-        showCronograma(id) {
-            this.$inertia.get(this.route('actas.cronograma', id));
+        showCronograma() {
+            this.$inertia.get(this.route('actas.cronograma'));
         },
         edit(id) {
             this.$inertia.get(this.route('actas.edit', id));

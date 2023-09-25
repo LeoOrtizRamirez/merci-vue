@@ -229,14 +229,10 @@ class ActaController extends Controller
             }
         }
 
-        $actas = Acta::where('empresa_id', $request->empresa_id)
-            ->where('user_id', Auth::user()->id)
-            ->with('empresa', 'user')
-            ->get();
         // Retornamos una respuesta
         return response()->json([
             'message' => 'Archivo importado con éxito',
-            'data' => $actas,
+            'data' => $acta->id,
         ]);
     }
 }
