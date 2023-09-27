@@ -21,6 +21,6 @@ class EmpresaIndicadore extends Model
 
     public function datos()
     {
-        return $this->hasMany(EmpresasIndicadoresDato::class);
+        return $this->hasMany(EmpresasIndicadoresDato::class)->orderBy('mes', 'asc');
     }
 }
