@@ -67,6 +67,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('/entregables/datatable', [EntregableController::class, 'datatable'])->name('entregables.datatable');
     Route::post('/api/upload-entregable', [EntregableController::class, 'uploadImage'])->name('entregables.image');
     Route::post('/api/update-entregable', [EntregableController::class, 'updateImage'])->name('entregables.update');
+    Route::get('/entregables-v2/{empresa_id}/', [EntregableController::class, 'indexV2'])->name('entregables.indexV2');
     Route::resource('entregables', EntregableController::class);
 });
 

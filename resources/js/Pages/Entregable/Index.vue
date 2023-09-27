@@ -6,7 +6,7 @@
                     <div class="title">
                         <Button v-permission="'entregable.create'" icon="pi pi-fw pi-plus"
                             class="p-button-primary p-button-sm mr-1 p-button-rounded p-button-outlined"
-                            @click="this.$inertia.get(this.route('entregables.create'));" />
+                            @click="this.$inertia.get('/entregables/create?empresa_id=' + empresa_id + '&view=single');" />
                         <h4>Entregables</h4>
                     </div>
                     <DataTable :value="entregables" :paginator="false">
@@ -29,7 +29,7 @@
                                 <a :href="`/public/images/entregables/${user.id}/${slotProps.data.url}`" target="_blank">{{ slotProps.data.url }}</a>
                             </template>
                         </Column>
-                        <!-- <Column header="Acciones" style="width: 150px;">
+                        <Column header="Acciones" style="width: 150px;">
                             <template #body="slotProps">
                                 <Button v-permission="'entregable.edit'" icon="pi pi-pencil"
                                     class="p-button-success p-button-sm mr-1 p-button-rounded p-button-outlined"
@@ -38,7 +38,7 @@
                                     class="p-button-sm p-button-danger p-button-rounded p-button-outlined"
                                     @click="showDeleteDialog(slotProps.data)" />
                             </template>
-                        </Column> -->
+                        </Column>
                         <template #empty>
                             Sin registros.
                         </template>
@@ -76,7 +76,8 @@ export default {
     },
     props:{
         user:[],
-        entregables: []
+        entregables: [],
+        empresa_id: ''
     },
     data() {
         return {
@@ -108,7 +109,7 @@ export default {
     },
     methods: {
         edit(id) {
-            this.$inertia.get(this.route('entregables.edit', id));
+            this.$inertia.get('/entregables/' + id + '/edit?view=single');
         },
         showDeleteDialog(model) {
             this.selectedModel = model;

@@ -23,7 +23,7 @@
                                     </div>
                                 </div>
                                 <Button class="p-button p-component p-button-danger p-button-raised mx-2" label="Cancelar"
-                                    @click="this.$inertia.get(this.route('empresas.show', entregable.empresa_id));" />
+                                    @click="back()" />
                                 <Button label="Actualizar" type="submit"></Button>
                             </form>
                         </div>
@@ -52,8 +52,9 @@ export default {
         Toast
     },
     props: {
-        entregable: [],
-        errors: Object
+        entregable: {},
+        errors: Object,
+        view: ""
     },
     data() {
         return {
@@ -83,7 +84,7 @@ export default {
                     detail: "Entregable actualizado",
                     life: 3000,
                 });
-                this.$inertia.get(route('empresas.show', this.entregable.empresa_id));
+                this.back()
             }).catch(error => {
                 console.log(error.response.data);
             });
@@ -95,6 +96,14 @@ export default {
             this.fileName = fileName;
             this.formData.append('image', event.target.files[0]);
         },
+
+        back(){
+            if(this.view == ""){
+                this.$inertia.get(route('empresas.show',this.entregable.empresa_id));
+            }else{
+                this.$inertia.get('/entregables-v2/' +this.entregable.empresa_id);
+            }
+        }
     }
 }
 </script>

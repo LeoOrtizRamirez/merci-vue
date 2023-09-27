@@ -15,20 +15,11 @@ use Illuminate\Http\JsonResponse;
 
 class EntregableController extends Controller
 {
-    public function index(): Response
+    public function indexV2($empresa_id, Request $request): Response
     {
         $user = Auth::user();
-        $user_empresa = UserEmpresa::where('user_id', $user->id)->first();
-        $role_name = $user->getRoleNames()[0];
-
-        $entregables = null;
-
-        if($role_name == "CLIENTE"){
-            $empresa = Empresa::find($user_empresa->empresa_id);
-            $entregables = Entregable::where('empresa_id', $empresa->id)->get();
-        }
-        
-        return Inertia::render('Entregable/Index', compact('entregables', 'user'));
+        $entregables = Entregable::where('empresa_id', $empresa_id)->get();
+        return Inertia::render('Entregable/Index', compact('entregables', 'user', 'empresa_id'));
     }
 
     public function datatable(
@@ -42,8 +33,9 @@ class EntregableController extends Controller
 
     public function create(Request $request): Response
     {
+        $view = !empty($request->view) ? $request->view : "";
         $empresa_id = $request->empresa_id;
-        return Inertia::render('Entregable/Create', compact('empresa_id'));
+        return Inertia::render('Entregable/Create', compact('empresa_id', 'view'));
     }
 
     public function store(Request $request)
@@ -61,10 +53,12 @@ class EntregableController extends Controller
         return Inertia::render('Entregable/Show', compact('entregable'));
     }
 
-    public function edit(Entregable $entregable)
+    public function edit(Entregable $entregable, Request $request)
     {
+        $view = !empty($request->view) ? $request->view : "";
         return Inertia::render('Entregable/Edit', [
-            'entregable' => $entregable
+            'entregable' => $entregable,
+            'view' => $view
         ]);
     }
 

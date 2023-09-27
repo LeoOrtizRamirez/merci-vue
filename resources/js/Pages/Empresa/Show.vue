@@ -375,7 +375,6 @@ export default {
         }
     },
     mounted() {
-        console.log("this.entregables", this.entregables)
     },
     methods: {
         edit(id, page) {

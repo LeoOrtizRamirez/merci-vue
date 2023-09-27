@@ -23,7 +23,7 @@
                                     </div>
                                 </div>
                                 <Button class="p-button p-component p-button-danger p-button-raised mx-2" label="Cancelar"
-                                    @click="this.$inertia.get(this.route('empresas.show', entregable.empresa_id));" />
+                                    @click="back()" />
                                 <Button label="Guardar" type="submit"></Button>
                             </form>
                         </div>
@@ -54,7 +54,8 @@ export default {
     },
     props: {
         estados: [],
-        empresa_id: ""
+        empresa_id: "",
+        view: ""
     },
     data() {
         return {
@@ -82,7 +83,7 @@ export default {
                     detail: "Entregable creado",
                     life: 3000,
                 });
-                this.$inertia.get(route('empresas.show', this.form.empresa_id));
+                this.back()
             }).catch(error => {
                 console.log(error.response.data);
             });
@@ -96,6 +97,13 @@ export default {
             this.formData = new FormData();
             this.formData.append('image', event.target.files[0]);
         },
+        back(){
+            if(this.view == ""){
+                this.$inertia.get(route('empresas.show', this.form.empresa_id));
+            }else{
+                this.$inertia.get('/entregables-v2/' + this.form.empresa_id);
+            }
+        }
     }
 }
 </script>
