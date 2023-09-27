@@ -4,7 +4,8 @@
             <div class="card mb-0">
                 <div class="flex justify-content-between">
                     <div>
-                        <div class="text-900 font-medium text-xl"><span class="text-green-500 font-medium">{{ total_actas }}</span></div>
+                        <div class="text-900 font-medium text-xl"><span class="text-green-500 font-medium">{{ total_actas
+                        }}</span></div>
                         <span class="block text-500 font-medium mb-3">Encuentros</span>
                     </div>
                     <div class="flex align-items-center justify-content-center bg-blue-100 border-round"
@@ -75,12 +76,15 @@
                         <tbody>
                             <tr v-for="item in result">
                                 <td>
-                                    <img src="/public/images/icons/icono-azul.png" class="absolute" style="width: 30px" alt="" />
+                                    <img src="/public/images/icons/icono-azul.png" class="absolute" style="width: 30px"
+                                        alt="" />
                                     <h6 class="categoria">{{ item.categoria_name }}</h6>
                                 </td>
                                 <td>
                                     <div class="d-flex">
-                                        <ProgressBar :value=" Math.round(item.tareas_terminadas * 100 / item.tareas_totales)"></ProgressBar>
+                                        <ProgressBar
+                                            :value="Math.round(item.tareas_terminadas * 100 / item.tareas_totales)">
+                                        </ProgressBar>
                                     </div>
                                 </td>
                             </tr>
@@ -93,28 +97,40 @@
 
 
         <div class="col-12 lg:col-6 xl :col-6" v-if="indicadores_ids.includes(1)">
-            <div class="card">
-                <h6 class="text-center">VENTAS vs PRESUPUESTO en mill.</h6>
+            <div class="card card-dashboard">
+                <h6 class="text-center title-dashboard">VENTAS vs PRESUPUESTO en mill.</h6>
+                <Button v-permission="'indicador.edit'" icon="pi pi-pencil"
+                    class="p-button-success p-button-sm mr-1 p-button-rounded p-button-outlined btn-edit-dashboard"
+                    @click="$inertia.get('/empresas/' + empresa_id + '/#indicadores');" />
                 <Chart type="bar" :data="chartVentasPresupuesto" :options="chartOptions" />
             </div>
         </div>
         <div class="col-12 lg:col-6 xl :col-6" v-if="indicadores_ids.includes(2)">
-            <div class="card">
-                <h6 class="text-center">COTIZACIONES</h6>
+            <div class="card card-dashboard">
+                <h6 class="text-center title-dashboard">COTIZACIONES</h6>
+                <Button v-permission="'indicador.edit'" icon="pi pi-pencil"
+                    class="p-button-success p-button-sm mr-1 p-button-rounded p-button-outlined btn-edit-dashboard"
+                    @click="$inertia.get('/empresas/' + empresa_id + '/#indicadores');" />
                 <Chart type="bar" :data="chartTtlCotizaciones" :options="chartOptions" />
             </div>
         </div>
 
         <div class="col-12 lg:col-6 xl :col-6" v-if="indicadores_ids.includes(3)">
-            <div class="card">
-                <h6 class="text-center">EFECTIVIDAD COMERCIAL</h6>
+            <div class="card card-dashboard">
+                <h6 class="text-center title-dashboard">EFECTIVIDAD COMERCIAL</h6>
+                <Button v-permission="'indicador.edit'" icon="pi pi-pencil"
+                    class="p-button-success p-button-sm mr-1 p-button-rounded p-button-outlined btn-edit-dashboard"
+                    @click="$inertia.get('/empresas/' + empresa_id + '/#indicadores');" />
                 <Chart type="line" :data="chartEfectividadComercial" />
             </div>
         </div>
 
         <div class="col-12 lg:col-6 xl :col-6" v-if="indicadores_ids.includes(4)">
-            <div class="card">
-                <h6 class="text-center">CLIENTES NUEVOS</h6>
+            <div class="card card-dashboard">
+                <h6 class="text-center title-dashboard">CLIENTES NUEVOS</h6>
+                <Button v-permission="'indicador.edit'" icon="pi pi-pencil"
+                    class="p-button-success p-button-sm mr-1 p-button-rounded p-button-outlined btn-edit-dashboard"
+                    @click="$inertia.get('/empresas/' + empresa_id + '/#indicadores');" />
                 <Chart type="bar" :data="chartClientesNuevos" :options="basicOptions" />
             </div>
         </div>
@@ -126,14 +142,15 @@
 import AppLayout from '@/Layouts/AppLayout.vue';
 import Chart from 'primevue/chart';
 import ProgressBar from 'primevue/progressbar';
-
+import Button from "primevue/button";
 
 export default {
     layout: AppLayout,
     components: {
         AppLayout,
         Chart,
-        ProgressBar
+        ProgressBar,
+        Button
     },
     props: {
         chartVentasPresupuesto: [],
@@ -141,11 +158,11 @@ export default {
         chartEfectividadComercial: [],
         chartClientesNuevos: [],
         indicadores_ids: [],
-        result:[],
-        acta_id:"",
-        total_actas:0,
-        logo:"",
-        empresa_id:null
+        result: [],
+        acta_id: "",
+        total_actas: 0,
+        logo: "",
+        empresa_id: null
     },
     data() {
         return {
@@ -157,16 +174,37 @@ export default {
             },
         }
     },
-    methods:{
+    methods: {
         showCronograma() {
-            this.$inertia.get('/actas/cronograma?empresa_id='+this.empresa_id);
+            this.$inertia.get('/actas/cronograma?empresa_id=' + this.empresa_id);
         },
-        showEntregables(){
+        showEntregables() {
             this.$inertia.get(this.route('entregables.indexV2', this.empresa_id));
         },
-        showActas(){
+        showActas() {
             this.$inertia.get(this.route('actas.index'));
         }
     }
 };
 </script>
+<style>
+.card-dashboard {
+    position: relative;
+}
+
+.btn-edit-dashboard {
+    position: absolute;
+    top: 30px;
+    right: 25px;
+}
+
+@media screen and (max-width: 600px) {
+    .title-dashboard {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        display: inline-block;
+        max-width: 225px;
+    }
+}
+</style>

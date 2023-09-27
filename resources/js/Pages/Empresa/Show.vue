@@ -29,7 +29,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-12">
+                <div class="col-12" id="indicadores">
                     <div class="card">
                         <div class="flex mb-2">
                             <Button v-permission="'indicador.create'" icon="pi pi-fw pi-plus"
