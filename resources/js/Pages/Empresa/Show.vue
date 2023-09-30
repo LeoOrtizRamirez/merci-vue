@@ -184,8 +184,7 @@
 
     <DeleteDialog ref="deleteDialog" v-model:visible="deleteDialog" :loading="deletingModel" @delete="onDelete" />
 
-    <Dialog v-model:visible="modelDialog" :style="{ width: '750px' }" :header="header" :modal="true"
-        class="p-fluid">
+    <Dialog v-model:visible="modelDialog" :style="{ width: '750px' }" :header="header" :modal="true" class="p-fluid">
         <div class="p-fluid formgrid grid">
             <div class="field col-12 md:col-6">
                 <label for="mes">MES</label>
@@ -211,7 +210,7 @@
                 <label for="data_1">PRESUPUESTO</label>
                 <InputNumber id="data_2" v-model.trim="model.data_2" required="true" autofocus
                     :class="{ 'p-invalid': submitted && !model.data_2 }" />
-                <small class="p-invalid" v-if="submitted && !model.data_2">Ventas es requerido.</small>
+                <small class="p-invalid" v-if="submitted && !model.data_2">Presupuesto es requerido.</small>
             </div>
 
             <div class="field col-12 md:col-12" v-if="model.indicador.id == 2">
@@ -460,21 +459,33 @@ export default {
         },
         saveModel() {
             this.submitted = true;
-            if (this.model) {
+            if (this.model.mes && this.model.data_1 && this.model.data_2 && this.model.indicador && this.model.empresa) {
                 let message = 'Indicador creado'
-                if(this.header == 'Actualizar Indicador'){
+                if (this.header == 'Actualizar Indicador') {
                     message = 'Indicador actualizado'
                 }
                 axios.post(this.route('empresas.saveIndicador'), this.model)
                     .then((response) => {
-                        this.model = response.data.data;
-                        this.$toast.add({
-                            severity: "success",
-                            summary: "Exitoso!",
-                            detail: message,
-                            life: 3000,
-                        });
-                        this.arbol = response.data
+                        if (response.data.code == 404) {
+                            this.model.mes = ""
+                            this.$toast.add({
+                                severity: "error",
+                                summary: "Error",
+                                detail: response.data.message,
+                                life: 3000,
+                            });
+                        } else {
+                            this.model = response.data.data;
+                            this.$toast.add({
+                                severity: "success",
+                                summary: "Exitoso!",
+                                detail: message,
+                                life: 3000,
+                            });
+                            this.arbol = response.data
+                            this.modelDialog = false;
+                            this.model = {};
+                        }
                     })
                     .catch((error) => {
                         this.$toast.add({
@@ -483,24 +494,24 @@ export default {
                             detail: error,
                             life: 3000,
                         });
+                        this.modelDialog = false;
+                        this.model = {};
                     });
             }
-            this.modelDialog = false;
-            this.model = {};
         },
         clearData() {
             this.model.data_1 = ""
             this.model.data_2 = ""
         },
-        clearModel(){
-            this.model = {  
+        clearModel() {
+            this.model = {
                 mes: "",
                 data_1: "",
                 data_2: "",
                 indicador: "",
-                empresa: this.empresa 
+                empresa: this.empresa
             };
-        },  
+        },
         async importarArchivo() {
             this.loading = true;
             let formData = new FormData();

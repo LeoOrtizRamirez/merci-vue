@@ -86,15 +86,15 @@ class EmpresaController extends Controller
         $role_name = $user->getRoleNames()[0];
 
         $entregables = Entregable::where('empresa_id', $empresa->id)->get();
-        if($role_name == "CLIENTE"){
+        if ($role_name == "CLIENTE") {
             //Obtener empresa del cliente
             $user_empresa = UserEmpresa::where('user_id', Auth::user()->id)->first();
             $actas = Acta::where('empresa_id', $user_empresa->empresa_id)
-            ->get();
-        }else{
+                ->get();
+        } else {
             $actas = Acta::where('empresa_id', $empresa->id)
-            ->where('user_id', Auth::user()->id)
-            ->get();
+                ->where('user_id', Auth::user()->id)
+                ->get();
         }
 
         $empresa_indicadores = $empresa->indicadores;
@@ -225,8 +225,8 @@ class EmpresaController extends Controller
             $ids_indicadores_actuales[] = $element->indicador_id;
         }
 
-        if (count(array_diff($ids_indicadores_actualizados, $ids_indicadores_actuales)) == 0 && count(array_diff($ids_indicadores_actuales, $ids_indicadores_actualizados)) == 0) { 
-        }else{
+        if (count(array_diff($ids_indicadores_actualizados, $ids_indicadores_actuales)) == 0 && count(array_diff($ids_indicadores_actuales, $ids_indicadores_actualizados)) == 0) {
+        } else {
             //Eliminar Indicadores
             foreach ($empresa->indicadores as $key => $indicador) {
                 //Eliminar datos de indicadores
@@ -254,7 +254,7 @@ class EmpresaController extends Controller
         $admin_empresa = UserEmpresa::where('empresa_id', $empresa->id)
             ->where('user_id', 1)
             ->first();
-        if($admin_empresa){
+        if ($admin_empresa) {
             $admin_empresa->delete();
         }
 
@@ -297,6 +297,7 @@ class EmpresaController extends Controller
     public function saveIndicador(Request $request)
     {
         //$user = User::find($request->user["id"]);
+
         if (isset($request->id)) {
             $empresas_indicadores_dato = EmpresasIndicadoresDato::find($request->id);
             $empresas_indicadores_dato->mes = $request->mes;
@@ -304,9 +305,28 @@ class EmpresaController extends Controller
             $empresas_indicadores_dato->data_2 = $request->data_2;
             $empresas_indicadores_dato->save();
         } else {
+
+            //Validar si hay un EmpresasIndicadoresDato en la fecha ingresada
+            $empresa_id = $request["empresa"]["id"];
+            $indicador_id = $request["empresa"]["id"];
+            $empresa_indicador = EmpresaIndicadore::where('empresa_id', $empresa_id)
+                ->where('indicador_id', $indicador_id)
+                ->first();
+            if (!empty($empresa_indicador)) {
+                $empresa_indicador_dato = EmpresasIndicadoresDato::where('empresa_indicadore_id', $empresa_indicador->id)
+                    ->where('mes', $request->mes)
+                    ->first();
+
+                if (!empty($empresa_indicador_dato)) {
+                    return json_encode([
+                        "code" => '404',
+                        "message" => 'Esta fecha no esta disponible para este indicador!'
+                    ]);
+                }
+            }
+
             $empresa_indicadores = EmpresaIndicadore::where('empresa_id', $request->empresa["id"])
                 ->where('indicador_id', $request->indicador["id"])->first();
-
             if ($empresa_indicadores) {
                 $empresas_indicadores_dato = new EmpresasIndicadoresDato;
                 $empresas_indicadores_dato->mes = $request->mes;

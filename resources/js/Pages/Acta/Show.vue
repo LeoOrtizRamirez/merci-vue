@@ -107,7 +107,7 @@
                                     <span class="date">{{ slotProps.data.fecha_finalizacion }}</span>
                                 </template>
                             </Column>
-                            <Column header="Acciones">
+                            <Column header="Acciones" class="actions">
                                 <template #body="slotProps">
                                     <Button v-permission="'tarea.edit'" icon="pi pi-pencil"
                                         class="p-button-success p-button-sm mr-1 p-button-rounded p-button-outlined"
@@ -589,5 +589,9 @@ export default {
 
 .p-datatable-sm .p-datatable-tbody>tr>td {
     padding: 0.3rem 0.3rem !important;
+}
+
+td.actions {
+    white-space: nowrap;
 }
 </style>
