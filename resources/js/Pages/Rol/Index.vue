@@ -32,7 +32,7 @@
                                 {{ slotProps.data.name }}
                             </template>
                         </Column>
-                        <Column header="Acciones" style="width: 150px;">
+                        <Column header="Acciones" class="actions">
                             <template #body="slotProps">
                                 <!-- <Button v-permission="'rol.show'" icon="pi pi-search"
                                     class="p-button-primary p-button-sm mr-1 p-button-rounded p-button-outlined"

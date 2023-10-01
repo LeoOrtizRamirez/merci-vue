@@ -62,7 +62,7 @@
                                 {{ slotProps.data.hora_finalizacion }}
                             </template>
                         </Column>
-                        <Column header="Acciones" class="acta-actions">
+                        <Column header="Acciones" class="actions">
                             <template #body="slotProps">
                                 <!-- <Button v-permission="'acta.show'" icon="pi pi-calendar"
                                     class="p-button-primary p-button-sm mr-1 p-button-rounded p-button-outlined"

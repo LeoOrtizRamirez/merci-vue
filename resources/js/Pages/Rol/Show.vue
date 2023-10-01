@@ -29,7 +29,7 @@
                                 {{ slotProps.data.name }}
                             </template>
                         </Column>
-                        <Column header="Acciones" style="width: 150px;">
+                        <Column header="Acciones" class="actions">
                             <template #body="slotProps">
                                 <InputSwitch :modelValue="role_has_permissions.includes(slotProps.data.id)"
                                     @change="togglePermission(slotProps.data.id)" />

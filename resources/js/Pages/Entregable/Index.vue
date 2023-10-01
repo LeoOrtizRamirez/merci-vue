@@ -29,7 +29,7 @@
                                 <a :href="`/public/images/entregables/${user.id}/${slotProps.data.url}`" target="_blank">{{ slotProps.data.url }}</a>
                             </template>
                         </Column>
-                        <Column header="Acciones" style="width: 150px;">
+                        <Column header="Acciones" class="actions">
                             <template #body="slotProps">
                                 <Button v-permission="'entregable.edit'" icon="pi pi-pencil"
                                     class="p-button-success p-button-sm mr-1 p-button-rounded p-button-outlined"

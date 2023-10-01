@@ -39,7 +39,7 @@
                                 {{ slotProps.data.categoria_name }}
                             </template>
                         </Column>
-                        <Column header="Acciones" style="width: 150px;">
+                        <Column header="Acciones" class="actions">
                             <template #body="slotProps">
                                 <Button v-permission="'actividad.edit'" icon="pi pi-pencil"
                                     class="p-button-success p-button-sm mr-1 p-button-rounded p-button-outlined"
