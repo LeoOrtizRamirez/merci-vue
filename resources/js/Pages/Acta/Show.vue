@@ -286,22 +286,20 @@
         <div class="p-fluid formgrid grid">
             <div class="field col-12 md:col-12">
                 <label for="name">Tarea</label>
-                <InputText id="descripcion" v-model.trim="model.descripcion" required="true" autofocus
-                    :class="{ 'p-invalid': submitted && !model.descripcion }" />
-                <small class="p-invalid" v-if="submitted && !model.descripcion">Descripción es requerida.</small>
+                <InputText id="descripcion" v-model.trim="model.descripcion" autofocus />
             </div>
             <div class="field col-12 md:col-6">
                 <label for="actividad">Actividad</label>
                 <Dropdown v-model="model.actividad" :options="actividades" optionLabel="name"
                     placeholder="Selecciona una Actividad" :class="{ 'p-invalid': submitted && !model.actividad }"
                     required />
-                <small class="p-invalid" v-if="submitted && !model.actividad">Responsable es requerido.</small>
+                <small class="p-invalid" v-if="submitted && !model.actividad">Actividad es requerida.</small>
             </div>
             <div class="field col-12 md:col-6">
                 <label for="estado">Estado</label>
                 <Dropdown v-model="model.estado" :options="estados" optionLabel="name" placeholder="Selecciona un Estado"
                     :class="{ 'p-invalid': submitted && !model.estado }" required />
-                <small class="p-invalid" v-if="submitted && !model.estado">Responsable es requerido.</small>
+                <small class="p-invalid" v-if="submitted && !model.estado">Estadp es requerido.</small>
             </div>
             <div class="field col-12 md:col-12">
                 <label for="responsable">Responsable</label>
@@ -313,19 +311,17 @@
                 <label for="fecha_inicio">Fecha Inicio</label>
                 <InputText id="fecha_inicio" v-model.trim="model.fecha_inicio" required="true" autofocus
                     :class="{ 'p-invalid': submitted && !model.fecha_inicio }" type="date" />
-                <small class="p-invalid" v-if="submitted && !model.fecha_inicio">Responsable es requerido.</small>
+                <small class="p-invalid" v-if="submitted && !model.fecha_inicio">Fecha Inicio es requerida.</small>
             </div>
             <div class="field col-12 md:col-4">
                 <label for="fecha_fin">Fecha Fin</label>
                 <InputText id="fecha_fin" v-model.trim="model.fecha_fin" required="true" autofocus
                     :class="{ 'p-invalid': submitted && !model.fecha_fin }" type="date" />
-                <small class="p-invalid" v-if="submitted && !model.fecha_fin">Responsable es requerido.</small>
+                <small class="p-invalid" v-if="submitted && !model.fecha_fin">Fecha Fin es requerida.</small>
             </div>
             <div class="field col-12 md:col-4">
-                <label for="fecha_finalizacion">Fecha finalización</label>
-                <InputText id="fecha_finalizacion" v-model.trim="model.fecha_finalizacion" required="true" autofocus
-                    :class="{ 'p-invalid': submitted && !model.fecha_finalizacion }" type="date" />
-                <small class="p-invalid" v-if="submitted && !model.fecha_finalizacion">Responsable es requerido.</small>
+                <label for="fecha_finalizacion">Fecha Finalización</label>
+                <InputText id="fecha_finalizacion" v-model.trim="model.fecha_finalizacion" autofocus type="date" />
             </div>
         </div>
         <template #footer>
@@ -515,7 +511,7 @@ export default {
         },
         updateModel() {
             this.submitted = true;
-            if (this.model) {
+            if (this.model && this.model.actividad && this.model.fecha_inicio && this.model.fecha_fin) {
                 axios.put(this.route('tareas.update', this.model), this.model)
                     .then((response) => {
                         this.model = response.data.data;
@@ -527,6 +523,8 @@ export default {
                             life: 3000,
                         });
                         this.datatable.data = response.data
+                        this.modelEditDialog = false;
+                        this.model = {};
                     })
                     .catch((error) => {
                         this.$toast.add({
@@ -537,8 +535,6 @@ export default {
                         });
                     });
             }
-            this.modelEditDialog = false;
-            this.model = {};
         },
         showDashboard() {
             this.$inertia.get('/dashboard?empresa_id=' + this.acta.empresa_id + '&acta_id=' + this.acta.id);
