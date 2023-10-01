@@ -237,34 +237,30 @@
         <div class="p-fluid formgrid grid">
             <div class="field col-12 md:col-12">
                 <label for="name">Tarea</label>
-                <InputText id="descripcion" v-model.trim="model.descripcion" required="true" autofocus
-                    :class="{ 'p-invalid': submitted && !model.descripcion }" />
-                <small class="p-invalid" v-if="submitted && !model.descripcion">Descripción es requerida.</small>
+                <InputText id="descripcion" v-model.trim="model.descripcion" autofocus />
             </div>
             <div class="field col-12 md:col-12">
                 <label for="actividad">Actividad</label>
                 <Dropdown v-model="model.actividad" :options="actividades" optionLabel="name"
                     placeholder="Selecciona una Actividad" :class="{ 'p-invalid': submitted && !model.actividad }"
                     required />
-                <small class="p-invalid" v-if="submitted && !model.actividad">Responsable es requerido.</small>
+                <small class="p-invalid" v-if="submitted && !model.actividad">Actividad es requerida.</small>
             </div>
             <div class="field col-12 md:col-12">
                 <label for="responsable">Responsable</label>
-                <InputText id="responsable" v-model.trim="model.responsable" required="true" autofocus
-                    :class="{ 'p-invalid': submitted && !model.responsable }" />
-                <small class="p-invalid" v-if="submitted && !model.responsable">Responsable es requerido.</small>
+                <InputText id="responsable" v-model.trim="model.responsable" autofocus />
             </div>
             <div class="field col-12 md:col-6">
                 <label for="fecha_inicio">Fecha Inicio</label>
                 <InputText id="fecha_inicio" v-model.trim="model.fecha_inicio" required="true" autofocus
                     :class="{ 'p-invalid': submitted && !model.fecha_inicio }" type="date" />
-                <small class="p-invalid" v-if="submitted && !model.fecha_inicio">Responsable es requerido.</small>
+                <small class="p-invalid" v-if="submitted && !model.fecha_inicio">Fecha Inicio es requerida.</small>
             </div>
             <div class="field col-12 md:col-6">
                 <label for="fecha_fin">Fecha Fin</label>
                 <InputText id="fecha_fin" v-model.trim="model.fecha_fin" required="true" autofocus
                     :class="{ 'p-invalid': submitted && !model.fecha_fin }" type="date" />
-                <small class="p-invalid" v-if="submitted && !model.fecha_fin">Responsable es requerido.</small>
+                <small class="p-invalid" v-if="submitted && !model.fecha_fin">Fecha Fin es requerida.</small>
             </div>
             <!-- <div class="field col-12 md:col-4">
                 <label for="fecha_finalizacion">Fecha finalización</label>
@@ -400,20 +396,7 @@ export default {
             deletingModel: false,
             modelDialog: false,
             modelEditDialog: false,
-            model: {
-                descripcion: "des",
-                responsable: "des",
-                fecha_inicio: "2023-01-01",
-                fecha_finalizacion: "2023-01-01",
-                fecha_fin: "2023-01-01",
-                estado: {
-                    id: 4, name: "Sin Iniciar", color: "#FFFFFF", backgroundColor: "#FFBF00", tipo: 2, created_at: null, updated_at: null
-                },
-                actividad: {
-                    id: 4, name: "Cronograma", categoria_id: 1, created_at: null, updated_at: null
-                }
-
-            },
+            model: {},
             submitted: false,
             printPdf: false
         }
@@ -504,7 +487,8 @@ export default {
         },
         saveModel() {
             this.submitted = true;
-            if (this.model) {
+
+            if (this.model && this.model.actividad && this.model.fecha_inicio && this.model.fecha_fin) {
                 axios.post(this.route('tareas.store'), this.model)
                     .then((response) => {
                         this.model = response.data.data;
@@ -516,6 +500,8 @@ export default {
                             life: 3000,
                         });
                         this.datatable.data = response.data
+                        this.modelDialog = false;
+                        this.model = {};
                     })
                     .catch((error) => {
                         this.$toast.add({
@@ -526,8 +512,6 @@ export default {
                         });
                     });
             }
-            this.modelDialog = false;
-            this.model = {};
         },
         updateModel() {
             this.submitted = true;

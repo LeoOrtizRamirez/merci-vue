@@ -37,7 +37,7 @@ class TareaController extends Controller
         $tarea->fecha_inicio = $request->fecha_inicio;
         $tarea->fecha_fin = $request->fecha_fin;
         $tarea->fecha_finalizacion = $request->fecha_finalizacion;
-        $tarea->estado_id = $request["estado"]["id"];
+        $tarea->estado_id = 4;
         $tarea->actividad_id = $request["actividad"]["id"];
         $tarea->save();
 
