@@ -127,10 +127,14 @@
         </div>
     </div>
     <!--VISTA PARA PDF-->
-    <div ref="pdfContent" v-if="printPdf">
+    <div ref="pdfContent" v-if="printPdf" id="pdfContent">
+    <!-- <div ref="pdfContent" id="pdfContent"> -->
         <div class="p-grid">
             <div class="p-col-12">
                 <div class="card">
+                    <div class="container_image">
+                        <img src="/images/logo-merci.png" alt="" width="200" class="py-4">
+                    </div>
                     <div class="flex mb-2">
                         <h4 class="m-0">Acta
                         </h4>
@@ -541,10 +545,18 @@ export default {
         },
         downloadPdf() {
             this.printPdf = true
+
+            const options = {
+                filename: 'acta.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+            };
+
             setTimeout(() => {
                 console.log("1 Segundo esperado")
                 const content = this.$refs.pdfContent;
-                html2pdf(content);
+                html2pdf(content, options);
             }, 1000);
             setTimeout(() => {
                 console.log("5 Segundo esperado")
@@ -574,4 +586,8 @@ export default {
 td.actions {
     white-space: nowrap;
 }
+
+/* #pdfContent .card {
+    padding: 0px !important;
+} */
 </style>
