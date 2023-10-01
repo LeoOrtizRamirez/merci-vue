@@ -137,6 +137,10 @@ td.acta-actions {
         margin-left: 0.5rem !important;
         margin-right: 0.5rem !important;
     }
+
+    .file-title{
+        position: unset !important;
+    }
 }
 
 tr:has(button[style="margin-left: 0rem; visibility: visible;"]) td.actions,
@@ -162,4 +166,8 @@ tr:has(button[style="margin-left: 0rem; visibility: hidden;"]) td.actions
 
 td.actions {
     white-space: nowrap;
+}
+
+.file-title{
+    position: absolute;
 }

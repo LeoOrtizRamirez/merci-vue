@@ -88,6 +88,7 @@
             </div>
         </div>
     </div>
+    <DeleteDialog ref="deleteDialog" v-model:visible="deleteDialog" :loading="deletingModel" @delete="onDelete" />
     <Dialog v-model:visible="modelEditDialog" :style="{ width: '750px' }" header="Editar Tarea" :modal="true"
         class="p-fluid">
         <div class="p-fluid formgrid grid">
@@ -194,7 +195,9 @@ export default {
             },
             modelEditDialog: false,
             tareas: this.tareas,
-            model: {}
+            model: {},
+            deleteDialog: false,
+            deletingModel: false,
         }
     },
     created() {
@@ -243,6 +246,26 @@ export default {
                         });
                     });
             }
+        },
+        showDeleteDialog(model) {
+            this.selectedModel = model;
+            this.deleteDialog = true;
+        },
+        onDelete() {
+            this.deletingModel = true;
+            this.$inertia.delete(this.route('tareas.destroy', this.selectedModel.id), {
+                onSuccess: () => {
+                    this.deletingModel = false;
+                    this.deleteDialog = false;
+                    this.$refs.deleteDialog.onClose();
+                    this.$toast.add({
+                        severity: "success",
+                        summary: "Exitoso",
+                        detail: "Tarea Eliminada!",
+                        life: 3000,
+                    });
+                }
+            })
         },
     }
 }

@@ -12,6 +12,7 @@ use App\Models\UserEmpresa;
 use App\Models\EmpresaIndicadore;
 use App\Models\EmpresasIndicadoresDato;
 use App\Models\Indicadore;
+use App\Models\Tarea;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
@@ -250,12 +251,50 @@ class EmpresaController extends Controller
 
     public function destroy(Empresa $empresa)
     {
-        //Eliminar empresa a role admin
-        $admin_empresa = UserEmpresa::where('empresa_id', $empresa->id)
+        //Eliminar usuarios de las empresas
+        $user_empresas = UserEmpresa::where('empresa_id', $empresa->id)
             ->where('user_id', 1)
-            ->first();
-        if ($admin_empresa) {
-            $admin_empresa->delete();
+            ->get();
+        foreach ($user_empresas as $key => $value) {
+            $value->delete();
+        }
+
+        //Eliminar indicadores actuales
+        foreach ($empresa->indicadores as $key => $indicador) {
+            //Eliminar datos de indicadores
+            $empresas_indicadores_datos = EmpresasIndicadoresDato::where('empresa_indicadore_id', $indicador->id)->get();
+            foreach ($empresas_indicadores_datos as $key => $value) {
+                $value->delete();
+            }
+            $indicador->delete();
+        }
+
+        //Eliminar actas de empresa
+        $actas = Acta::where('empresa_id', $empresa->id)->get();
+        foreach ($actas as $key => $value) {
+            //Eliminar tareas
+            $tareas = Tarea::where('acta_id', $value->id)->get();
+            foreach ($tareas as $key => $tarea) {
+                $tarea->delete();
+            }
+            $value->delete();
+        }
+
+        //Eliminar entregables de empresa
+        $entregables = Entregable::where('empresa_id', $empresa->id)->get();
+        foreach ($entregables as $key => $value) {
+            //Eliminar archivo de entregable
+            $imagePathEntregable = public_path('images') . "/entregables/" . Auth::user()->id . "/" . $value->url;
+            if (file_exists($imagePathEntregable)) {
+                unlink($imagePathEntregable);
+            }
+            $value->delete();
+        }
+
+        //Eliminar imagen de empresa
+        $imagePath = public_path('images') . '/' . $empresa->logo;
+        if (file_exists($imagePath)) {
+            unlink($imagePath);
         }
 
         $empresa->delete();
@@ -269,13 +308,8 @@ class EmpresaController extends Controller
             'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
-        //dd($request->image->extension());
-        // store the image
         $imageName = time() . '.' . $request->image->extension();
         $request->image->move(public_path('images'), $imageName);
-
-        // return the image path
-        //return response()->json(['path' => '/images/' . $imageName]);
 
         $empresa = new Empresa;
         $empresa->name = $request->name;
@@ -291,6 +325,61 @@ class EmpresaController extends Controller
         $admin_empresa->empresa_id = $empresa->id;
         $admin_empresa->save();
 
+        //Guardar indicadores
+        foreach (json_decode($request['indicadores']) as $key => $value) {
+            $empresa_indicador = new EmpresaIndicadore;
+            $empresa_indicador->empresa_id = $empresa->id;
+            $empresa_indicador->indicador_id = $value->id;
+            $empresa_indicador->save();
+        }
+
+        return redirect()->route('empresas.index');
+    }
+
+    public function updateImage(Request $request)
+    {
+        // validate the image
+        /* $request->validate([
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]); */
+
+        $empresa = Empresa::find($request->id);
+        if (isset($request->image)) {
+            //Se elimina el archivo actual
+            $imagePath = public_path('images') . '/' . $empresa->logo;
+            if (file_exists($imagePath)) {
+                unlink($imagePath);
+            }
+
+            //Se guarda el nuevo archivo
+            $extension = $request->image->extension();
+            $imageName = time() . '.' . $extension;
+            $request->image->move(public_path('images'), $imageName);
+            $empresa->logo = $imageName;
+        }
+
+        $empresa->name = $request->name;
+        $empresa->nit = $request->nit;
+        $empresa->estado_id = $request['estado'];
+        $empresa->save();
+
+        //Eliminar indicadores actuales
+        foreach ($empresa->indicadores as $key => $indicador) {
+            //Eliminar datos de indicadores
+            $empresas_indicadores_datos = EmpresasIndicadoresDato::where('empresa_indicadore_id', $indicador->id)->get();
+            foreach ($empresas_indicadores_datos as $key => $value) {
+                $value->delete();
+            }
+            $indicador->delete();
+        }
+
+        //Guardar Indicadores
+        foreach (json_decode($request["indicadores"]) as $key => $indicador) {
+            $empresa_indicador = new EmpresaIndicadore;
+            $empresa_indicador->indicador_id = $indicador->id;
+            $empresa_indicador->empresa_id = $empresa->id;
+            $empresa_indicador->save();
+        }
         return redirect()->route('empresas.index');
     }
 

@@ -11,7 +11,9 @@
                                 <div class="p-fluid formgrid grid">
                                     <div class="field col-12 md:col-6">
                                         <label for="name">Nombre</label>
-                                        <InputText v-model="form.name" id="name" type="text" required />
+                                        <InputText v-model="form.name" id="name" type="text" />
+                                        <small class="p-invalid" v-if="submitted && !form.name">Nombre es
+                                            requerido.</small>
                                     </div>
                                     <div class="field col-12 md:col-6">
                                         <label for="file-upload" class="custom-file-upload import-entregable">
@@ -63,31 +65,41 @@ export default {
                 name: this.entregable.name,
             },
             fileName: this.entregable.url,
-            formData: new FormData()
+            formData: new FormData(),
+            submitted: false,
         }
     },
     mounted() {
     },
     methods: {
         submit() {
-            this.formData.append("id", this.form.id);
-            this.formData.append("name", this.form.name);
-            this.formData.append("empresa_id", this.entregable.empresa_id);
-            axios.post('/api/update-entregable', this.formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-            }).then(response => {
-                this.$toast.add({
-                    severity: "success",
-                    summary: "Exitoso!",
-                    detail: "Entregable actualizado",
-                    life: 3000,
+            this.submitted = true
+            if (this.form.name) {
+                this.formData.append("id", this.form.id);
+                this.formData.append("name", this.form.name);
+                this.formData.append("empresa_id", this.entregable.empresa_id);
+                axios.post('/api/update-entregable', this.formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                }).then(response => {
+                    this.$toast.add({
+                        severity: "success",
+                        summary: "Exitoso!",
+                        detail: "Entregable actualizado",
+                        life: 3000,
+                    });
+                    this.back()
+                }).catch(error => {
+                    console.log(error.response.data);
+                    this.$toast.add({
+                        severity: "error",
+                        summary: "Error",
+                        detail: error.response.data,
+                        life: 3000,
+                    });
                 });
-                this.back()
-            }).catch(error => {
-                console.log(error.response.data);
-            });
+            }
         },
 
         handleFileUpload(event) {
@@ -97,11 +109,11 @@ export default {
             this.formData.append('image', event.target.files[0]);
         },
 
-        back(){
-            if(this.view == ""){
-                this.$inertia.get(route('empresas.show',this.entregable.empresa_id));
-            }else{
-                this.$inertia.get('/entregables-v2/' +this.entregable.empresa_id);
+        back() {
+            if (this.view == "") {
+                this.$inertia.get(route('empresas.show', this.entregable.empresa_id));
+            } else {
+                this.$inertia.get('/entregables-v2/' + this.entregable.empresa_id);
             }
         }
     }

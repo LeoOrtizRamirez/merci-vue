@@ -11,15 +11,21 @@
                                 <div class="p-fluid formgrid grid">
                                     <div class="field col-12 md:col-6">
                                         <label for="name">Nombre</label>
-                                        <InputText v-model="form.name" id="name" type="text" required />
+                                        <InputText v-model="form.name" id="name" type="text" />
+                                        <small class="p-invalid" v-if="submitted && !form.name">Nombre es
+                                            requerido.</small>
                                     </div>
                                     <div class="field col-12 md:col-6">
+                                        <label for="file-upload" class="file-title">Archivo</label>
                                         <label for="file-upload" class="custom-file-upload import-entregable">
                                             <span class="pi pi-upload"></span>
                                             <span>{{ fileName }}</span>
                                             <input id="file-upload" name="image" ref="archivo" type="file"
                                                 class="input-file" @change="handleFileUpload">
                                         </label>
+                                        <br>
+                                            <small class="p-invalid" v-if="submitted && !form.image">Archivo es
+                                            requerido.</small>
                                     </div>
                                 </div>
                                 <Button class="p-button p-component p-button-danger p-button-raised mx-2" label="Cancelar"
@@ -62,45 +68,57 @@ export default {
             form: {
                 name: "",
                 empresa_id: this.empresa_id,
+                image: ""
             },
-            fileName: 'Seleccionar archivo'
+            fileName: 'Seleccionar archivo',
+            submitted: false,
+            formData: new FormData()
         }
     },
     mounted() {
     },
     methods: {
         submit() {
-            this.formData.append("name", this.form.name);
-            this.formData.append("empresa_id", this.form.empresa_id);
-            axios.post('/api/upload-entregable', this.formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-            }).then(response => {
-                this.$toast.add({
-                    severity: "success",
-                    summary: "Exitoso!",
-                    detail: "Entregable creado",
-                    life: 3000,
+            this.submitted = true
+            if (this.form.name && this.form.image) {
+                this.formData.append("name", this.form.name);
+                this.formData.append("empresa_id", this.form.empresa_id);
+                axios.post('/api/upload-entregable', this.formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                }).then(response => {
+                    this.$toast.add({
+                        severity: "success",
+                        summary: "Exitoso!",
+                        detail: "Entregable creado",
+                        life: 3000,
+                    });
+                    this.back()
+                }).catch(error => {
+                    console.log(error.response.data);
+                    this.$toast.add({
+                        severity: "error",
+                        summary: "Error",
+                        detail: error.response.data,
+                        life: 3000,
+                    });
                 });
-                this.back()
-            }).catch(error => {
-                console.log(error.response.data);
-            });
+            }
         },
 
         handleFileUpload(event) {
             const input = event.target;
             const fileName = input.files[0].name;
             this.fileName = fileName;
+            this.form.image = fileName
 
-            this.formData = new FormData();
             this.formData.append('image', event.target.files[0]);
         },
-        back(){
-            if(this.view == ""){
+        back() {
+            if (this.view == "") {
                 this.$inertia.get(route('empresas.show', this.form.empresa_id));
-            }else{
+            } else {
                 this.$inertia.get('/entregables-v2/' + this.form.empresa_id);
             }
         }

@@ -28,6 +28,18 @@
                                             placeholder="Selecciona los Indicadores" :maxSelectedLabels="3" class="w-full"
                                             required />
                                     </div>
+                                    <div class="field col-12 md:col-6">
+                                        <label for="file-upload" class="file-title">Logo</label>
+                                        <label for="file-upload" class="custom-file-upload import-entregable">
+                                            <span class="pi pi-upload"></span>
+                                            <span>{{ fileName }}</span>
+                                            <input id="file-upload" name="image" ref="archivo" type="file"
+                                                class="input-file" @change="handleFileUpload">
+                                        </label>
+                                        <br>
+                                        <small class="p-invalid" v-if="submitted && !form.image">Logo es
+                                            requerido.</small>
+                                    </div>
                                 </div>
                                 <Button class="p-button p-component p-button-danger p-button-raised mx-2" label="Cancelar"
                                     @click="this.$inertia.get(this.route('empresas.index'));" />
@@ -46,6 +58,7 @@ import Button from "primevue/button";
 import InputText from "primevue/inputtext";
 import Dropdown from 'primevue/dropdown';
 import MultiSelect from 'primevue/multiselect';
+import axios from 'axios';
 
 export default {
     name: "Edit",
@@ -72,7 +85,11 @@ export default {
                 nit: this.empresa.nit,
                 estado: this.empresa.estado,
                 indicadores: this.current_empresa.indicadores,
+                image: this.empresa.logo
             },
+            fileName: this.empresa.logo,
+            formData: new FormData(),
+            submitted: false,
         }
     },
     mounted() {
@@ -81,6 +98,7 @@ export default {
             this.form.estado = estadoSeleccionado;
         }
 
+        console.log()
         const indicadoresSeleccionados = this.indicadores.filter(indicador => this.empresa_indicadores_ids.includes(indicador.id));
         if (indicadoresSeleccionados) {
             this.form.indicadores = indicadoresSeleccionados;
@@ -88,7 +106,45 @@ export default {
     },
     methods: {
         submit() {
-            this.$inertia.put(route('empresas.update', { 'empresa': this.empresa }), this.form);
+            /* this.$inertia.put(route('empresas.update', { 'empresa': this.empresa }), this.form); */
+            this.submitted = true
+            if (this.form.estado && this.form.name && this.form.nit && this.form.image) {
+                this.formData.append("id", this.empresa.id);
+                this.formData.append("name", this.form.name);
+                this.formData.append("nit", this.form.nit);
+                this.formData.append("estado", this.form.estado.id);
+                this.formData.append("indicadores", JSON.stringify(this.form.indicadores));
+                axios.post('/api/update-image', this.formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                }).then(response => {
+                    this.$toast.add({
+                            severity: "success",
+                            summary: "Exitoso!",
+                            detail: "Empresa actualizada",
+                            life: 3000,
+                        });
+                    this.$inertia.get(route('empresas.index'));
+                }).catch(error => {
+                    console.log(error.response.data);
+                    this.$toast.add({
+                        severity: "error",
+                        summary: "Error",
+                        detail: "La imagen debe ser un archivo de tipo: jpeg, png, jpg, gif, svg",
+                        life: 3000,
+                    });
+                    this.form.image = ""
+                });
+            }
+        },
+        handleFileUpload(event) {
+            const input = event.target;
+            const fileName = input.files[0].name;
+            this.fileName = fileName;
+            this.form.image = fileName
+
+            this.formData.append('image', event.target.files[0]);
         },
     }
 }
