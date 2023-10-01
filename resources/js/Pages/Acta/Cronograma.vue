@@ -28,6 +28,9 @@
                                 <InputText type="text" v-model="filterModel.value" @input="filterCallback()"
                                     class="p-column-filter" />
                             </template>
+                            <template #body="slotProps">
+                                <div class="large-text" v-html="slotProps.data.descripcion"></div>
+                            </template>
                         </Column>
                         <Column field="responsable" header="RESPONSABLE">
                             <template #filter="{ filterModel, filterCallback }">
@@ -70,16 +73,16 @@
                                     class="p-column-filter" />
                             </template>
                         </Column>
-                        <Column header="ACCIONES">
-                                <template #body="slotProps">
-                                    <Button v-permission="'tarea.edit'" icon="pi pi-pencil"
-                                        class="p-button-success p-button-sm mr-1 p-button-rounded p-button-outlined"
-                                        @click="editModel(slotProps.data)" />
-                                    <Button v-permission="'tarea.destroy'" icon="pi pi-trash"
-                                        class="p-button-sm p-button-danger p-button-rounded p-button-outlined"
-                                        @click="showDeleteDialog(slotProps.data)" />
-                                </template>
-                            </Column>
+                        <Column header="Acciones" class="actions">
+                            <template #body="slotProps">
+                                <Button v-permission="'tarea.edit'" icon="pi pi-pencil"
+                                    class="p-button-success p-button-sm mr-1 p-button-rounded p-button-outlined"
+                                    @click="editModel(slotProps.data)" />
+                                <Button v-permission="'tarea.destroy'" icon="pi pi-trash"
+                                    class="p-button-sm p-button-danger p-button-rounded p-button-outlined"
+                                    @click="showDeleteDialog(slotProps.data)" />
+                            </template>
+                        </Column>
                     </DataTable>
                 </div>
             </div>
@@ -90,7 +93,7 @@
         <div class="p-fluid formgrid grid">
             <div class="field col-12 md:col-12">
                 <label for="name">Tarea</label>
-                <InputText id="descripcion" v-model.trim="model.descripcion" autofocus />
+                <Editor v-model="model.descripcion" editorStyle="height: 100px" />
             </div>
             <div class="field col-12 md:col-6">
                 <label for="actividad">Actividad</label>
@@ -149,6 +152,7 @@ import InputText from "primevue/inputtext";
 import Dropdown from 'primevue/dropdown';
 import axios from "axios";
 import Tag from 'primevue/tag';
+import Editor from 'primevue/editor';
 
 export default {
     name: "Index",
@@ -164,7 +168,8 @@ export default {
         Dialog,
         InputText,
         Dropdown,
-        Tag
+        Tag,
+        Editor
     },
     props: {
         tareas: [],

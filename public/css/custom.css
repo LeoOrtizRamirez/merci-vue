@@ -154,3 +154,12 @@ tr:has(button[style="margin-left: 0rem; visibility: hidden;"]) td.actions
     margin-bottom: 0px !important;
     padding-bottom: 14px;
 }
+
+.custom-html{
+    width: 100% !important;
+    word-wrap: break-word;
+}
+
+td.actions {
+    white-space: nowrap;
+}

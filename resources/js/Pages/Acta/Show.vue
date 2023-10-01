@@ -43,11 +43,15 @@
                     </div>
                     <div class="flex justify-between items-center px-2 py-2 show-subtitle">
                         <p class="m-0 font-bold">Asistentes:</p>
-                        <p class="ml-2">{{ acta.asistentes }}</p>
+                    </div>
+                    <div class="flex justify-between items-center px-2 py-2 show-subtitle">
+                        <div class="ml-2 custom-html" v-html="acta.asistentes"></div>
                     </div>
                     <div class="flex justify-between items-center px-2 py-2 show-subtitle">
                         <p class="m-0 font-bold">Temas tratados en la sesión:</p>
-                        <p class="ml-2">{{ acta.temas }}</p>
+                    </div>
+                    <div class="flex justify-between items-center px-2 py-2 show-subtitle">
+                        <div class="ml-2 custom-html" v-html="acta.temas"></div>
                     </div>
                 </div>
                 <div class="col-12">
@@ -67,7 +71,7 @@
                             @page="onPage($event)" @sort="onSort($event)" @filter="onSort($event)">
                             <Column field="descripcion" header="Tarea">
                                 <template #body="slotProps">
-                                    <span class="large-text">{{ slotProps.data.descripcion }}</span>
+                                    <div class="large-text" v-html="slotProps.data.descripcion"></div>
                                 </template>
                             </Column>
                             <Column field="categoria" header="Categoria">
@@ -186,7 +190,7 @@
                             @page="onPage($event)" @sort="onSort($event)" @filter="onSort($event)">
                             <Column field="descripcion" header="Tarea">
                                 <template #body="slotProps">
-                                    <span class="large-text">{{ slotProps.data.descripcion }}</span>
+                                    <div class="large-text" v-html="slotProps.data.descripcion"></div>
                                 </template>
                             </Column>
                             <Column field="categoria" header="Categoria">
@@ -241,7 +245,7 @@
         <div class="p-fluid formgrid grid">
             <div class="field col-12 md:col-12">
                 <label for="name">Tarea</label>
-                <InputText id="descripcion" v-model.trim="model.descripcion" autofocus />
+                <Editor v-model="model.descripcion" editorStyle="height: 100px" />
             </div>
             <div class="field col-12 md:col-12">
                 <label for="actividad">Actividad</label>
@@ -290,7 +294,7 @@
         <div class="p-fluid formgrid grid">
             <div class="field col-12 md:col-12">
                 <label for="name">Tarea</label>
-                <InputText id="descripcion" v-model.trim="model.descripcion" autofocus />
+                <Editor v-model="model.descripcion" editorStyle="height: 100px" />
             </div>
             <div class="field col-12 md:col-6">
                 <label for="actividad">Actividad</label>
@@ -352,6 +356,7 @@ import Dropdown from 'primevue/dropdown';
 import axios from "axios";
 import Tag from 'primevue/tag';
 import html2pdf from 'html2pdf.js';
+import Editor from 'primevue/editor';
 
 export default {
     name: "Index",
@@ -367,7 +372,8 @@ export default {
         Dialog,
         InputText,
         Dropdown,
-        Tag
+        Tag,
+        Editor
     },
     props: {
         acta: [],
@@ -581,10 +587,6 @@ export default {
 
 .p-datatable-sm .p-datatable-tbody>tr>td {
     padding: 0.3rem 0.3rem !important;
-}
-
-td.actions {
-    white-space: nowrap;
 }
 
 /* #pdfContent .card {

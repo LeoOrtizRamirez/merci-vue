@@ -42,11 +42,11 @@
                                     </div>
                                     <div class="field col-12 md:col-12">
                                         <label for="asistentes">Asistentes</label>
-                                        <TextArea v-model="form.asistentes" rows="2" cols="30" class="w-full p-inputtextarea p-inputtext p-component"/>
+                                        <Editor v-model="form.asistentes" editorStyle="height: 100px" />
                                     </div>
                                     <div class="field col-12 md:col-12">
                                         <label for="temas">Temas tratados en la sesión</label>
-                                        <TextArea v-model="form.temas" rows="3" cols="30" class="w-full p-inputtextarea p-inputtext p-component"/>
+                                        <Editor v-model="form.temas" editorStyle="height: 100px" />
                                     </div>
                                 </div>
                                 <Button class="p-button p-component p-button-danger p-button-raised mx-2" label="Cancelar"
@@ -68,6 +68,7 @@ import InputText from "primevue/inputtext";
 import TextArea from 'primevue/textarea';
 import Dropdown from 'primevue/dropdown';
 import axios from "axios";
+import Editor from 'primevue/editor';
 
 export default {
     name: "Create",
@@ -77,7 +78,8 @@ export default {
         Button,
         InputText,
         TextArea,
-        Dropdown
+        Dropdown,
+        Editor
     },
     props:{
         current_empresa: "",
