@@ -39,7 +39,7 @@ class ValidarEstadoTareas extends Command
     public function handle()
     {
         $current_date = date('Y-m-d');
-        $tareas = Tarea::all();
+        $tareas = Tarea::where('estado_id', '!=', 6)->get();
         foreach ($tareas as $key => $tarea) {
             if($current_date > $tarea->fecha_fin){
                 $tarea->estado_id = 7;
