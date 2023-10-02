@@ -35,10 +35,10 @@
                                     @keyup.enter="submit"></Password>
 
                         <div class="flex align-items-center justify-content-between mb-5">
-                            <div class="flex align-items-center">
+                            <!-- <div class="flex align-items-center">
                                 <Checkbox id="rememberme1" v-model="checked" :binary="true" class="mr-2"></Checkbox>
                                 <label for="rememberme1">Recordarme</label>
-                            </div>
+                            </div> -->
                             <!-- <a :href="route('register')" class="font-medium no-underline ml-2 text-right cursor-pointer" style="color: var(--primary-color)">Regístrate</a> -->
                             <!-- <a class="font-medium no-underline ml-2 text-right cursor-pointer" style="color: var(--primary-color)">Forgot password?</a> -->
                         </div>
