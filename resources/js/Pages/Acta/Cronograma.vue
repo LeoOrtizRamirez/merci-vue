@@ -255,6 +255,7 @@ export default {
             this.deletingModel = true;
             this.$inertia.delete(this.route('tareas.destroy', this.selectedModel.id), {
                 onSuccess: () => {
+                    this.tareas = this.tareas.filter(tarea => tarea.id != this.selectedModel.id)
                     this.deletingModel = false;
                     this.deleteDialog = false;
                     this.$refs.deleteDialog.onClose();
