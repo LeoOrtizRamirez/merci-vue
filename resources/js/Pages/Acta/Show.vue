@@ -137,7 +137,7 @@
             <div class="p-col-12">
                 <div class="card">
                     <div class="container_image">
-                        <img src="/images/logo-merci.png" alt="" width="200" class="py-4">
+                        <img src="/public/images/logo-merci.png" alt="" width="200" class="py-4">
                     </div>
                     <div class="flex mb-2">
                         <h4 class="m-0">Acta

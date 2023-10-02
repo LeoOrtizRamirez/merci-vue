@@ -284,7 +284,7 @@ class EmpresaController extends Controller
         $entregables = Entregable::where('empresa_id', $empresa->id)->get();
         foreach ($entregables as $key => $value) {
             //Eliminar archivo de entregable
-            $imagePathEntregable = public_path('images') . "/entregables/" . Auth::user()->id . "/" . $value->url;
+            $imagePathEntregable = public_path('images') . "/entregables/" . $value->empresa_id . "/" . $value->url;
             if (file_exists($imagePathEntregable)) {
                 unlink($imagePathEntregable);
             }

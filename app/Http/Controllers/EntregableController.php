@@ -74,7 +74,7 @@ class EntregableController extends Controller
 
     public function destroy(Entregable $entregable)
     {
-        $imagePath = public_path('images') . "/entregables/" . Auth::user()->id . "/" . $entregable->url;
+        $imagePath = public_path('images') . "/entregables/" . $entregable->empresa_id . "/" . $entregable->url;
         if (file_exists($imagePath)) {
             unlink($imagePath);
         }
@@ -93,7 +93,7 @@ class EntregableController extends Controller
         $extension = $request->image->extension();
         $imageName = time() . '.' . $extension;
 
-        $request->image->move(public_path('images') . "/entregables/" . Auth::user()->id, $imageName);
+        $request->image->move(public_path('images') . "/entregables/" . $request->empresa_id, $imageName);
 
         $entregable = new Entregable;
         $entregable->name = $request->name;
@@ -117,7 +117,7 @@ class EntregableController extends Controller
         $entregable->name = $request->name;
         if (isset($request->image)) {
             //Se elimina el archivo actual
-            $imagePath = public_path('images') . "/entregables/" . Auth::user()->id . "/" . $entregable->url;
+            $imagePath = public_path('images') . "/entregables/" . $entregable->empresa_id . "/" . $entregable->url;
             if (file_exists($imagePath)) {
                 unlink($imagePath);
             }
@@ -125,7 +125,7 @@ class EntregableController extends Controller
             //Se guarda el nuevo archivo
             $extension = $request->image->extension();
             $imageName = time() . '.' . $extension;
-            $request->image->move(public_path('images') . "/entregables/" . Auth::user()->id, $imageName);
+            $request->image->move(public_path('images') . "/entregables/" . $entregable->empresa_id, $imageName);
             $entregable->extension = $extension;
             $entregable->url = $imageName;
         }

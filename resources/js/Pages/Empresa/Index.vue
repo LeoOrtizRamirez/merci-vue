@@ -33,7 +33,7 @@
                         </Column>
                         <Column field="logo" header="LOGO">
                             <template #body="slotProps">
-                                <img :src="`/images/${slotProps.data.logo}`" alt="" width="100">
+                                <img :src="`/public/images/${slotProps.data.logo}`" alt="" width="100">
                             </template>
                         </Column>
                         <Column field="estado" header="Estado">
