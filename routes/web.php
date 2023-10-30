@@ -86,6 +86,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('/actas/datatable', [ActaController::class, 'datatable'])->name('actas.datatable');
     Route::get('/actas/cronograma', [ActaController::class, 'cronograma'])->name('actas.cronograma');
     Route::post('/importar-archivo', [ActaController::class, 'import'])->name('actas.import');
+    Route::get('/actas-v2/{empresa_id}/', [ActaController::class, 'indexV2'])->name('actas.indexV2');
     Route::resource('actas', ActaController::class);
 });
 

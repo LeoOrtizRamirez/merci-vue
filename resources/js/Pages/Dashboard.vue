@@ -1,7 +1,33 @@
 <template>
     <div class="grid">
         <div class="col-12 lg:col-6 xl:col-3">
-            <div class="card mb-0">
+            <div class="card mb-0 cursor-pointer" v-role="'ADMIN'" @click="showActas('ADMIN')">
+                <div class="flex justify-content-between">
+                    <div>
+                        <div class="text-900 font-medium text-xl"><span class="text-green-500 font-medium">{{ total_actas
+                        }}</span></div>
+                        <span class="block text-500 font-medium mb-3">Encuentros</span>
+                    </div>
+                    <div class="flex align-items-center justify-content-center bg-blue-100 border-round"
+                        style="width:2.5rem;height:2.5rem">
+                        <i class="pi pi-book text-blue-500 text-xl"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="card mb-0 cursor-pointer" v-role="'CONSULTOR'" @click="showActas('CONSULTOR')">
+                <div class="flex justify-content-between">
+                    <div>
+                        <div class="text-900 font-medium text-xl"><span class="text-green-500 font-medium">{{ total_actas
+                        }}</span></div>
+                        <span class="block text-500 font-medium mb-3">Encuentros</span>
+                    </div>
+                    <div class="flex align-items-center justify-content-center bg-blue-100 border-round"
+                        style="width:2.5rem;height:2.5rem">
+                        <i class="pi pi-book text-blue-500 text-xl"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="card mb-0 cursor-pointer" v-role="'CLIENTE'" @click="showActas('CLIENTE')">
                 <div class="flex justify-content-between">
                     <div>
                         <div class="text-900 font-medium text-xl"><span class="text-green-500 font-medium">{{ total_actas
@@ -15,8 +41,8 @@
                 </div>
             </div>
         </div>
-        <div class="col-12 lg:col-6 xl:col-3">
-            <div class="card mb-0 cursor-pointer" @click="showCronograma()">
+        <div class="col-12 lg:col-6 xl:col-3" @click="showCronograma()">
+            <div class="card mb-0 cursor-pointer">
                 <div class="flex justify-content-between mb-3">
                     <div>
                         <span class="block text-500 font-medium">Acceso <br> Cronograma</span>
@@ -29,8 +55,36 @@
                 </div>
             </div>
         </div>
-        <div class="col-12 lg:col-6 xl:col-3">
-            <div class="card mb-0 cursor-pointer" @click="showEntregables()">
+        <div class="col-12 lg:col-6 xl:col-3" v-role="'ADMIN'" @click="showEntregables('ADMIN')">
+            <div class="card mb-0 cursor-pointer">
+                <div class="flex justify-content-between mb-3">
+                    <div>
+                        <span class="block text-500 font-medium">Acceso <br> Entregables</span>
+                        <!-- <div class="text-900 font-medium text-xl"><span class="text-green-500 font-medium">{{ new Intl.NumberFormat('en-US').format(gain) }}</span></div> -->
+                    </div>
+                    <div class="flex align-items-center justify-content-center bg-cyan-100 border-round"
+                        style="width:2.5rem;height:2.5rem">
+                        <i class="pi pi-external-link text-cyan-500 text-xl"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 lg:col-6 xl:col-3" v-role="'CONSULTOR'" @click="showEntregables('CONSULTOR')">
+            <div class="card mb-0 cursor-pointer">
+                <div class="flex justify-content-between mb-3">
+                    <div>
+                        <span class="block text-500 font-medium">Acceso <br> Entregables</span>
+                        <!-- <div class="text-900 font-medium text-xl"><span class="text-green-500 font-medium">{{ new Intl.NumberFormat('en-US').format(gain) }}</span></div> -->
+                    </div>
+                    <div class="flex align-items-center justify-content-center bg-cyan-100 border-round"
+                        style="width:2.5rem;height:2.5rem">
+                        <i class="pi pi-external-link text-cyan-500 text-xl"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 lg:col-6 xl:col-3" v-role="'CLIENTE'" @click="showEntregables('CLIENTE')">
+            <div class="card mb-0 cursor-pointer">
                 <div class="flex justify-content-between mb-3">
                     <div>
                         <span class="block text-500 font-medium">Acceso <br> Entregables</span>
@@ -162,7 +216,7 @@ export default {
         acta_id: "",
         total_actas: 0,
         logo: "",
-        empresa_id: null
+        empresa_id: null,
     },
     data() {
         return {
@@ -178,12 +232,23 @@ export default {
         showCronograma() {
             this.$inertia.get('/actas/cronograma?empresa_id=' + this.empresa_id);
         },
-        showEntregables() {
-            this.$inertia.get(this.route('entregables.indexV2', this.empresa_id));
+        showActas(role) {
+            if(role == 'CLIENTE'){
+                this.$inertia.get(this.route('actas.indexV2', this.empresa_id));
+            }else{
+                this.$inertia.get('/empresas/'  +this.empresa_id + '/#actas');
+            }
         },
-        showActas() {
+        showEntregables(role) {
+            if(role == 'CLIENTE'){
+                this.$inertia.get(this.route('entregables.indexV2', this.empresa_id));
+            }else{
+                this.$inertia.get('/empresas/'  +this.empresa_id + '/#entregables');
+            }
+        },
+        /* showActas() {
             this.$inertia.get(this.route('actas.index'));
-        }
+        } */
     }
 };
 </script>

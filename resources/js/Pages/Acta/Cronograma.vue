@@ -5,12 +5,12 @@
                 <div class="card">
                     <h4>Cronograma</h4>
                     <DataTable :value="tareas" :paginator="false" v-model:filters="filters" filterDisplay="row">
-                        <Column field="acta_id" header="ACTA">
+                        <!-- <Column field="acta_id" header="ACTA">
                             <template #filter="{ filterModel, filterCallback }">
                                 <InputText type="text" v-model="filterModel.value" @input="filterCallback()"
                                     class="p-column-filter" />
                             </template>
-                        </Column>
+                        </Column> -->
                         <!-- <Column field="categoria_name" header="CATEGORIA">
                             <template #filter="{ filterModel, filterCallback }">
                                 <InputText type="text" v-model="filterModel.value" @input="filterCallback()"
@@ -29,7 +29,7 @@
                                     class="p-column-filter" />
                             </template>
                             <template #body="slotProps">
-                                <div class="large-text" v-html="slotProps.data.descripcion"></div>
+                                <div class="" v-html="slotProps.data.descripcion"></div>
                             </template>
                         </Column>
                         <Column field="responsable" header="RESPONSABLE">

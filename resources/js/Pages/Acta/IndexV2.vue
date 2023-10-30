@@ -1,0 +1,229 @@
+<template>
+    <div>
+        <div class="p-grid">
+            <div class="p-col-12">
+                <div class="card">
+                    <div class="title">
+                        <!-- <Button v-permission="'acta.create'" icon="pi pi-fw pi-plus"
+                            class="p-button-primary p-button-sm mr-1 p-button-rounded p-button-outlined"
+                            @click="this.$inertia.get(this.route('actas.create'));" /> -->
+                            <h4 >Actas</h4>
+                    </div>
+                    <!-- <div class="title">
+                        <form @submit.prevent="importarArchivo">
+                            <label for="file-upload" class="custom-file-upload">
+                                <span class="pi pi-upload"></span>
+                                <span>{{ fileName }}</span>
+                                <input id="file-upload" name="file-upload" ref="archivo" type="file" class="input-file"
+                                    @change="handleFileUpload">
+                            </label>
+                            <button v-if="fileName != 'Importar'" class="p-button p-component" type="submit">
+                                <span class="p-button-label">Guardar</span>
+                            </button>
+                        </form>
+                    </div> -->
+
+
+
+                    <DataTable ref="dt" :value="datatable.data" :lazy="true" data-key="id" :paginator="true" :rows="50"
+                        :loading="datatable.loading" :total-records="datatable.totalRecords"
+                        v-model:filters="datatable.filters"
+                        paginator-template="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
+                        :rows-per-page-options="[10, 25, 50]"
+                        current-page-report-template="Mostrando del {first} al {last} de {totalRecords} resultados"
+                        @page="onPage($event)" @sort="onSort($event)" @filter="onSort($event)">
+                        <Column field="empresa" header="Empresa">
+                            <template #body="slotProps">
+                                {{ slotProps.data.empresa.name }}
+                            </template>
+                        </Column>
+                        <Column field="user" header="Usuario">
+                            <template #body="slotProps">
+                                {{ slotProps.data.user.name }}
+                            </template>
+                        </Column>
+                        <Column field="numero_sesion" header="# sesión">
+                            <template #body="slotProps">
+                                {{ slotProps.data.numero_sesion }}
+                            </template>
+                        </Column>
+                        <Column field="fecha" header="Fecha">
+                            <template #body="slotProps">
+                                {{ slotProps.data.fecha }}
+                            </template>
+                        </Column>
+                        <Column field="hora_inicio" header="Hora de inicio">
+                            <template #body="slotProps">
+                                {{ slotProps.data.hora_inicio }}
+                            </template>
+                        </Column>
+                        <Column field="hora_finalizacion" header="Hora de finalización">
+                            <template #body="slotProps">
+                                {{ slotProps.data.hora_finalizacion }}
+                            </template>
+                        </Column>
+                        <template #empty>
+                            Sin registros.
+                        </template>
+                    </DataTable>
+                </div>
+            </div>
+        </div>
+
+        <DeleteDialog ref="deleteDialog" v-model:visible="deleteDialog" :loading="deletingModel" @delete="onDelete" />
+    </div>
+</template>
+
+<script>
+import AppLayout from "../../Layouts/AppLayout";
+import DataTable from "primevue/datatable";
+import { FilterMatchMode } from "primevue/api";
+import DatatableService from "../../Services/DatatableService";
+import Menubar from "primevue/menubar";
+import Column from "primevue/column";
+import Button from "primevue/button";
+import DeleteDialog from "../../Components/DeleteDialog";
+import Toast from 'primevue/toast';
+import axios from 'axios';
+
+export default {
+    name: "Index",
+    layout: AppLayout,
+    components: {
+        AppLayout,
+        Menubar,
+        DataTable,
+        Column,
+        Button,
+        DeleteDialog,
+        Toast
+    },
+    props:{
+        empresa_id: ""
+    },
+    data() {
+        return {
+            datatable: {
+                loading: true,
+                totalRecords: 0,
+                data: null,
+                filters: {
+                    'global': { value: null, matchMode: FilterMatchMode.CONTAINS },
+                    'status': { value: null, matchMode: FilterMatchMode.EQUALS },
+                    'empresa_id' : this.empresa_id
+                },
+                lazyParams: {}
+            },
+            importDialog: false,
+            importForm: this.$inertia.form({
+                file: null
+            }),
+            selectedModel: null,
+            deleteDialog: false,
+            deletingModel: false,
+            fileName: 'Importar'
+        }
+    },
+    datatableService: null,
+    created() {
+        this.datatableService = new DatatableService();
+    },
+    mounted() {
+        this.datatable.loading = true;
+        this.datatable.lazyParams = {
+            first: 0,
+            rows: this.$refs.dt.rows,
+            sortField: 'id',
+            sortOrder: -1,
+            filters: this.datatable.filters
+        };
+        this.loadLazyData();
+    },
+    methods: {
+        loadLazyData() {
+            this.datatable.loading = true;
+            this.datatableService.getData(this.route('actas.datatable'), this.datatable.lazyParams).then(data => {
+                this.datatable.data = data.data;
+                this.datatable.totalRecords = data.total;
+                this.datatable.loading = false;
+            });
+        },
+        onPage(event) {
+            this.datatable.lazyParams = event;
+            this.loadLazyData();
+        },
+        onSort(event) {
+            this.datatable.lazyParams = event;
+            this.loadLazyData();
+        },
+        show(id) {
+            this.$inertia.get(this.route('actas.show', id));
+        },
+        showCronograma(id) {
+            this.$inertia.get(this.route('actas.cronograma', id));
+        },
+        edit(id) {
+            this.$inertia.get(this.route('actas.edit', id));
+        },
+        showDeleteDialog(model) {
+            this.selectedModel = model;
+            this.deleteDialog = true;
+        },
+        onDelete() {
+            this.deletingModel = true;
+            this.$inertia.delete(this.route('actas.destroy', this.selectedModel.id), {
+                onSuccess: () => {
+                    this.deletingModel = false;
+                    this.deleteDialog = false;
+                    this.loadLazyData();
+                    this.$refs.deleteDialog.onClose();
+                    this.$toast.add({
+                        severity: "success",
+                        summary: "Exitoso",
+                        detail: "Acta Eliminada!",
+                        life: 3000,
+                    });
+                }
+            })
+        },
+        async importarArchivo() {
+            this.datatable.loading = true;
+            let formData = new FormData();
+            formData.append('file', this.$refs.archivo.files[0]);
+
+            let response = await axios.post('/importar-archivo', formData);
+
+            console.log(response.data.data);
+            this.$toast.add({
+                severity: "success",
+                summary: "Exitoso",
+                detail: response.data.message,
+                life: 3000,
+            });
+
+            this.datatable.data = response.data.data
+            console.log(response.data.data.length)
+            this.datatable.totalRecords = response.data.data.length;
+            this.datatable.loading = false;
+        },
+        handleFileUpload(event) {
+            const input = event.target;
+            const fileName = input.files[0].name;
+            this.fileName = fileName;
+            // Handle file upload logic here
+        },
+        descargarArchivo() {
+            const url = "/assets/cronograma.xlsx";
+            const nombreArchivo = "importacion-cronograma.xlsx";
+            const link = document.createElement("a");
+            link.href = url;
+            link.setAttribute("download", nombreArchivo);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    }
+}
+</script>
+
+<style scoped></style>

@@ -21,6 +21,12 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class ActaController extends Controller
 {
+
+    public function indexV2($empresa_id, Request $request): Response
+    {
+        return Inertia::render('Acta/IndexV2', compact('empresa_id'));
+    }
+
     public function index(): Response
     {
         return Inertia::render('Acta/Index');
@@ -121,7 +127,10 @@ class ActaController extends Controller
     public function cronograma(Request $request)
     {
         $user = Auth::user();
-        if($user->getRoleNames()[0] == "CLIENTE"){
+
+        $actas = Acta::where('empresa_id', $request->empresa_id)
+                ->get();
+        /* if($user->getRoleNames()[0] == "CLIENTE"){
             $actas = Acta::where('empresa_id', $request->empresa_id)
             ->get();
         }else if(isset($request->empresa_id)){
@@ -130,7 +139,7 @@ class ActaController extends Controller
             ->get();
         }else{
             $actas = Acta::where('user_id', $user->id)->get();
-        }
+        } */
         
         $actas_ids = [];
         if($actas){

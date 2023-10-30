@@ -17,28 +17,36 @@ class DashboardController extends Controller
 {
     public function index(Request $request): Response
     {
-        $logo = "/images/logo-merci.png";
+        $logo = "/public/images/logo-horizontal-completo.png";
         $user = Auth::user();
         $user_empresa = UserEmpresa::where('user_id', $user->id)->first();
         $role_name = $user->getRoleNames()[0];
 
+        if(!empty($request->empresa_id)){//ADMINISTRADOR - CONSULTOR
+            $actas = Acta::where('empresa_id', $request->empresa_id)
+                ->get();
+        }else{//CLIENTE
+            $actas = Acta::where('empresa_id', $user_empresa->empresa_id)
+                ->get();
+        }
+
         if($role_name == "CLIENTE"){
-            $logo = "/images/" . Empresa::find($user_empresa->empresa_id)->logo;
+            $logo = "/public/images/" . Empresa::find($user_empresa->empresa_id)->logo;
             $empresa = Empresa::find($user_empresa->empresa_id);
             $indicadores = $empresa->indicadores;
 
-            $actas = Acta::where('empresa_id', $user_empresa->empresa_id)
-                ->get();
+            /* $actas = Acta::where('empresa_id', $user_empresa->empresa_id)
+                ->get(); */
         }else if (isset($request->empresa_id)) {
-            $logo = "/images/" . Empresa::find($request->empresa_id)->logo;
+            $logo = "/public/images/" . Empresa::find($request->empresa_id)->logo;
             $empresa = Empresa::find($request->empresa_id);
             $indicadores = $empresa->indicadores;
-            $actas = Acta::where('empresa_id', $request->empresa_id)
+            /* $actas = Acta::where('empresa_id', $request->empresa_id)
                 ->where('user_id',$user->id)
-                ->get();
-        }else{
+                ->get(); */
+        }/* else{
             $actas = Acta::where('user_id',$user->id)->get();
-        }
+        } */
 
         $empresa_id = $empresa->id;
 

@@ -123,6 +123,7 @@ export default {
                 filters: {
                     'global': { value: null, matchMode: FilterMatchMode.CONTAINS },
                     'status': { value: null, matchMode: FilterMatchMode.EQUALS },
+                    'empresa_id' : 2
                 },
                 lazyParams: {}
             },

@@ -1,0 +1,12 @@
+{
+    "primevue": {
+      "filters": {
+        "equals": "Igual",
+        "notEquals": "No igual",
+        "startsWith": "Comienza con",
+        "endsWith": "Termina con",
+        "contains": "Contiene",
+        "notContains": "No contiene"
+      }
+    }
+  }

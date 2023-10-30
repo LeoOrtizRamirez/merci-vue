@@ -71,7 +71,7 @@
                             @page="onPage($event)" @sort="onSort($event)" @filter="onSort($event)">
                             <Column field="descripcion" header="Tarea">
                                 <template #body="slotProps">
-                                    <div class="large-text" v-html="slotProps.data.descripcion"></div>
+                                    <div class="" v-html="slotProps.data.descripcion"></div>
                                 </template>
                             </Column>
                             <Column field="categoria" header="Categoria">
@@ -86,7 +86,7 @@
                             </Column>
                             <Column field="responsable" header="Responsable">
                                 <template #body="slotProps">
-                                    <span class="large-text">{{ slotProps.data.responsable }}</span>
+                                    <span class="">{{ slotProps.data.responsable }}</span>
                                 </template>
                             </Column>
                             <Column field="fecha_inicio" header="Inicio" class="date">
@@ -137,7 +137,7 @@
             <div class="p-col-12">
                 <div class="card">
                     <div class="container_image">
-                        <img src="/public/images/logo-merci.png" alt="" width="200" class="py-4">
+                        <img src="/public/images/logo-horizontal-completo.png" alt="" width="200" class="py-4">
                     </div>
                     <div class="flex mb-2">
                         <h4 class="m-0">Acta
@@ -169,11 +169,15 @@
                     </div>
                     <div class="flex justify-between items-center px-2 py-2 show-subtitle">
                         <p class="m-0 font-bold">Asistentes:</p>
-                        <p class="ml-2">{{ acta.asistentes }}</p>
+                    </div>
+                    <div class="flex justify-between items-center px-2 py-2 show-subtitle">
+                        <div class="ml-2 custom-html" v-html="acta.asistentes"></div>
                     </div>
                     <div class="flex justify-between items-center px-2 py-2 show-subtitle">
                         <p class="m-0 font-bold">Temas tratados en la sesión:</p>
-                        <p class="ml-2">{{ acta.temas }}</p>
+                    </div>
+                    <div class="flex justify-between items-center px-2 py-2 show-subtitle">
+                        <div class="ml-2 custom-html" v-html="acta.temas"></div>
                     </div>
                 </div>
                 <div class="col-12">
@@ -190,7 +194,7 @@
                             @page="onPage($event)" @sort="onSort($event)" @filter="onSort($event)">
                             <Column field="descripcion" header="Tarea">
                                 <template #body="slotProps">
-                                    <div class="large-text" v-html="slotProps.data.descripcion"></div>
+                                    <div class="" v-html="slotProps.data.descripcion"></div>
                                 </template>
                             </Column>
                             <Column field="categoria" header="Categoria">
@@ -205,7 +209,7 @@
                             </Column>
                             <Column field="responsable" header="Responsable">
                                 <template #body="slotProps">
-                                    <span class="large-text">{{ slotProps.data.responsable }}</span>
+                                    <span class="">{{ slotProps.data.responsable }}</span>
                                 </template>
                             </Column>
                             <Column field="fecha_inicio" header="Inicio" class="date">

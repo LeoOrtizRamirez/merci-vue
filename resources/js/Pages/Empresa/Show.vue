@@ -55,7 +55,7 @@
                         </TreeTable>
                     </div>
                 </div>
-                <div class="col-12">
+                <div class="col-12" id="entregables">
                     <div class="card">
                         <div class="title">
                             <Button v-permission="'acta.create'" icon="pi pi-fw pi-plus"
@@ -106,7 +106,7 @@
                         </DataTable>
                     </div>
                 </div>
-                <div class="col-12">
+                <div class="col-12" id="actas">
                     <div class="card">
                         <div class="title">
                             <Button v-permission="'acta.create'" icon="pi pi-fw pi-plus"

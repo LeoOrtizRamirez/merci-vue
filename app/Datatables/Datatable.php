@@ -76,19 +76,28 @@ abstract class Datatable
 
     protected function globalFilter(Request $request): callable
     {
+        $response = "";
         $filters = json_decode($request['filters'], true);
 
         $filterValue = $filters['global']['value'];
 
         if (isset($filters['acta_id'])) {
             $filterValue = $filters['acta_id']['value'];
-            return function (Builder $query) use ($filterValue) {
+            $response = function (Builder $query) use ($filterValue) {
                 $query->where('acta_id', '=', $filterValue);
             };
+        }
+
+        if(isset($filters['empresa_id'])){
+            $response = function (Builder $query) use ($filters) {
+                $query->where('empresa_id', '=', $filters['empresa_id']);
+            };
         }else{
-            return function (Builder $query) use ($filterValue) {
+            $response = function (Builder $query) use ($filterValue) {
                 //$query->where('name', 'LIKE', '%' . $filterValue . '%');
             };
         }
+
+        return $response;
     }
 }
