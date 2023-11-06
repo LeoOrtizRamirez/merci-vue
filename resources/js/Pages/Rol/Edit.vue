@@ -37,11 +37,6 @@
                                 :rows-per-page-options="[10, 25, 50]"
                                 current-page-report-template="Mostrando del {first} al {last} de {totalRecords} resultados"
                                 @page="onPage($event)" @sort="onSort($event)" @filter="onSort($event)">
-                                <Column field="id" header="ID">
-                                    <template #body="slotProps">
-                                        {{ slotProps.data.id }}
-                                    </template>
-                                </Column>
                                 <Column field="name" header="Nombre">
                                     <template #body="slotProps">
                                         {{ slotProps.data.name }}
@@ -113,6 +108,7 @@ export default {
                 filters: {
                     'global': { value: null, matchMode: FilterMatchMode.CONTAINS },
                     'status': { value: null, matchMode: FilterMatchMode.EQUALS },
+                    'permisos': 'without'
                 },
                 lazyParams: {}
             },

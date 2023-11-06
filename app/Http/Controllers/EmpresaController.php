@@ -90,11 +90,11 @@ class EmpresaController extends Controller
         if ($role_name == "CLIENTE") {
             //Obtener empresa del cliente
             $user_empresa = UserEmpresa::where('user_id', Auth::user()->id)->first();
-            $actas = Acta::where('empresa_id', $user_empresa->empresa_id)
+            $actas = Acta::with('user')->where('empresa_id', $user_empresa->empresa_id)
                 ->get();
         } else {
-            $actas = Acta::where('empresa_id', $empresa->id)
-                ->where('user_id', Auth::user()->id)
+            $actas = Acta::with('user')->where('empresa_id', $empresa->id)
+                /* ->where('user_id', Auth::user()->id) */
                 ->get();
         }
 
@@ -142,7 +142,7 @@ class EmpresaController extends Controller
                             "key" => $index . "-" . $key,
                             "data" => [
                                 "name" => "MES: " . $dato->mes,
-                                "size" => "TTL COTIZACIONES: " . number_format($dato->data_1),
+                                "size" => "$ COTIZACIONES: " . number_format($dato->data_1),
                                 "type" => "N COTIZACIONES: " . number_format($dato->data_2),
                                 "node" => $item,
                                 "dato_1" => $dato->data_1,
@@ -397,7 +397,7 @@ class EmpresaController extends Controller
 
             //Validar si hay un EmpresasIndicadoresDato en la fecha ingresada
             $empresa_id = $request["empresa"]["id"];
-            $indicador_id = $request["empresa"]["id"];
+            $indicador_id = $request["indicador"]["id"];
             $empresa_indicador = EmpresaIndicadore::where('empresa_id', $empresa_id)
                 ->where('indicador_id', $indicador_id)
                 ->first();

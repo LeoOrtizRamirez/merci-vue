@@ -56,7 +56,11 @@ class RoleController extends Controller
 
     public function edit(Role $role)
     {
-        $role_has_permissions = RoleHasPermission::where('role_id', $role->id)->get()->pluck('permission_id')->toArray();
+        $role_has_permissions = RoleHasPermission::where('role_id', $role->id)
+        ->whereNotIn('permission_id', [1,2,3,4])
+        ->get()
+        ->pluck('permission_id')
+        ->toArray();
         return Inertia::render('Rol/Edit', compact('role', 'role_has_permissions'));
     }
 

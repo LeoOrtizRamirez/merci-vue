@@ -26,7 +26,7 @@
                         </Column>
                         <Column field="url" header="Documento">
                             <template #body="slotProps">
-                                <a :href="`/public/images/entregables/${user.id}/${slotProps.data.url}`" target="_blank">{{ slotProps.data.url }}</a>
+                                <a :href="`/public/images/entregables/${empresa_id}/${slotProps.data.url}`" target="_blank">{{ slotProps.data.url }}</a>
                             </template>
                         </Column>
                         <Column header="Acciones" class="actions">

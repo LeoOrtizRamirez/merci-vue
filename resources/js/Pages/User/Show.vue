@@ -67,10 +67,10 @@
             </div>
 
             <div class="field col-12 md:col-12" v-if="model.indicador.id == 2">
-                <label for="data_1">TTL COTIZACIONES</label>
+                <label for="data_1">$ COTIZACIONES</label>
                 <InputNumber id="data_1" v-model.trim="model.data_1" required="true" autofocus
                     :class="{ 'p-invalid': submitted && model.data_1 == ''}" />
-                <small class="p-invalid" v-if="submitted && model.data_1 == ''">TTL COTIZACIONES ES REQUERIDO.</small>
+                <small class="p-invalid" v-if="submitted && model.data_1 == ''">$ COTIZACIONES ES REQUERIDO.</small>
             </div>
             <div class="field col-12 md:col-12" v-if="model.indicador.id == 2">
                 <label for="data_1">N COTIZACIONES</label>

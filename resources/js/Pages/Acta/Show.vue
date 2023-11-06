@@ -10,11 +10,7 @@
                         <Button v-permission="'acta.download'" icon="pi pi-download"
                             class="p-button-primary p-button-sm mr-1 p-button-rounded p-button-outlined"
                             @click="downloadPdf" />
-                        <h4 class="m-0">Acta -
-                            <span v-permission="'acta.show'" @click="showCronograma()" class="external mx-2">
-                                Ver cronograma
-                                <i class="pi pi-external-link"></i>
-                            </span>
+                        <h4 class="m-0">Acta
                         </h4>
                     </div>
                     <div class="flex justify-between items-center px-2 py-2 show-subtitle">
@@ -69,6 +65,11 @@
                             :rows-per-page-options="[10, 25, 50]"
                             current-page-report-template="Mostrando del {first} al {last} de {totalRecords} resultados"
                             @page="onPage($event)" @sort="onSort($event)" @filter="onSort($event)">
+                            <Column field="id" header="ID">
+                                <template #body="slotProps">
+                                    <div class="" >{{slotProps.data.acta_id}}</div>
+                                </template>
+                            </Column>
                             <Column field="descripcion" header="Tarea">
                                 <template #body="slotProps">
                                     <div class="" v-html="slotProps.data.descripcion"></div>

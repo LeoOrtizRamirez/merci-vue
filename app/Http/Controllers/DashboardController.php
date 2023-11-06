@@ -118,7 +118,7 @@ class DashboardController extends Controller
                             ],
                             [
                                 "type" => 'bar',
-                                "label" => 'TTL COTIZACIONES',
+                                "label" => '$ COTIZACIONES',
                                 "backgroundColor" => '#581dfc',
                                 "data" => array_column($dataTtlCotizaciones->toArray(), 'data_2'),
                                 "borderColor" => 'white',

@@ -81,14 +81,28 @@ abstract class Datatable
 
         $filterValue = $filters['global']['value'];
 
-        if (isset($filters['acta_id'])) {
+       
+        
+        if (isset($filters['acta_id'])) {//TAREAS
             $filterValue = $filters['acta_id']['value'];
             $response = function (Builder $query) use ($filterValue) {
                 $query->where('acta_id', '=', $filterValue);
             };
+        }else if(isset($filters['empresa_id'])){//ACTAS CLIENTE
+            $response = function (Builder $query) use ($filters) {
+                $query->where('empresa_id', '=', $filters['empresa_id']);
+            };
+        }else if(isset($filters['permisos'])){//EDIT ROLE
+            $response = function (Builder $query) use ($filters) {
+                $query->whereNotIn('id', [1,2,3,4]);
+            };
+        }else{
+            $response = function (Builder $query) use ($filterValue) {
+                //$query->where('name', 'LIKE', '%' . $filterValue . '%');
+            };
         }
 
-        if(isset($filters['empresa_id'])){
+        /* if(isset($filters['empresa_id'])){
             $response = function (Builder $query) use ($filters) {
                 $query->where('empresa_id', '=', $filters['empresa_id']);
             };
@@ -96,7 +110,7 @@ abstract class Datatable
             $response = function (Builder $query) use ($filterValue) {
                 //$query->where('name', 'LIKE', '%' . $filterValue . '%');
             };
-        }
+        } */
 
         return $response;
     }

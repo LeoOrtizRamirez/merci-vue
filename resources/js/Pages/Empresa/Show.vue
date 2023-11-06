@@ -8,10 +8,6 @@
                             class="p-button-success p-button-sm mr-1 p-button-rounded p-button-outlined"
                             @click="edit(empresa.id, 'empresas')" />
                         <h4 class="m-0">Empresa</h4>
-                        <span v-permission="'acta.show'" @click="showCronograma()" class="external mx-2">
-                            Ver cronograma
-                            <i class="pi pi-external-link"></i>
-                        </span>
                     </div>
                     <div class="grid grid-cols-2 mx-4 my-4">
                         <div class="container_image">
@@ -136,6 +132,11 @@
                         </div>
 
                         <DataTable ref="dt" :value="actas" :paginator="false">
+                            <Column field="user" header="Usuario">
+                                <template #body="slotProps">
+                                    {{ slotProps.data.user.name }}
+                                </template>
+                            </Column>
                             <Column field="numero_sesion" header="# sesión">
                                 <template #body="slotProps">
                                     {{ slotProps.data.numero_sesion }}
@@ -214,10 +215,10 @@
             </div>
 
             <div class="field col-12 md:col-12" v-if="model.indicador.id == 2">
-                <label for="data_1">TTL COTIZACIONES</label>
+                <label for="data_1">$ COTIZACIONES</label>
                 <InputNumber id="data_1" v-model.trim="model.data_1" required="true" autofocus
                     :class="{ 'p-invalid': submitted && !model.data_1 }" />
-                <small class="p-invalid" v-if="submitted && !model.data_1">TTL COTIZACIONES es requerido.</small>
+                <small class="p-invalid" v-if="submitted && !model.data_1">$ COTIZACIONES es requerido.</small>
             </div>
             <div class="field col-12 md:col-12" v-if="model.indicador.id == 2">
                 <label for="data_1">N COTIZACIONES</label>
@@ -458,8 +459,9 @@ export default {
             this.submitted = false;
         },
         saveModel() {
+            console.log("save")
             this.submitted = true;
-            if (this.model.mes && this.model.data_1 && this.model.data_2 && this.model.indicador && this.model.empresa) {
+            if (this.model.mes && this.model.data_1 && this.model.indicador && this.model.empresa) {
                 let message = 'Indicador creado'
                 if (this.header == 'Actualizar Indicador') {
                     message = 'Indicador actualizado'
