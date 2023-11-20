@@ -18,6 +18,8 @@ use Inertia\Response;
 use Inertia\Inertia;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Facades\Excel;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 
 class ActaController extends Controller
 {
@@ -243,5 +245,31 @@ class ActaController extends Controller
             'message' => 'Archivo importado con éxito',
             'data' => $acta->id,
         ]);
+    }
+
+    public function pdf($id){
+        $acta = Acta::where('id', $id)->with('empresa')->first();
+
+        $fecha = Carbon::createFromFormat('Y-m-d', $acta->fecha);
+        $fechaFormateada = $fecha->format('d \d\e F Y');
+        $acta->fecha = $fechaFormateada;
+        $tareas = Tarea::where('acta_id', $id)->get();
+
+        foreach ($tareas as $key => $tarea) {
+            $tarea->estado_name = $tarea->estado->name;
+            $tarea->estado_backgroundColor = $tarea->estado->backgroundColor;
+            $tarea->actividad_name = $tarea->actividad->name;
+            $tarea->categoria_name = $tarea->actividad->categoria->name;
+
+            $segundos = strtotime($tarea->fecha_finalizacion) - strtotime($tarea->fecha_fin);
+            $dias = $segundos / 86400;
+            $tarea->desviacion = $dias;
+        }
+        //dd($tareas);
+        $pdf = PDF::loadView('acta', [
+            'acta' => $acta,
+            'tareas' => $tareas,
+        ]);
+        return $pdf->stream();
     }
 }

@@ -171,3 +171,12 @@ td.actions {
 .file-title{
     position: absolute;
 }
+
+.p-datatable .p-datatable-tbody > tr > td.descripcion{
+    max-width: 160px !important;
+    word-wrap: break-word !important;
+}
+
+p:has(br){
+    margin: 0px !important;
+}

@@ -9,7 +9,7 @@
                             @click="edit(acta.id)" />
                         <Button v-permission="'acta.download'" icon="pi pi-download"
                             class="p-button-primary p-button-sm mr-1 p-button-rounded p-button-outlined"
-                            @click="downloadPdf" />
+                            @click="downloadActa" />
                         <h4 class="m-0">Acta
                         </h4>
                     </div>
@@ -67,12 +67,12 @@
                             @page="onPage($event)" @sort="onSort($event)" @filter="onSort($event)">
                             <Column field="id" header="ID">
                                 <template #body="slotProps">
-                                    <div class="" >{{slotProps.data.acta_id}}</div>
+                                    <div class="">{{ slotProps.data.acta_id }}</div>
                                 </template>
                             </Column>
-                            <Column field="descripcion" header="Tarea">
+                            <Column field="descripcion" header="Tarea" class="descripcion">
                                 <template #body="slotProps">
-                                    <div class="" v-html="slotProps.data.descripcion"></div>
+                                    <div v-html="slotProps.data.descripcion"></div>
                                 </template>
                             </Column>
                             <Column field="categoria" header="Categoria">
@@ -131,118 +131,6 @@
             </div>
         </div>
     </div>
-    <!--VISTA PARA PDF-->
-    <div ref="pdfContent" v-if="printPdf" id="pdfContent">
-    <!-- <div ref="pdfContent" id="pdfContent"> -->
-        <div class="p-grid">
-            <div class="p-col-12">
-                <div class="card">
-                    <div class="container_image">
-                        <img src="/public/images/logo-horizontal-completo.png" alt="" width="200" class="py-4">
-                    </div>
-                    <div class="flex mb-2">
-                        <h4 class="m-0">Acta
-                        </h4>
-                    </div>
-                    <div class="flex justify-between items-center px-2 py-2 show-subtitle">
-                        <p class="m-0 font-bold">Empresa</p>
-                        <p class="ml-2">{{ acta.empresa.name }}</p>
-                    </div>
-                    <div class="flex justify-between items-center px-2 py-2 show-subtitle">
-                        <p class="m-0 font-bold">Número de la sesión:</p>
-                        <p class="ml-2">{{ acta.numero_sesion }}</p>
-                    </div>
-                    <div class="flex justify-between items-center px-2 py-2 show-subtitle">
-                        <p class="m-0 font-bold">Fecha: </p>
-                        <p class="ml-2"> {{ acta.fecha }} </p>
-                    </div>
-                    <div class="flex justify-between items-center px-2 py-2 show-subtitle">
-                        <p class="m-0 font-bold">Hora de inicio:</p>
-                        <p class="ml-2">{{ acta.hora_inicio }}</p>
-                    </div>
-                    <div class="flex justify-between items-center px-2 py-2 show-subtitle">
-                        <p class="m-0 font-bold">Hora de finalización:</p>
-                        <p class="ml-2">{{ acta.hora_finalizacion }}</p>
-                    </div>
-                    <div class="flex justify-between items-center px-2 py-2 show-subtitle">
-                        <p class="m-0 font-bold">Modalidad de encuentro:</p>
-                        <p class="ml-2">{{ acta.modalidad_encuentro }}</p>
-                    </div>
-                    <div class="flex justify-between items-center px-2 py-2 show-subtitle">
-                        <p class="m-0 font-bold">Asistentes:</p>
-                    </div>
-                    <div class="flex justify-between items-center px-2 py-2 show-subtitle">
-                        <div class="ml-2 custom-html" v-html="acta.asistentes"></div>
-                    </div>
-                    <div class="flex justify-between items-center px-2 py-2 show-subtitle">
-                        <p class="m-0 font-bold">Temas tratados en la sesión:</p>
-                    </div>
-                    <div class="flex justify-between items-center px-2 py-2 show-subtitle">
-                        <div class="ml-2 custom-html" v-html="acta.temas"></div>
-                    </div>
-                </div>
-                <div class="col-12">
-                    <div class="card">
-                        <div class="flex mb-2">
-                            <h4 class="m-0">Tareas</h4>
-                        </div>
-                        <DataTable :class="`p-datatable-sm`" ref="dt" :value="datatable.data" :lazy="true" data-key="id"
-                            :paginator="false" :loading="datatable.loading" :total-records="datatable.totalRecords"
-                            v-model:filters="datatable.filters"
-                            paginator-template="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
-                            :rows-per-page-options="[10, 25, 50]"
-                            current-page-report-template="Mostrando del {first} al {last} de {totalRecords} resultados"
-                            @page="onPage($event)" @sort="onSort($event)" @filter="onSort($event)">
-                            <Column field="descripcion" header="Tarea">
-                                <template #body="slotProps">
-                                    <div class="" v-html="slotProps.data.descripcion"></div>
-                                </template>
-                            </Column>
-                            <Column field="categoria" header="Categoria">
-                                <template #body="slotProps">
-                                    {{ slotProps.data.categoria_name }}
-                                </template>
-                            </Column>
-                            <Column field="actividad" header="Actividad">
-                                <template #body="slotProps">
-                                    {{ slotProps.data.actividad_name }}
-                                </template>
-                            </Column>
-                            <Column field="responsable" header="Responsable">
-                                <template #body="slotProps">
-                                    <span class="">{{ slotProps.data.responsable }}</span>
-                                </template>
-                            </Column>
-                            <Column field="fecha_inicio" header="Inicio" class="date">
-                                <template #body="slotProps">
-                                    <span class="date">{{ slotProps.data.fecha_inicio }}</span>
-                                </template>
-                            </Column>
-                            <Column field="fecha_fin" header="Fin" class="date">
-                                <template #body="slotProps">
-                                    <span class="date">{{ slotProps.data.fecha_fin }}</span>
-                                </template>
-                            </Column>
-                            <Column field="estado" header="Estado">
-                                <template #body="slotProps">
-                                    <span>{{ slotProps.data.estado_name }}</span>
-                                </template>
-                            </Column>
-                            <Column field="fecha_finalizacion" header="Finalización" class="date">
-                                <template #body="slotProps">
-                                    <span class="date">{{ slotProps.data.fecha_finalizacion }}</span>
-                                </template>
-                            </Column>
-                            <template #empty>
-                                Sin registros.
-                            </template>
-                        </DataTable>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!--VISTA PARA PDF-->
 
     <DeleteDialog ref="deleteDialog" v-model:visible="deleteDialog" :loading="deletingModel" @delete="onDelete" />
 
@@ -409,7 +297,6 @@ export default {
             modelEditDialog: false,
             model: {},
             submitted: false,
-            printPdf: false
         }
     },
     datatableService: null,
@@ -554,25 +441,8 @@ export default {
         showDashboard() {
             this.$inertia.get('/dashboard?empresa_id=' + this.acta.empresa_id + '&acta_id=' + this.acta.id);
         },
-        downloadPdf() {
-            this.printPdf = true
-
-            const options = {
-                filename: 'acta.pdf',
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2 },
-                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
-            };
-
-            setTimeout(() => {
-                console.log("1 Segundo esperado")
-                const content = this.$refs.pdfContent;
-                html2pdf(content, options);
-            }, 1000);
-            setTimeout(() => {
-                console.log("5 Segundo esperado")
-                this.printPdf = false
-            }, 1000);
+        downloadActa() {
+            window.open('/acta-pdf/' + this.acta.id, '_blank');
         }
     }
 }
@@ -594,7 +464,8 @@ export default {
     padding: 0.3rem 0.3rem !important;
 }
 
-/* #pdfContent .card {
-    padding: 0px !important;
-} */
+.p-datatable .p-datatable-tbody > tr > td.descripcion{
+    max-width: 120px !important;
+    word-wrap: break-word !important;
+}
 </style>

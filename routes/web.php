@@ -18,7 +18,6 @@ use App\Http\Controllers\Security;
 use App\Http\Controllers\TareaController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -39,9 +38,9 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         $empresa = $request->input('empresa_id');
         $user = Auth::user();
         $user->role_name = $user->getRoleNames()[0];
-        if($user->role_name == "CLIENTE"){
+        if ($user->role_name == "CLIENTE") {
             return app()->call('App\Http\Controllers\DashboardController@index');
-        }else if (isset($empresa)) {
+        } else if (isset($empresa)) {
             return app()->call('App\Http\Controllers\DashboardController@index');
         } else {
             return app()->call('App\Http\Controllers\EmpresaController@index');
@@ -101,3 +100,5 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::post('/roles/permissions/toggle', [RoleController::class, 'rolePermissionsToggle'])->name('roles.permissions.toggle');
     Route::resource('roles', RoleController::class);
 });
+
+Route::get('/acta-pdf/{id}', [ActaController::class, 'pdf'])->name('actas.pdf');
